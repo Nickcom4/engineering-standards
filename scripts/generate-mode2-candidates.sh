@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# generate-mode2-candidates.sh — the enforcement analyzer Mode 2 candidate generator
+# generate-mode2-candidates.sh: the enforcement analyzer Mode 2 candidate generator
 # (DFMEA FM-06, REQ-ADD-AI-30 through REQ-ADD-AI-33)
 #
 # Reads obligation keywords found by lint-obligations.sh that are NOT within

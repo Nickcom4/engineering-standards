@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lint-fmea-controls.sh — verify DFMEA/PFMEA Controls Summary [x] entries
+# lint-fmea-controls.sh: verify DFMEA/PFMEA Controls Summary [x] entries
 # that reference scripts confirm those scripts exist in scripts/ and appear in ci.yml.
 #
 # Rationale: A Controls Summary [x] entry for a non-existent or unwired script

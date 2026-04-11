@@ -49,6 +49,7 @@ dependencies.md                        Versioned external standards referenced
 scripts/                               CI validation scripts and git hooks
 docs/
   adoption.md                          Adoption guide and operational reference
+  migrating-from-partial-adoption.md   Migration guide for projects at intermediate adoption states
   background.md                        Research corpus: why each section exists
   requirement-index.md                 Requirements organized by lifecycle scope and applies-when
   standards-application.md             This repo applying its own standard to itself

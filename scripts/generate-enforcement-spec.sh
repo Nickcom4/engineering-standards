@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# generate-enforcement-spec.sh — T6: generate enforcement-spec.yml from kind:gate REQ-IDs
+# generate-enforcement-spec.sh: T6: generate enforcement-spec.yml from kind:gate REQ-IDs
 # (DFMEA FM-03, FM-06; ADR-2026-03-25-ese-machine-readable-first-format.md)
 #
 # Reads all non-deprecated kind:gate requirements from the ESE corpus and

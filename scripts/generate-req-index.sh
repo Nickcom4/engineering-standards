@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# generate-req-index.sh — generate docs/requirement-index.md from REQ-ID tags (B15)
+# generate-req-index.sh: generate docs/requirement-index.md from REQ-ID tags (B15)
 # Organizes all active REQ-IDs by lifecycle scope, then by applies-when group.
 # Fully generated; requires no manual maintenance.
 #

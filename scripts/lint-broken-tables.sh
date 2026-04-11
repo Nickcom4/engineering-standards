@@ -44,7 +44,7 @@ for file in "${FILES[@]}"; do
       # But we can't look ahead. So flag it and let the human decide.
       # Actually: if prev_prev was a data row (not separator) and current is a data row (not separator), it's broken.
       if [[ ! "$pp_stripped" =~ ^\|[-[:space:]|]+\|$ ]] && [[ ! "$stripped" =~ ^\|[-[:space:]|]+\|$ ]]; then
-        VIOLATIONS+=("$relpath:$lineno: table row after blank line (broken table) — merge with table above or add header+separator for new table")
+        VIOLATIONS+=("$relpath:$lineno: table row after blank line (broken table): merge with table above or add header+separator for new table")
       fi
     fi
 

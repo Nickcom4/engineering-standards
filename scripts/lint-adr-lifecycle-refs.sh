@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lint-adr-lifecycle-refs.sh — verify ADR lifecycle document cross-references (REQ-4.2-08, REQ-4.2-09)
+# lint-adr-lifecycle-refs.sh: verify ADR lifecycle document cross-references (REQ-4.2-08, REQ-4.2-09)
 #
 # For every ADR in docs/decisions/:
 #   - If dfmea: field is populated (not ~ or absent), verify the named file exists

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lint-work-item-export.sh — FM-08 round-trip CI gate
+# lint-work-item-export.sh: FM-08 round-trip CI gate
 #
 # Validates that work item export files conform to the templates/work-item-export.md format:
 #   - YAML frontmatter is present and parseable

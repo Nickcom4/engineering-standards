@@ -62,10 +62,10 @@ for file in "${FILES[@]}"; do
       prev_was_table=1
     else
       if [ "$prev_was_table" -eq 1 ] && [ "$in_table" -eq 1 ] && [ -n "$stripped" ]; then
-        # Non-empty non-table line right after table — table ended
+        # Non-empty non-table line right after table: table ended
         in_table=0
       elif [ "$prev_was_table" -eq 1 ] && [ "$in_table" -eq 1 ] && [ -z "$stripped" ]; then
-        # Blank line inside what might be a continued table — check next line
+        # Blank line inside what might be a continued table: check next line
         :
       fi
       prev_was_table=0
