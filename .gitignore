@@ -16,3 +16,6 @@ Thumbs.db
 # ese-plugin runtime state (session-local, per work item)
 .ese-session-state.json
 docs/work-items/active/
+
+# Claude Code per-project session state (permissions, local settings)
+.claude/

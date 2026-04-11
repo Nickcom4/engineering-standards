@@ -57,6 +57,7 @@ README_STRUCTURE_EXCLUDE = {
     ".DS_Store",
     ".ese-session-state.json",  # gitignored runtime state
     ".gate-manifest.json",  # gitignored local artifact
+    ".claude",  # per-project Claude Code session state (settings.local.json, etc.); gitignored
 }
 
 with open(readme_path, encoding="utf-8") as f:
