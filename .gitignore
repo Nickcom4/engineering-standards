@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+*.zip
+.gate-manifest.json
+
+# ese-plugin runtime state (session-local, per work item)
+.ese-session-state.json
+docs/work-items/active/

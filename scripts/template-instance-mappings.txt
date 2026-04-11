@@ -1,0 +1,72 @@
+# Template-to-instance mappings for lint-template-compliance.sh
+#
+# Format (one mapping per line):
+#   template-path | instance-glob | instance-type-label
+#
+# Lines beginning with # are comments. Blank lines are ignored.
+#
+# One template can have multiple mapping lines when it applies to
+# multiple instance path patterns (e.g., fmea.md applies to both
+# DFMEA-*.md and PFMEA-*.md).
+#
+# Instance-glob is relative to the repo root and follows shell glob
+# syntax. Instance files matched by the glob must contain every
+# non-optional ## section from the template, or declare the omission
+# with an inline <!-- omit-section: Name --> comment.
+#
+# Adding a new mapping: append a line. No code change required.
+# Adding a new template instance type: create the template (mark any
+# optional sections with <!-- optional --> on the heading line),
+# create the instance directory, add the mapping line.
+
+# -------- ADRs --------
+templates/adr.md | docs/decisions/ADR-*.md | ADR
+
+# -------- FMEAs (DFMEA and PFMEA variants, one template) --------
+templates/fmea.md | docs/decisions/DFMEA-*.md | DFMEA
+templates/fmea.md | docs/decisions/PFMEA-*.md | PFMEA
+
+# -------- Architecture documents --------
+templates/architecture-doc.md | docs/architecture/*.md | architecture doc
+
+# -------- Work session logs --------
+# Handled by the specialized lint-session-artifacts.sh which accepts
+# historical heading variants ("What Was Done", "Actions", etc.)
+# alongside the current canonical template. Adopters with only
+# canonical-format logs can add a mapping line here.
+# templates/work-session-log.md | docs/work-sessions/*.md | work session log
+
+# -------- Work item exports --------
+templates/work-item-export.md | docs/work-items/*.md | work item export
+
+# -------- Compliance reviews --------
+templates/compliance-review.md | docs/compliance-review-*.md | compliance review
+
+# -------- Product-layer documents (§1.2 progression) --------
+templates/capabilities.md | docs/product/capabilities-*.md | capabilities
+templates/prd.md | docs/product/prd-*.md | PRD
+templates/investigation.md | docs/product/investigation-*.md | investigation
+templates/problem-research.md | docs/product/problem-research-*.md | problem research
+
+# -------- Starter-driven living documents --------
+# These use the starter as the template (one-time adoption pattern).
+# Their content drifts independently and needs the same section check.
+starters/standards-application.md | docs/standards-application.md | standards-application
+starters/deployment.md | docs/deployment.md | deployment guide
+starters/setup.md | docs/setup.md | setup guide
+
+# Templates without instances in this repo (used by adopters only):
+#   templates/a3.md
+#   templates/capabilities.md
+#   templates/investigation.md
+#   templates/post-mortem.md       (adopters only; no incident logs in this repo)
+#   templates/prd.md
+#   templates/problem-research.md
+#   templates/slo.md
+#   templates/tech-eval.md
+#   templates/work-item.md         (internal work item system is private; exports are via work-item-export)
+#   starters/intake-log.md         (adopters only)
+#   starters/anti-pattern-registry.md (no starter section structure)
+#   starters/lessons-learned-registry.md (no starter section structure)
+#   starters/repo-structure.md     (reference layout, not a starter with instances)
+#   starters/runbook.md            (adopters only; ESE has no runbook)

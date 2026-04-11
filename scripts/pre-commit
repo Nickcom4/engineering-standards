@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# ESE pre-commit hook
+# Runs T1 (unique REQ-ID validator) and T2 (tag schema linter) on every commit
+# that modifies STANDARDS.md or any addendum file.
+#
+# Install: ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+# Check if docs/standards-application.md is staged — run the frontmatter linter
+# so applicability-claim drift is caught locally before it hits CI.
+STAGED_SA=$(git diff --cached --name-only -- docs/standards-application.md 2>/dev/null || true)
+if [ -n "$STAGED_SA" ]; then
+  echo "ESE pre-commit: docs/standards-application.md changed, validating frontmatter..."
+  if ! "$REPO_ROOT/scripts/lint-standards-application-frontmatter.sh"; then
+    echo ""
+    echo "ESE pre-commit: BLOCKED. Fix standards-application frontmatter violations above before committing."
+    exit 1
+  fi
+fi
+
+# Check if FMEA files are staged — run template compliance + FMEA-specific checks
+STAGED_FMEA=$(git diff --cached --name-only 2>/dev/null | grep -E '(DFMEA|PFMEA)-.*\.md$' || true)
+if [ -n "$STAGED_FMEA" ]; then
+  echo "ESE pre-commit: FMEA files changed, running template compliance check..."
+  # Template section compliance (generic linter; replaces former lint-fmea-template.sh)
+  if ! "$REPO_ROOT/scripts/lint-template-compliance.sh"; then
+    echo ""
+    echo "ESE pre-commit: BLOCKED. Fix template compliance violations above before committing."
+    exit 1
+  fi
+  # REQ-2.1-53: verify Controls Summary [x] entries reference existing, wired scripts
+  if ! "$REPO_ROOT/scripts/lint-fmea-controls.sh"; then
+    echo ""
+    echo "ESE pre-commit: BLOCKED. Fix FMEA controls implementation gaps above before committing."
+    exit 1
+  fi
+  # FMEA congruence: status/iteration/table/controls
+  if ! "$REPO_ROOT/scripts/lint-fmea-congruence.sh"; then
+    echo ""
+    echo "ESE pre-commit: BLOCKED. Fix FMEA congruence violations above before committing."
+    exit 1
+  fi
+fi
+
+# Check if STANDARDS.md or addenda are staged
+STAGED=$(git diff --cached --name-only -- STANDARDS.md 'docs/addenda/*.md' 2>/dev/null || true)
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+echo "ESE pre-commit: STANDARDS.md or addenda changed, running validation..."
+
+FAILED=0
+
+# T1: Unique REQ-ID validator
+if ! "$REPO_ROOT/scripts/validate-req-ids.sh"; then
+  FAILED=1
+fi
+
+# T2: Tag schema linter
+if ! "$REPO_ROOT/scripts/lint-req-tags.sh"; then
+  FAILED=1
+fi
+
+# T7: REQ-ID integrity manifest (auto-regenerate and stage if changed)
+"$REPO_ROOT/scripts/generate-req-manifest.sh" generate > /dev/null
+if ! git diff --quiet "$REPO_ROOT/req-manifest.sha256" 2>/dev/null; then
+  git add "$REPO_ROOT/req-manifest.sha256"
+  echo "T7: req-manifest.sha256 auto-regenerated and staged (was out of date)."
+fi
+
+if [ "$FAILED" -eq 1 ]; then
+  echo ""
+  echo "ESE pre-commit: BLOCKED. Fix violations above before committing."
+  exit 1
+fi
+
+# T7b: Count-parity check - manifest block count must match total unique anchors in corpus
+MANIFEST_COUNT=$(wc -l < "$REPO_ROOT/req-manifest.sha256" 2>/dev/null | tr -d " ")
+# Count anchors the same way validate-req-ids.sh does (already ran above as T1)
+ANCHOR_COUNT=$(grep -roh '<a name="REQ-[^"]*">' "$REPO_ROOT/STANDARDS.md" "$REPO_ROOT"/docs/addenda/*.md "$REPO_ROOT/docs/adoption.md" "$REPO_ROOT"/templates/*.md "$REPO_ROOT"/starters/*.md 2>/dev/null | sort -u | wc -l | tr -d " ")
+if [ -n "$MANIFEST_COUNT" ] && [ -n "$ANCHOR_COUNT" ] && [ "$MANIFEST_COUNT" != "$ANCHOR_COUNT" ]; then
+  echo "FAIL: REQ-ID count parity (T7b): manifest has $MANIFEST_COUNT blocks but corpus has $ANCHOR_COUNT unique anchors."
+  echo "  Fix: run ./scripts/generate-req-manifest.sh generate and commit req-manifest.sha256"
+  FAILED=1
+fi
+
+# FMEA derived views auto-regenerate (High-Severity table, RPN Summary)
+for fmea in "$REPO_ROOT"/docs/decisions/DFMEA-*.md "$REPO_ROOT"/docs/decisions/PFMEA-*.md; do
+  [ -f "$fmea" ] && "$REPO_ROOT/scripts/generate-fmea-views.sh" "$fmea" > /dev/null 2>&1
+  if ! git diff --quiet "$fmea" 2>/dev/null; then
+    git add "$fmea"
+    echo "FMEA views auto-regenerated: $(basename $fmea)"
+  fi
+done
+
+# PF-37: Stale REQ-ID count references in living documents
+if ! "$REPO_ROOT/scripts/lint-stale-counts.sh"; then
+  FAILED=1
+fi
+
+# T3: Unclassified obligation linter (vault-mrcbg)
+# Runs when STANDARDS.md or addenda change (already gated by STAGED check above).
+if ! "$REPO_ROOT/scripts/lint-obligations.sh"; then
+  FAILED=1
+fi
+
+# T5: Section heading anchor linter (vault-25z8n)
+# Verifies no baseline heading anchor was removed or renamed.
+if ! "$REPO_ROOT/scripts/lint-section-anchors.sh"; then
+  FAILED=1
+fi
+
+# REQ-4.2-08/09: ADR lifecycle document cross-references (vault-vy8ym)
+if ! "$REPO_ROOT/scripts/lint-adr-lifecycle-refs.sh"; then
+  FAILED=1
+fi
+
+# FM-08: work-item-export round-trip format check (vault-eijlv)
+# Runs always (template and work-items/ files may change independently of STANDARDS.md)
+if ! "$REPO_ROOT/scripts/lint-work-item-export.sh" > /dev/null 2>&1; then
+  "$REPO_ROOT/scripts/lint-work-item-export.sh"  # print failures
+  echo ""
+  echo "ESE pre-commit: BLOCKED. Fix work-item-export format violations above."
+  exit 1
+fi
+
+# T6: enforcement-spec.yml auto-regenerate and stage (vault-hn5lc)
+"$REPO_ROOT/scripts/generate-enforcement-spec.sh" generate > /dev/null
+if ! git diff --quiet "$REPO_ROOT/enforcement-spec.yml" 2>/dev/null; then
+  git add "$REPO_ROOT/enforcement-spec.yml"
+  echo "T6: enforcement-spec.yml auto-regenerated and staged."
+fi
+
+# B15: Requirement index auto-regenerate and stage (vault-kk8qy)
+"$REPO_ROOT/scripts/generate-req-index.sh" generate > /dev/null
+if ! git diff --quiet "$REPO_ROOT/docs/requirement-index.md" 2>/dev/null; then
+  git add "$REPO_ROOT/docs/requirement-index.md"
+  echo "B15: docs/requirement-index.md auto-regenerated and staged."
+fi
+
+if [ "$FAILED" -eq 1 ]; then
+  echo ""
+  echo "ESE pre-commit: BLOCKED. Fix violations above before committing."
+  exit 1
+fi
+
+# -------------------------------------------------------------------------
+# Release ceremony integrity check
+#
+# Per ADR-2026-04-11 (release trigger policy), a release ceremony commit
+# must atomically (a) move ## [Unreleased] to ## [X.Y.Z] - YYYY-MM-DD in
+# CHANGELOG.md and (b) update docs/standards-application.md
+# ("Standard version applied:" and "Last updated:" fields). If the
+# staged CHANGELOG.md diff adds a new versioned heading, then
+# docs/standards-application.md must ALSO be in the same commit.
+#
+# Detects a commit that has moved the CHANGELOG heading but forgotten
+# to bump standards-application.md, catching a ceremony split across
+# commits or a forgotten dependent update.
+# -------------------------------------------------------------------------
+CHANGELOG_STAGED=$(git diff --cached --name-only -- CHANGELOG.md 2>/dev/null || true)
+if [ -n "$CHANGELOG_STAGED" ]; then
+  # Look for an added line of the form ## [X.Y.Z] - YYYY-MM-DD
+  # (staged diff line starts with '+' and matches the versioned heading pattern)
+  NEW_VERSION_HEADING=$(git diff --cached -- CHANGELOG.md 2>/dev/null \
+    | grep -E '^\+## \[[0-9]+\.[0-9]+\.[0-9]+[^]]*\] - [0-9]{4}-[0-9]{2}-[0-9]{2}' \
+    || true)
+  if [ -n "$NEW_VERSION_HEADING" ]; then
+    SA_STAGED=$(git diff --cached --name-only -- docs/standards-application.md 2>/dev/null || true)
+    if [ -z "$SA_STAGED" ]; then
+      echo ""
+      echo "ESE pre-commit: BLOCKED (release ceremony integrity)."
+      echo ""
+      echo "The staged CHANGELOG.md diff adds a new versioned heading:"
+      echo "  $NEW_VERSION_HEADING"
+      echo ""
+      echo "Per ADR-2026-04-11, a release ceremony commit must also update"
+      echo "docs/standards-application.md ('Standard version applied:' and"
+      echo "'Last updated:' fields) in the same atomic commit."
+      echo ""
+      echo "Fix: stage the corresponding docs/standards-application.md changes,"
+      echo "or split the ceremony out of this commit if this is not a release."
+      exit 1
+    fi
+  fi
+fi
+
+echo "ESE pre-commit: all checks passed."
+exit 0

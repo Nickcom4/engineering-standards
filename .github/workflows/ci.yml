@@ -1,0 +1,502 @@
+name: ESE Documentation Quality Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    name: Documentation Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check@3
+
+      # -------------------------
+      # Check 1: Em dash scan
+      # ESE §2.1 VERIFY: no AI-generated typographic characters including
+      #   Unicode em dashes (U+2014), en dashes (U+2013), and ASCII double-
+      #   hyphen sentence dashes ( -- ) used as prose sentence separators.
+      # -------------------------
+      - name: Em dash scan
+        run: |
+          python3 - <<'EOF'
+          import os
+          import re
+          import sys
+
+          violations = []
+          EM_DASH = '\u2014'
+          EN_DASH = '\u2013'
+
+          def check_double_hyphens(fpath, content):
+              """
+              Detect ' -- ' used as a sentence dash in prose.
+              Skips: lines inside code fences, YAML frontmatter, table rows
+              (starting with |), and list-item lines whose dash is structural
+              (e.g., '- --option' CLI flags, '|---|' table separators).
+              Returns list of (lineno, text) violations.
+              """
+              hits = []
+              in_fence = False
+              in_frontmatter = False
+              lines = content.splitlines()
+              fm_boundary = 0  # count of '---' lines seen at top of file
+              for i, line in enumerate(lines):
+                  stripped = line.strip()
+                  # YAML frontmatter: first line '---' opens it, second closes it
+                  if i == 0 and stripped == '---':
+                      in_frontmatter = True
+                      continue
+                  if in_frontmatter:
+                      if stripped == '---':
+                          in_frontmatter = False
+                      continue
+                  # Code fences
+                  if stripped.startswith('```'):
+                      in_fence = not in_fence
+                      continue
+                  if in_fence:
+                      continue
+                  # Table rows and separator lines
+                  if stripped.startswith('|'):
+                      continue
+                  # Indented code blocks (4+ spaces or tab)
+                  if line.startswith('    ') or line.startswith('\t'):
+                      continue
+                  # Check for sentence-dash pattern: space--space
+                  if ' -- ' in line:
+                      hits.append((i + 1, line.rstrip()))
+              return hits
+
+          for root, dirs, files in os.walk('.'):
+              dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'node_modules']
+              for fname in files:
+                  if not fname.endswith('.md'):
+                      continue
+                  fpath = os.path.join(root, fname)
+                  with open(fpath, encoding='utf-8') as f:
+                      content = f.read()
+                  em_count = content.count(EM_DASH)
+                  en_count = content.count(EN_DASH)
+                  if em_count or en_count:
+                      violations.append(f'{fpath}: em-dash={em_count}, en-dash={en_count}')
+                  for lineno, text in check_double_hyphens(fpath, content):
+                      violations.append(f'{fpath}:{lineno}: double-hyphen sentence dash: {text[:100]}')
+
+          if violations:
+              print('FAIL: Typographic dashes found (use plain hyphens or correct punctuation per ESE §2.1 VERIFY):')
+              for v in violations:
+                  print(f'  {v}')
+              sys.exit(1)
+          else:
+              print('PASS: No em dashes, en dashes, or double-hyphen sentence dashes found in markdown files.')
+          EOF
+
+      # -------------------------
+      # Check 2: ADR frontmatter validation
+      # ESE §4.2: required frontmatter fields in all ADRs
+      # -------------------------
+      - name: ADR frontmatter validation
+        run: |
+          python3 - <<'EOF'
+          import os
+          import sys
+          import re
+
+          adr_dir = 'docs/decisions'
+          required_fields = ['type', 'id', 'title', 'status', 'date']
+          violations = []
+
+          if not os.path.isdir(adr_dir):
+              print(f'SKIP: {adr_dir} not found')
+              sys.exit(0)
+
+          for fname in sorted(os.listdir(adr_dir)):
+              if not fname.endswith('.md'):
+                  continue
+              fpath = os.path.join(adr_dir, fname)
+              with open(fpath, encoding='utf-8') as f:
+                  content = f.read()
+
+              # Extract YAML frontmatter
+              fm_match = re.match(r'^---\s*\n(.*?)\n---', content, re.DOTALL)
+              if not fm_match:
+                  violations.append(f'{fpath}: missing YAML frontmatter block')
+                  continue
+
+              frontmatter = fm_match.group(1)
+              missing = []
+              for field in required_fields:
+                  if not re.search(rf'^{field}:', frontmatter, re.MULTILINE):
+                      missing.append(field)
+              if missing:
+                  violations.append(f'{fpath}: missing frontmatter fields: {missing}')
+
+          if violations:
+              print('FAIL: ADR frontmatter violations (ESE §4.2):')
+              for v in violations:
+                  print(f'  {v}')
+              sys.exit(1)
+          else:
+              files_checked = len([f for f in os.listdir(adr_dir) if f.endswith('.md')])
+              print(f'PASS: All {files_checked} ADRs have required frontmatter fields.')
+          EOF
+
+      # -------------------------
+      # Check 3: Markdown link validation
+      # ESE §2.1 VERIFY: every internal link resolves to a valid target
+      # Runs on all .md files; external links skipped (network not available in CI)
+      # -------------------------
+      - name: Markdown link check (internal links)
+        run: |
+          # Create config to check only internal links (skip http/https)
+          cat > /tmp/mlc-config.json <<'MLCEOF'
+          {
+            "ignorePatterns": [
+              { "pattern": "^https?://" },
+              { "pattern": "^mailto:" }
+            ],
+            "retryOn429": true,
+            "retryCount": 2,
+            "fallbackRetryDelay": "30s",
+            "aliveStatusCodes": [200, 206]
+          }
+          MLCEOF
+
+          FAILED=0
+          while IFS= read -r -d '' f; do
+            result=$(markdown-link-check --config /tmp/mlc-config.json "$f" 2>&1)
+            if echo "$result" | grep -q "ERROR\|Dead"; then
+              echo "FAIL: $f"
+              echo "$result" | grep -E "ERROR|Dead|\[✗\]"
+              FAILED=1
+            fi
+          done < <(find . -name "*.md" -not -path './.git/*' -not -path './node_modules/*' -print0)
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "FAIL: Broken internal links found (ESE §2.1 VERIFY)"
+            exit 1
+          else
+            echo "PASS: All internal markdown links resolve."
+          fi
+
+      # -------------------------
+      # Check 4: CHANGELOG has [Unreleased] or version entries
+      # ESE §4.3: changelogs maintained for actively evolving documents
+      # -------------------------
+      - name: CHANGELOG structure check
+        run: |
+          python3 - <<'EOF'
+          import sys
+
+          try:
+              with open('CHANGELOG.md', encoding='utf-8') as f:
+                  content = f.read()
+          except FileNotFoundError:
+              print('FAIL: CHANGELOG.md not found (ESE §4.3)')
+              sys.exit(1)
+
+          if '## [' not in content:
+              print('FAIL: CHANGELOG.md has no version entries (ESE §4.3)')
+              sys.exit(1)
+
+          # Check for stale [Unreleased] with no content
+          import re
+          unreleased = re.search(r'## \[Unreleased\](.*?)## \[', content, re.DOTALL)
+          if unreleased:
+              section = unreleased.group(1).strip()
+              # Section must have at least one list item
+              if not any(line.strip().startswith('-') for line in section.splitlines()):
+                  print('WARN: [Unreleased] section appears empty -- commit or remove it')
+                  # Non-fatal: warn only
+
+          print('PASS: CHANGELOG.md structure valid.')
+          EOF
+
+      # -------------------------
+      # Check 5: Unique REQ-ID validator (T1, FM-01)
+      # ESE §4.9.5: REQ-IDs are globally unique across STANDARDS.md and all addenda.
+      # Scans for duplicate <a name="REQ-..."> anchors outside code blocks.
+      # -------------------------
+      - name: Unique REQ-ID validator (T1)
+        run: bash scripts/validate-req-ids.sh
+
+      # -------------------------
+      # Check 6: REQ-ID tag schema linter (T2, FM-02)
+      # ESE §4.9.2: validates all 5 tag positions, enum values, and eval-scope
+      # presence on kind:gate requirements.
+      # -------------------------
+      - name: REQ-ID tag schema linter (T2)
+        run: bash scripts/lint-req-tags.sh
+
+      # -------------------------
+      # Check 7: REQ-ID integrity manifest (T7, vault-btl7d)
+      # ESE §4.9: verifies req-manifest.sha256 matches current STANDARDS.md and
+      # addenda. Divergence means a REQ-ID block was edited without updating the
+      # manifest, or a new REQ-ID was added without regenerating it.
+      # -------------------------
+      - name: REQ-ID integrity manifest (T7)
+        run: bash scripts/generate-req-manifest.sh verify
+
+      # -------------------------
+      # Check 8: REQ-ID count parity (T7b, vault-e9h8p)
+      # Manifest block count must equal total unique anchors in corpus.
+      # Catches file-set divergence between manifest generator and validator.
+      # -------------------------
+      - name: REQ-ID count parity (T7b)
+        run: |
+          MANIFEST_COUNT=$(wc -l < req-manifest.sha256 | tr -d " ")
+          ANCHOR_COUNT=$(grep -roh '<a name="REQ-[^"]*">' STANDARDS.md docs/addenda/*.md docs/adoption.md templates/*.md starters/*.md 2>/dev/null | sort -u | wc -l | tr -d " ")
+          if [ "$MANIFEST_COUNT" != "$ANCHOR_COUNT" ]; then
+            echo "FAIL: manifest has $MANIFEST_COUNT blocks but corpus has $ANCHOR_COUNT unique anchors."
+            echo "Fix: run ./scripts/generate-req-manifest.sh generate and commit req-manifest.sha256"
+            exit 1
+          fi
+          echo "PASS: REQ-ID count parity confirmed ($MANIFEST_COUNT blocks = $ANCHOR_COUNT anchors)."
+
+      # -------------------------
+      # Check 9: Stale REQ-ID count references (PF-37 corrective action)
+      # Detects hardcoded REQ-ID counts in living documents that diverge
+      # from the actual count in req-manifest.sha256.
+      # -------------------------
+      - name: Stale count references (PF-37)
+        run: bash scripts/lint-stale-counts.sh
+
+      # -------------------------
+      # Check 10: FMEA internal consistency (REQ-2.1-43)
+      # Verifies High-Severity table and RPN Summary match source FM tables.
+      # -------------------------
+      - name: FMEA internal consistency (REQ-2.1-43)
+        run: bash scripts/lint-fmea-consistency.sh
+
+      # -------------------------
+      # Check 11: Self-compliance (REQ-2.1-51)
+      # Verifies this repo complies with its own standards.
+      # -------------------------
+      - name: Self-compliance (REQ-2.1-51)
+        run: bash scripts/lint-self-compliance.sh
+
+      # -------------------------
+      # Check 12: Unclassified obligation linter (T3, FM-07)
+      # ESE §4.9.7: obligation keywords in prose must be within 10 lines of a REQ-ID anchor.
+      # Catches requirement statements that lack a REQ-ID and are therefore unenforceable.
+      # -------------------------
+      - name: Unclassified obligation linter (T3)
+        run: bash scripts/lint-obligations.sh
+
+      # -------------------------
+      # Check 13: Broken table detector
+      # Detects table rows separated by blank lines, which breaks rendering in most markdown renderers.
+      # -------------------------
+      - name: Broken table detector
+        run: bash scripts/lint-broken-tables.sh
+
+      # -------------------------
+      # Check 14: Table format linter
+      # Checks column count consistency within each table and separator row alignment.
+      # -------------------------
+      - name: Table format linter
+        run: bash scripts/lint-table-format.sh
+
+      # -------------------------
+      # Check 15: Work item export format round-trip (FM-08, vault-eijlv)
+      # Validates templates/work-item-export.md and any docs/work-items/*.md files:
+      # frontmatter present, required fields, round-trip parse consistency.
+      # -------------------------
+      - name: Work item export round-trip (FM-08)
+        run: bash scripts/lint-work-item-export.sh
+
+      # -------------------------
+      # Check 16: Enforcement spec freshness (T6, FM-03, vault-hn5lc)
+      # Verifies enforcement-spec.yml matches regenerated output from current kind:gate REQ-IDs.
+      # -------------------------
+      - name: Enforcement spec freshness (T6)
+        run: bash scripts/generate-enforcement-spec.sh verify
+
+      # -------------------------
+      # Check 17: Requirement index freshness (B15, vault-kk8qy)
+      # Verifies docs/requirement-index.md matches regenerated output from current tags.
+      # -------------------------
+      - name: Requirement index freshness (B15)
+        run: bash scripts/generate-req-index.sh verify
+
+      # -------------------------
+      # Check 18: ADR lifecycle document cross-references (REQ-4.2-08, REQ-4.2-09, vault-vy8ym)
+      # Verifies dfmea/pfmea frontmatter fields in ADRs reference files that exist
+      # and that those files' adr: field matches the ADR's id.
+      # -------------------------
+      - name: ADR lifecycle document cross-references (REQ-4.2-08/09)
+        run: bash scripts/lint-adr-lifecycle-refs.sh
+
+      # -------------------------
+      # Check 19: FMEA controls implementation verification (REQ-2.1-53, vault-dq1kc)
+      # Verifies every [x] entry in DFMEA/PFMEA Controls Summary that names a script
+      # confirms the script exists in scripts/ and is called in ci.yml.
+      # -------------------------
+      - name: FMEA controls implementation verification (REQ-2.1-53)
+        run: bash scripts/lint-fmea-controls.sh
+
+      # -------------------------
+      # Check 20: Section heading anchor linter (T5, FM-04)
+      # Verifies every heading anchor in docs/section-anchors-baseline.txt
+      # is still present in STANDARDS.md and addenda.
+      # Prevents adopter tooling breakage from unannounced heading renames.
+      # -------------------------
+      - name: Section heading anchor linter (T5)
+        run: bash scripts/lint-section-anchors.sh
+
+      # -------------------------
+      # Check 21: README structure accuracy
+      # Verifies every file/directory listed in README.md Structure
+      # section actually exists on disk.
+      # -------------------------
+      - name: README structure accuracy
+        run: bash scripts/lint-readme-structure.sh
+
+      # -------------------------
+      # Check 22: ToC link consistency
+      # Verifies every Table of Contents anchor link resolves to an
+      # actual heading in the same document using GFM slug rules.
+      # -------------------------
+      - name: ToC link consistency
+        run: bash scripts/lint-toc-links.sh
+
+      # -------------------------
+      # Check 23: ADR validation triggers (advisory)
+      # Warns when accepted ADRs have validation triggers with no
+      # recorded result after 90 days. Advisory only; does not block.
+      # -------------------------
+      - name: ADR validation triggers (advisory)
+        run: bash scripts/lint-adr-triggers.sh
+
+      # -------------------------
+      # Check 24: ADR validation section presence (REQ-4.2-07)
+      # Verifies every ADR has a Validation section with a binary
+      # criterion and an event or calendar trigger.
+      # -------------------------
+      - name: ADR validation section presence (REQ-4.2-07)
+        run: bash scripts/lint-adr-validation.sh
+
+      # -------------------------
+      # Check 25: CHANGELOG entry presence
+      # Verifies CHANGELOG has required structure and entries.
+      # -------------------------
+      - name: CHANGELOG entry presence
+        run: bash scripts/lint-changelog-entries.sh
+
+      # -------------------------
+      # Check 26: FMEA completeness (REQ-2.1-37)
+      # Verifies all above-threshold failure modes have controls or
+      # deferral rationale.
+      # -------------------------
+      - name: FMEA completeness (REQ-2.1-37)
+        run: bash scripts/lint-fmea-completeness.sh
+
+      # -------------------------
+      # Check 27: Work session log structure (REQ-4.6-01)
+      # Verifies all work session logs have the required sections
+      # from templates/work-session-log.md.
+      # -------------------------
+      - name: Work session log structure (REQ-4.6-01)
+        run: bash scripts/lint-session-artifacts.sh
+
+      # -------------------------
+      # Check 28: Orphan script detector
+      # Fails when a lint/validate/generate script exists in scripts/
+      # but is not wired into BOTH ci.yml AND CLAUDE.md "Before Every
+      # Commit" local suite. Prevents the pattern where gating scripts
+      # are added but never run.
+      # -------------------------
+      - name: Orphan script detector
+        run: bash scripts/lint-orphan-scripts.sh
+
+      # -------------------------
+      # Check 29: Count congruence
+      # Asserts that every "N gates", "N checks", "N scripts" claim in
+      # living documents matches the authoritative generator
+      # (enforcement-spec.yml, ci.yml, or ls scripts/*.sh). Complements
+      # lint-stale-counts.sh which only covers REQ-ID counts.
+      # -------------------------
+      - name: Count congruence
+        run: bash scripts/lint-count-congruence.sh
+
+      # -------------------------
+      # Check 30: CHANGELOG-to-git-tag congruence
+      # Verifies every versioned heading in CHANGELOG.md (at or after
+      # the tagging-era consistency floor) has a matching git tag, and
+      # every vX.Y.Z git tag has a matching CHANGELOG heading. Catches
+      # release ceremony commits that forget to tag, and stray tags
+      # with no CHANGELOG entry. Per ADR-2026-04-11 release policy.
+      # -------------------------
+      - name: CHANGELOG-to-git-tag congruence
+        run: bash scripts/lint-changelog-tags.sh
+
+      # -------------------------
+      # Check 31: Orphan ADR detector (advisory)
+      # Warns when an Accepted or Proposed ADR is not referenced from
+      # any living document. Advisory only; an orphan ADR may be
+      # terminal by design and can be acknowledged with
+      # 'cross-reference-free: intentional' in its frontmatter.
+      # -------------------------
+      - name: Orphan ADR detector (advisory)
+        run: bash scripts/lint-orphan-adrs.sh
+
+      # -------------------------
+      # Check 32: Generic template compliance
+      # Reads scripts/template-instance-mappings.txt and verifies that
+      # every instance file contains every non-optional ## section from
+      # its template. Covers ADRs, FMEAs, architecture docs, work item
+      # exports, compliance reviews, and starter-driven living docs.
+      # Optional sections in templates are marked with <!-- optional -->
+      # on the heading line; instances document intentional omissions
+      # with <!-- omit-section: Name --> inline.
+      # -------------------------
+      - name: Generic template compliance
+        run: bash scripts/lint-template-compliance.sh
+
+      # -------------------------
+      # Check 33: FMEA congruence
+      # Catches FMEAs whose declared state overstates the actual state:
+      # status "Complete" with uncontrolled above-threshold FMs, RPN
+      # Tracking Table columns short of the declared iteration count,
+      # main-table RPN mismatched with the latest tracking-table value,
+      # and [x] controls without a verification token.
+      # -------------------------
+      - name: FMEA congruence (REQ-2.1-37, REQ-2.1-41, REQ-2.1-42, REQ-2.1-43)
+        run: bash scripts/lint-fmea-congruence.sh
+
+      # -------------------------
+      # Check 34: Standards-application frontmatter
+      # Validates the YAML frontmatter in docs/standards-application.md:
+      # presence/types/enums (Tier 1), YAML ↔ prose table consistency for
+      # capabilities, addenda, FMEA thresholds, verification mode, owner,
+      # and footer (Tier 2), and claim-vs-reality checks against
+      # CHANGELOG.md version headings, normative-doc owner-name boundary,
+      # template-compliance evidence-path existence/CI wiring, and
+      # addendum-REQ activation (Tier 3). Makes the applicability summary
+      # machine-readable so downstream tools can consume it.
+      # -------------------------
+      - name: Standards-application frontmatter (REQ-2.4, REQ-4.1-03, REQ-5.3)
+        run: bash scripts/lint-standards-application-frontmatter.sh
+
+      # -------------------------
+      # Summary
+      # -------------------------
+      - name: Quality gate summary
+        if: always()
+        run: |
+          echo "ESE Documentation Quality Gate complete."
+          echo "Checks: em dash scan, ADR frontmatter, internal link validation, CHANGELOG structure, REQ-ID uniqueness (T1), tag schema lint (T2), integrity manifest (T7), count parity (T7b), stale counts (PF-37), FMEA consistency (REQ-2.1-43), self-compliance (REQ-2.1-51), unclassified obligations (T3), broken tables, table format, work item export round-trip (FM-08), enforcement spec freshness (T6), requirement index freshness (B15), ADR lifecycle cross-references (REQ-4.2-08/09), FMEA controls implementation (REQ-2.1-53), section heading anchors (T5), README structure, ToC link consistency, ADR validation triggers, ADR validation section presence (REQ-4.2-07), CHANGELOG entry presence, FMEA completeness (REQ-2.1-37), work session log structure (REQ-4.6-01), orphan script detector, count congruence, CHANGELOG-to-git-tag congruence, orphan ADR detector, generic template compliance, FMEA congruence, standards-application frontmatter."
+          echo "All checks must pass before merge is permitted."

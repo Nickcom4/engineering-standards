@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# ESE commit-msg hook
+# Rejects commits containing AI co-authorship trailers or AI tool attribution.
+#
+# Generating principle: commit authorship must accurately reflect the human
+# accountable for the change. AI-generated trailers inserted by default tool
+# behavior misrepresent authorship and bypass the named gate authority (§1.4).
+#
+# Install: ln -sf ../../scripts/commit-msg .git/hooks/commit-msg
+
+set -euo pipefail
+
+MSG_FILE="$1"
+MSG=$(cat "$MSG_FILE")
+
+# Pattern: Co-Authored-By lines referencing AI tools/models
+if echo "$MSG" | grep -qiE 'Co-Authored-By:.*\b(claude|gpt|copilot|gemini|anthropic|openai)\b'; then
+  echo "REJECT: commit message contains an AI co-authorship trailer."
+  echo "  ESE commits are authored by the human gate authority."
+  echo "  Remove the Co-Authored-By line and re-commit."
+  exit 1
+fi
+
+# Pattern: any trailer or line explicitly attributing authorship to an AI tool
+if echo "$MSG" | grep -qiE 'Generated (by|with|using).*\b(claude|gpt|copilot|gemini|ai)\b'; then
+  echo "REJECT: commit message contains AI tool attribution."
+  echo "  ESE commits are authored by the human gate authority."
+  echo "  Remove the attribution line and re-commit."
+  exit 1
+fi
+
+exit 0
