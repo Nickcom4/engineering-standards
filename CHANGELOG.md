@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-04-11
+
+**Theme:** Turnkey adopter onboarding arc: clean-history public release, machine-readable applicability frontmatter schema + three-tier validator, ese-starter scaffold repo, migration guide for partial adopters, adopter-facing drift-detection tools (verify / upgrade-check / catchup), single-command preflight wrapper, new lint-doc-references discoverability gate, lint-changelog-entries subsection uniqueness check, and phase-closure audit enforcement via both prose guidance in AGENTS.md and a global Claude Code Stop hook.
+
 
 ### Added
 
