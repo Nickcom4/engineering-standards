@@ -31,11 +31,16 @@ These are not aspirational guidelines. They are gates that block progress when v
 
 See [docs/adoption.md](docs/adoption.md) for full setup instructions (submodule, first steps, what your project produces).
 
-Quick start:
-1. Add this repo as a git submodule
+**Fastest path:** clone [ese-starter](https://github.com/Nickcom4/ese-starter), a turnkey scaffold that ships this repo as a pinned submodule at `.standards/`, all eight vendored drift-detection linters, the scaffolding and verification tools, pre-commit hook, CI workflow, and Dependabot configuration for automatic submodule bumps. See the starter's README for the bootstrap ritual.
+
+**Incremental path** (for projects that already exist):
+1. Add this repo as a git submodule at `.standards/`
 2. Read [STANDARDS.md](STANDARDS.md)
-3. Create your `standards-application.md` from the [template](starters/standards-application.md)
+3. Create your `docs/standards-application.md` from the [template](starters/standards-application.md) and fill in the YAML applicability frontmatter
 4. Identify which [addenda](docs/addenda/) apply
+5. Vendor the linters you want from [starters/linters/](starters/linters/) and the tools from [starters/tools/](starters/tools/)
+
+**Migrating from an older partial adoption:** see [docs/migrating-from-partial-adoption.md](docs/migrating-from-partial-adoption.md).
 
 ## Structure
 

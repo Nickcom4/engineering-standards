@@ -57,6 +57,21 @@ If your organization already operates at Level 4 or has defined quality targets,
 
 ### How to Adopt
 
+#### Fastest: Clone the starter repo
+
+If you want a turnkey ESE-compliant scaffold you can clone and rename as the starting point for a new project, use [ese-starter](https://github.com/Nickcom4/ese-starter). It ships with this repo pinned as a git submodule at `.standards/`, all eight vendored drift-detection linters, the scaffolding and verification tools, a pre-commit hook, a CI workflow, Dependabot configuration for automatic submodule bumps, and CLAUDE.md/AGENTS.md agent guidance. Clone it, fill in the placeholders in `docs/standards-application.md`, rename the remote, and push.
+
+```bash
+git clone --recurse-submodules https://github.com/Nickcom4/ese-starter.git my-project
+cd my-project
+# ... fill in placeholders per ese-starter/README.md Bootstrap Ritual ...
+git remote set-url origin https://github.com/YOUR-ORG/my-project.git
+```
+
+This is the same submodule-based approach described below, but you do not have to assemble the pieces yourself. First-commit CI will fail intentionally on `lint-standards-application-frontmatter.sh` until you fill in the YAML placeholder values; this is the designed forcing function and is documented in the starter README.
+
+If you already have a project and need to adopt incrementally, use the submodule approach below. If your project is already partially adopted from an older version, see [docs/migrating-from-partial-adoption.md](migrating-from-partial-adoption.md).
+
 #### Recommended: Git Submodule
 
 Add this repository as a git submodule in your project. Your project pins a specific version and pulls updates on its own schedule.
@@ -114,6 +129,18 @@ After every ESE version update, all four steps are completed: read the CHANGELOG
 **The failure mode this prevents:** Template-Standard Drift. See [docs/incidents/anti-patterns.md](incidents/anti-patterns.md) for the named pattern. Template-Standard Drift occurs when artifacts are created against an older template and left unaudited as the standard evolves. A project that updates its submodule pointer without auditing existing artifacts accumulates silent drift across every document created from a template - ADRs, post-mortems, architecture docs, compliance reviews - until the gap is discovered in a production incident or a formal audit.
 
 **Also check for new linters.** On every ESE version bump, review [starters/linters/README.md](../starters/linters/README.md) for any linters added since your previous version (check the CHANGELOG entries between your previous and new version for `starters/linters/` additions). The linter pack evolves independently of the templates: a new drift class discovered in ESE's own self-audit becomes a new linter in `starters/linters/` in the release where it lands. Vendoring a new linter into your project on the same update cycle as the standard bump keeps your drift-detection surface as broad as ESE's own.
+
+**Use the drift-detection tools.** After every submodule bump, run these adopter-facing tools from [starters/tools/](../starters/tools/):
+
+```bash
+bash scripts/catchup.sh                  # see what changed between your old pin and the new pin
+bash scripts/upgrade-check.sh            # detect drift in three dimensions (pin, version declaration, vendored files)
+bash scripts/verify.sh                   # run the full linter suite and summarize pass/fail
+```
+
+`catchup.sh` is a read-only preview of the commit log and file changes between versions, scoped to adopter-relevant paths. `upgrade-check.sh` reports on submodule pin drift, declared-version vs pinned-version drift, and per-file byte drift between your vendored copies and their upstream counterparts (so you can decide which local customizations to keep). `verify.sh` wraps the full linter suite into one command with a pass/fail summary. See [starters/tools/README.md](../starters/tools/README.md) for the full adoption protocol.
+
+**If you are coming from an older partial adoption.** Some projects adopted ESE before the current scaffold tools existed and have not yet completed adoption. If that describes your project, follow [docs/migrating-from-partial-adoption.md](migrating-from-partial-adoption.md). It covers the four common partial-adoption states (stale submodule pin, missing vendored linters, missing applicability frontmatter, missing pre-commit and CI wiring), a diagnostic script, and step-by-step resolution per state.
 
 #### Alternative: Fork
 
