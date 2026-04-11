@@ -40,6 +40,12 @@ ALLOWLIST=(
   # scaffolding tool for new artifact instances; invoked manually by users,
   # not a gate (creating artifacts is not a verification step)
   "new-artifact.sh"
+  # wrapper that runs every other lint script; not a gate itself, it's the
+  # single-command entry point that adopters and agents invoke before commit
+  "preflight.sh"
+  # agent/operator helper for the phase-closure audit discipline; soft check,
+  # not a gate; invoked manually before claiming work complete
+  "phase-audit.sh"
 )
 
 is_allowlisted() {

@@ -50,7 +50,7 @@ CHANGELOG.md                           Version history
 CLAUDE.md                              Agent context for AI-assisted sessions (ESE compliance)
 dependencies.md                        Versioned external standards referenced
 .github/
-  workflows/ci.yml                     CI pipeline (34 checks)
+  workflows/ci.yml                     CI pipeline (35 checks)
 scripts/                               CI validation scripts and git hooks
 docs/
   adoption.md                          Adoption guide and operational reference
