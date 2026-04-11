@@ -213,8 +213,33 @@ if [ "$failed_gate" -gt 0 ]; then
         echo "  - $f"
     done
 fi
+# Write a state file on success so the phase-closure-audit Stop hook can
+# detect that preflight ran recently without having to scan the full
+# conversation transcript. See ~/.claude/hooks/phase-closure-audit.sh.
+write_state_file() {
+    local state_dir="$HOME/.claude/state"
+    local state_file="$state_dir/preflight-run.json"
+    mkdir -p "$state_dir" 2>/dev/null || return 0
+    local ts
+    ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cat > "$state_file" <<EOF
+{
+  "audit_timestamp": "$ts",
+  "audit_type": "preflight",
+  "script": "scripts/preflight.sh",
+  "exit_code": 0,
+  "total_checks": $total,
+  "passed": $passed,
+  "gate_failures": $failed_gate,
+  "advisory_failures": $failed_advisory,
+  "repo_root": "$(pwd)"
+}
+EOF
+}
+
 echo ""
 if [ "$failed_gate" -eq 0 ]; then
+    write_state_file
     echo "OK. Ready to commit."
     exit 0
 else
