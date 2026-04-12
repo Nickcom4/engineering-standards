@@ -60,9 +60,13 @@ Each gap in the current vs target state table has a filed §2.2 work item ID.
 
 ## Architecture Diagram <!-- optional -->
 
-> [§3.1](../STANDARDS.md#31-component-architecture-template): ASCII diagram or linked image. Must show component boundaries and communication paths.
+> [§3.1](../STANDARDS.md#31-component-architecture-template): Mermaid diagram (preferred), or linked image. Must show component boundaries and communication paths. Mermaid renders natively on GitHub/GitLab and keeps the diagram source lintable and diffable.
 
-{ASCII diagram or linked image}
+```mermaid
+flowchart TD
+    A["{Component A}"] --> B["{Component B}"]
+    B --> C["{External Dependency}"]
+```
 
 ---
 
