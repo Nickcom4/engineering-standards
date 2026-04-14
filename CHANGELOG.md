@@ -6,8 +6,13 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-04-14
+
+**Theme:** Trigger-walk default inversion (silent-skip to explicit-justify) and release-mechanics ADR. The work-item template's DESIGN Qualification Checklist gains residual FMEA and A3 triggers that require an explicit one-sentence justification when answered "no," completing the companion to the ese-plugin v0.20.0 AP-005 structural fix.
+
 ### Added
 
+- `templates/work-item.md`: **Residual FMEA and A3 triggers** added to the DESIGN Qualification Checklist. Two new checkbox rows explicitly invert the default from silent-skip to explicit-justify: (1) residual FMEA ("high-risk change with silent-failure mode, irreversibility, or blast radius not captured by the four named FMEA triggers above?") and (2) residual A3 ("class of failure observed, not just an instance?"). When either residual trigger is answered "no," the template prose directs a one-sentence justification next to the answer. Implements A3-2026-04-14 (ese-plugin side) target state point 4; closes the companion countermeasure to the ese-plugin v0.20.0 AP-005 structural fix. The pairing ensures both the procedural bypass (AP-005) and the trigger-coverage gap (this change) are addressed; together they make "no FMEA / no A3 needed" an assertion the agent must defend rather than a silent default.
 - `docs/decisions/ADR-2026-04-14-automate-release-mechanics-at-close-push-remains-gate-authority-only.md`: Accepted. Automates local release mechanics (CHANGELOG `[Unreleased]` heading move, `standards-application.md` version bump, ceremony commit, local tag) at the CLOSE stage of the work-item lifecycle when preflight is green and the semver bump is patch or minor. Push remains explicit gate-authority approval; major bumps remain gate-authority approval. Partially supersedes ADR-2026-04-11 decision points 1, 4, 5, 7. Points 2 (thematic-completion trigger), 3 (deterministic semver table), and 6 (breaking-change pre-release notice) remain in force unchanged. Implementation in the ese-plugin lifecycle skill is a separate follow-on work item; until then, release ceremonies continue to be executed manually by the gate authority per the unchanged decision points.
 
 ### Changed

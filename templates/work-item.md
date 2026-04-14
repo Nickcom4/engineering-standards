@@ -130,6 +130,11 @@ Required by §2.2 for every work item entering the delivery system.
 - [ ] Touches external integrations (3rd-party APIs, webhooks, queues)? -> complete FMEA
 - [ ] None of the above apply
 
+**Residual triggers** (inversion of the default from silent-skip to explicit-justify; if answered "no," append a one-sentence justification naming the specific reason the category does not apply to this work):
+
+- [ ] Residual FMEA: high-risk change with silent-failure mode, irreversibility, or blast radius not captured by the four named FMEA triggers above? -> complete FMEA. If no, one-sentence justification: {reason the four triggers above fully cover the risk surface, e.g., "pure documentation change with no runtime behavior" or "touches isolated test fixture with no production path"}.
+- [ ] Residual A3: class of failure observed, not just an instance (prior incidents of the same shape, recurring pattern, or anti-pattern match)? -> write A3 ([§8.7](../STANDARDS.md#87-a3-structured-problem-solving)). If no, one-sentence justification: {reason this is a single instance rather than a class, e.g., "first observation; no prior incidents of this shape in lessons-learned or anti-pattern registries"}.
+
 **Architecture doc check** ([§3.3](../STANDARDS.md#33-architecture-doc-backlog)):
 - [ ] Does this change touch a component? If yes: does the component have an architecture doc? If no: file an issue for the architecture doc before proceeding.
 
