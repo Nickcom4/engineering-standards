@@ -6,13 +6,20 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+*No unreleased changes.*
+
+## [2.7.0] - 2026-04-14
+
+**Theme:** Bidirectional flow between engineering-standards and ese-starter; starter-originated linter back-ported upstream so all adopters get the same release-discipline gate regardless of adoption path.
+
 ### Added
 
-- `scripts/lint-release-existence.sh` as CI Check 36: errors when CHANGELOG has real content under `[Unreleased]` but the repo has zero versioned `v*` git tags. Complements `lint-changelog-tags.sh` (which has nothing to enforce when no tags exist) and makes the release trigger policy in ADR-2026-04-11 deterministically enforceable from day one of adoption. Ported from ese-starter 1.3.0 (back into the upstream reference) so adopters who vendor from ESE directly get the same gate that bootstrap adopters already get. Auto-discovered by `preflight.sh`; wired into `.github/workflows/ci.yml`. Passes against current state (two versioned tags present).
+- `scripts/lint-release-existence.sh` as CI Check 36: errors when CHANGELOG has real content under `[Unreleased]` but the repo has zero versioned `v*` git tags. Complements `lint-changelog-tags.sh` (which has nothing to enforce when no tags exist) and makes the release trigger policy in ADR-2026-04-11 deterministically enforceable from day one of adoption. Ported from ese-starter 1.3.0 (back into the upstream reference) so adopters who vendor from ESE directly get the same gate that bootstrap adopters already get. Auto-discovered by `preflight.sh`; wired into `.github/workflows/ci.yml`. Passes against current state (versioned tags present).
+- `docs/work-items/2026-04-11-ese-starter-adopter-repo-and-portable-frontmatter-linter.md`: closed-record export of the ese-starter adoption arc per ADR-019. Documents the scope that shipped in v2.6.0 and across `Nickcom4/ese-starter` v1.0.0-v1.3.0, including the bidirectional back-port of `lint-release-existence.sh` as the closing evidence.
 
 ### Changed
 
-- `scripts/preflight.sh` header comment: linter count updated from 27 to 28 to reflect the addition of `lint-release-existence.sh`. Summary line in `.github/workflows/ci.yml` extended to name the new check.
+- `scripts/preflight.sh` header comment: linter count updated from 27 to 28 to reflect the addition of `lint-release-existence.sh`. Summary line in `.github/workflows/ci.yml` extended to name the new check. `CLAUDE.md` updated from 35 to 36 CI checks and new entry in the Before Every Commit local suite.
 
 ## [2.6.0] - 2026-04-11
 

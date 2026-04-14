@@ -4,8 +4,8 @@
 # against the prose tables in this file and against the rest of the repo
 # (enforcement-spec.yml, req-manifest.sha256, CHANGELOG.md version headings).
 
-ese-version: "2.6.0"
-last-updated: "2026-04-11"
+ese-version: "2.7.0"
+last-updated: "2026-04-14"
 
 owner:
   name: "Nick Baker"
@@ -338,8 +338,8 @@ STANDARDS.md lives in a git repo alongside other files. Per §4.3: changelog is 
 
 ---
 
-*Standard version applied: 2.6.0*
-*Last updated: 2026-04-11*
+*Standard version applied: 2.7.0*
+*Last updated: 2026-04-14*
 *Compliance review cadence: every significant release*
-*Last compliance review: 2026-04-11 (v2.6.0 turnkey adopter onboarding arc: clean-history public release, applicability frontmatter schema and three-tier validator, ese-starter scaffold repo, migration guide, adopter drift-detection tools, preflight wrapper, lint-doc-references gate, lint-changelog-entries subsection uniqueness check, and phase-closure audit enforcement via prose plus global Stop hook)*
+*Last compliance review: 2026-04-14 (v2.7.0 bidirectional flow with ese-starter: back-ported lint-release-existence.sh from ese-starter v1.3.0 as CI Check 36 so upstream-vendoring adopters get the same release-discipline gate as bootstrap-adopted repos; closed the ese-starter adoption arc work item as a work-item-export)*
 *Next compliance review: next significant release (v2.7.0 or later)*
