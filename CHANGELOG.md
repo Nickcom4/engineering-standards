@@ -6,7 +6,15 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
-*No unreleased changes.*
+### Added
+
+- `docs/decisions/ADR-2026-04-14-automate-release-mechanics-at-close-push-remains-gate-authority-only.md`: Accepted. Automates local release mechanics (CHANGELOG `[Unreleased]` heading move, `standards-application.md` version bump, ceremony commit, local tag) at the CLOSE stage of the work-item lifecycle when preflight is green and the semver bump is patch or minor. Push remains explicit gate-authority approval; major bumps remain gate-authority approval. Partially supersedes ADR-2026-04-11 decision points 1, 4, 5, 7. Points 2 (thematic-completion trigger), 3 (deterministic semver table), and 6 (breaking-change pre-release notice) remain in force unchanged. Implementation in the ese-plugin lifecycle skill is a separate follow-on work item; until then, release ceremonies continue to be executed manually by the gate authority per the unchanged decision points.
+
+### Changed
+
+- `docs/decisions/ADR-2026-04-11-release-trigger-policy.md`: status flipped from `Accepted` to `Partially superseded by ADR-2026-04-14-automate-release-mechanics-at-close-push-remains-gate-authority-only` to reflect the supersession.
+- `CLAUDE.md` Hard Gate #7: updated from "never cut a release" to "never push a release" to reflect the new policy's distinction between local-reversible mechanics (automatable) and shared-irreversible push (still gated).
+- `README.md` Versioning section: updated to reference both ADRs, with ADR-2026-04-14 as the current authoritative policy.
 
 ## [2.7.0] - 2026-04-14
 

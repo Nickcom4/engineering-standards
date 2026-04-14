@@ -2,7 +2,7 @@
 type: adr
 id: ADR-2026-04-11-release-trigger-policy
 title: "ESE release trigger policy: gate-authority-cut on thematic completion"
-status: Accepted
+status: Partially superseded by ADR-2026-04-14-automate-release-mechanics-at-close-push-remains-gate-authority-only
 date: 2026-04-11
 deciders: "Nick Baker"
 stage:

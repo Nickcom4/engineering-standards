@@ -119,7 +119,7 @@ starters/                              8 one-time adoption files; copy once at a
 
 Follows [Semantic Versioning](https://semver.org). All changes in [CHANGELOG.md](CHANGELOG.md).
 
-See [CHANGELOG.md](CHANGELOG.md) for current version and history. Release trigger policy (when releases are cut and how semver bumps are assigned) is documented in [ADR-2026-04-11](docs/decisions/ADR-2026-04-11-release-trigger-policy.md).
+See [CHANGELOG.md](CHANGELOG.md) for current version and history. Release trigger and automation policy is documented in [ADR-2026-04-14](docs/decisions/ADR-2026-04-14-automate-release-mechanics-at-close-push-remains-gate-authority-only.md) (current, automates local mechanics at CLOSE; push remains gate-authority-only) and [ADR-2026-04-11](docs/decisions/ADR-2026-04-11-release-trigger-policy.md) (partially superseded; thematic-completion trigger, semver assignment table, and breaking-change pre-release notice remain in force).
 
 ## Contributing
 
