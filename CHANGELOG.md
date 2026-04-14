@@ -6,6 +6,14 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `scripts/lint-release-existence.sh` as CI Check 36: errors when CHANGELOG has real content under `[Unreleased]` but the repo has zero versioned `v*` git tags. Complements `lint-changelog-tags.sh` (which has nothing to enforce when no tags exist) and makes the release trigger policy in ADR-2026-04-11 deterministically enforceable from day one of adoption. Ported from ese-starter 1.3.0 (back into the upstream reference) so adopters who vendor from ESE directly get the same gate that bootstrap adopters already get. Auto-discovered by `preflight.sh`; wired into `.github/workflows/ci.yml`. Passes against current state (two versioned tags present).
+
+### Changed
+
+- `scripts/preflight.sh` header comment: linter count updated from 27 to 28 to reflect the addition of `lint-release-existence.sh`. Summary line in `.github/workflows/ci.yml` extended to name the new check.
+
 ## [2.6.0] - 2026-04-11
 
 **Theme:** Turnkey adopter onboarding arc: clean-history public release, machine-readable applicability frontmatter schema + three-tier validator, ese-starter scaffold repo, migration guide for partial adopters, adopter-facing drift-detection tools (verify / upgrade-check / catchup), single-command preflight wrapper, new lint-doc-references discoverability gate, lint-changelog-entries subsection uniqueness check, and phase-closure audit enforcement via both prose guidance in AGENTS.md and a global Claude Code Stop hook.

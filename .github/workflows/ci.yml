@@ -505,11 +505,22 @@ jobs:
         run: bash scripts/lint-doc-references.sh
 
       # -------------------------
+      # Check 36: Release existence
+      # Errors when CHANGELOG has real content under [Unreleased] but the
+      # repo has zero versioned git tags. Complements
+      # lint-changelog-tags.sh (which has nothing to enforce when no tags
+      # exist) and makes the release trigger policy in ADR-2026-04-11
+      # deterministically enforceable from day one of adoption.
+      # -------------------------
+      - name: Release existence
+        run: bash scripts/lint-release-existence.sh
+
+      # -------------------------
       # Summary
       # -------------------------
       - name: Quality gate summary
         if: always()
         run: |
           echo "ESE Documentation Quality Gate complete."
-          echo "Checks: em dash scan, ADR frontmatter, internal link validation, CHANGELOG structure, REQ-ID uniqueness (T1), tag schema lint (T2), integrity manifest (T7), count parity (T7b), stale counts (PF-37), FMEA consistency (REQ-2.1-43), self-compliance (REQ-2.1-51), unclassified obligations (T3), broken tables, table format, work item export round-trip (FM-08), enforcement spec freshness (T6), requirement index freshness (B15), ADR lifecycle cross-references (REQ-4.2-08/09), FMEA controls implementation (REQ-2.1-53), section heading anchors (T5), README structure, ToC link consistency, ADR validation triggers, ADR validation section presence (REQ-4.2-07), CHANGELOG entry presence, FMEA completeness (REQ-2.1-37), work session log structure (REQ-4.6-01), orphan script detector, count congruence, CHANGELOG-to-git-tag congruence, orphan ADR detector, generic template compliance, FMEA congruence, standards-application frontmatter, doc references (discoverability)."
+          echo "Checks: em dash scan, ADR frontmatter, internal link validation, CHANGELOG structure, REQ-ID uniqueness (T1), tag schema lint (T2), integrity manifest (T7), count parity (T7b), stale counts (PF-37), FMEA consistency (REQ-2.1-43), self-compliance (REQ-2.1-51), unclassified obligations (T3), broken tables, table format, work item export round-trip (FM-08), enforcement spec freshness (T6), requirement index freshness (B15), ADR lifecycle cross-references (REQ-4.2-08/09), FMEA controls implementation (REQ-2.1-53), section heading anchors (T5), README structure, ToC link consistency, ADR validation triggers, ADR validation section presence (REQ-4.2-07), CHANGELOG entry presence, FMEA completeness (REQ-2.1-37), work session log structure (REQ-4.6-01), orphan script detector, count congruence, CHANGELOG-to-git-tag congruence, orphan ADR detector, generic template compliance, FMEA congruence, standards-application frontmatter, doc references (discoverability), release existence."
           echo "All checks must pass before merge is permitted."
