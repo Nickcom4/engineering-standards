@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-04-16
+
+**Theme:** `agent-assisted-development` addenda slot advertised in the starter schema for repositories maintained by AI coding agents with commit authority. The addendum content file is deferred to a separate work item; the slot is advertised first so downstream adopters (ese-starter, ese-plugin) can declare the field, and the internal-vs-starter linter state is intentionally divergent until the addendum file lands.
+
 ### Added
 
 - `docs/decisions/ADR-2026-04-16-agent-assisted-development-addenda-slot.md`: Accepted. Records the rationale for advertising the `agent-assisted-development` addenda slot before the addendum content file exists. Covers the three rejected alternatives (parallel top-level block, subsumption under AI and ML Systems, defer until content ready), the deliberate internal-vs-starter linter divergence, and the validation plan whose trigger is whichever comes first of the addendum content file landing or the first external adopter reporting a schema-validation outcome. Cross-references ese-plugin `docs/research/ecc-comparison-2026-04-16.md` opportunity G2 and the gate-authority OQ1 resolution of 2026-04-16.
