@@ -154,7 +154,8 @@ REQUIRED_CAPABILITIES = [
 ]
 REQUIRED_ADDENDA = [
     'multi-service', 'multi-team', 'web-applications', 'containerized',
-    'ai-ml', 'event-driven', 'continuous-improvement',
+    'ai-ml', 'event-driven', 'agent-assisted-development',
+    'continuous-improvement',
 ]
 ALLOWED_CADENCES = {
     'every-significant-release', 'quarterly', 'semi-annual', 'annual', 'event-triggered',
@@ -328,6 +329,7 @@ ADDENDUM_LABEL_TO_KEY = {
     'Containerized and Orchestrated Systems': 'containerized',
     'AI and ML Systems': 'ai-ml',
     'Event-Driven Systems': 'event-driven',
+    'Agent-Assisted Development': 'agent-assisted-development',
     'Continuous Improvement': 'continuous-improvement',
 }
 
@@ -453,6 +455,7 @@ ADDENDUM_TO_TOKEN = {
     'containerized': 'CTR',
     'ai-ml': 'AI',
     'event-driven': 'EVT',
+    'agent-assisted-development': 'AAD',
     'continuous-improvement': 'CI',
 }
 

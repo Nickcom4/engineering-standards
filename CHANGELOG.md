@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `starters/standards-application.md`: **`agent-assisted-development` addenda slot** added to the `addenda:` YAML block (8th boolean, default `false`) and to the Applicable Addenda prose table. Declares a posture for repositories maintained by AI coding agents with commit authority. The addendum content file itself (`docs/addenda/agent-assisted-development.md`) is a follow-on deliverable; until that file exists, adopters who set this field to `true` will fail `lint-template-compliance.sh`'s cross-check against `docs/addenda/`, which is the correct forcing function: the slot is advertised, the content follows. `starters/linters/lint-standards-application-frontmatter.sh` gains `agent-assisted-development` in all three maintained maps (`REQUIRED_ADDENDA`, `ADDENDUM_LABEL_TO_KEY`, `ADDENDUM_TO_TOKEN` with token `AAD`). The internal `scripts/lint-standards-application-frontmatter.sh` is intentionally unchanged in this release so ESE's own `docs/standards-application.md` is not yet required to declare the field; the two linters are briefly in a known-divergent state until the addendum file lands. Discovered-from: `ese-plugin` `docs/research/ecc-comparison-2026-04-16.md` opportunity G2; gate-authority OQ1 resolution 2026-04-16.
+
 ## [2.8.0] - 2026-04-14
 
 **Theme:** Trigger-walk default inversion (silent-skip to explicit-justify) and release-mechanics ADR. The work-item template's DESIGN Qualification Checklist gains residual FMEA and A3 triggers that require an explicit one-sentence justification when answered "no," completing the companion to the ese-plugin v0.20.0 AP-005 structural fix.

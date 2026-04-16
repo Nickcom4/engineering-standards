@@ -53,6 +53,7 @@ addenda:
   containerized: false                      # Docker, Kubernetes, OCI runtime
   ai-ml: false                              # ML models, LLMs, probabilistic components
   event-driven: false                       # event brokers, message queues, event sourcing
+  agent-assisted-development: false         # AI coding agents with commit authority, harness configuration, agent security posture
   continuous-improvement: false             # formal Lean or Six Sigma practice
 
 # §4.1 template-compliance verification mode (REQ-4.1-03).
@@ -366,6 +367,7 @@ The standards application document contains a new person readiness check.
 | Containerized and Orchestrated Systems | no | |
 | AI and ML Systems | no | |
 | Event-Driven Systems | no | |
+| Agent-Assisted Development | no | |
 | Continuous Improvement | no | |
 
 > **Adopter action:** flip each Applies? cell from no to yes for every addendum that matches your project's context. Each yes activates an overlay of extra requirements on top of the base standard. The YAML applicability frontmatter at the top of this file must match: a yes here requires `true` for the corresponding `addenda.*` key, enforced by `lint-standards-application-frontmatter.sh` Tier 2. The addendum files live in the vendored ESE submodule under `docs/addenda/`; reference those for the full REQ list each addendum adds.
