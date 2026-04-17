@@ -21,7 +21,7 @@
 
 ## About This Repo
 
-Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 754 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 37 CI checks and maintain self-compliance.
+Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 754 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 38 CI checks and maintain self-compliance.
 
 **Key paths:**
 
@@ -234,6 +234,7 @@ bash scripts/lint-standards-application-frontmatter.sh
 bash scripts/lint-doc-references.sh
 bash scripts/lint-release-existence.sh
 bash scripts/lint-vsm-baseline-reference.sh
+bash scripts/lint-agent-config.sh
 ```
 
 **Fastest path:** instead of running every script above individually, use `bash scripts/preflight.sh`. That single command runs the full linter suite, the three manifest verifies, the typographic scan, and the content-boundary scans, and prints one pass/fail summary. It is the recommended entry point before any commit; the per-script list above remains for debugging an individual failure.

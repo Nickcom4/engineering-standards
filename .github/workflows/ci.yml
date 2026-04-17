@@ -530,11 +530,27 @@ jobs:
         run: bash scripts/lint-vsm-baseline-reference.sh
 
       # -------------------------
+      # Check 38: Agent-config posture (shadow)
+      # Applies only when standards-application.md declares
+      # addenda.agent-assisted-development: true. When active, scans the
+      # configured posture files (CLAUDE.md, AGENTS.md, .cursorrules,
+      # .agent.md) for six required posture statements (file exists,
+      # agent-authority declaration, gate-authority review pathway,
+      # approval-boundary statement, credential-handling statement,
+      # revocation-path statement) and reports any that are absent.
+      # Detection is lexical; the shadow phase is where patterns are
+      # refined before promotion to gate. Ships in shadow status: prints
+      # findings for auditability but does not block the build.
+      # -------------------------
+      - name: Agent-config posture (shadow, REQ-ADD-AAD-01..-08)
+        run: bash scripts/lint-agent-config.sh
+
+      # -------------------------
       # Summary
       # -------------------------
       - name: Quality gate summary
         if: always()
         run: |
           echo "ESE Documentation Quality Gate complete."
-          echo "Checks: em dash scan, ADR frontmatter, internal link validation, CHANGELOG structure, REQ-ID uniqueness (T1), tag schema lint (T2), integrity manifest (T7), count parity (T7b), stale counts (PF-37), FMEA consistency (REQ-2.1-43), self-compliance (REQ-2.1-51), unclassified obligations (T3), broken tables, table format, work item export round-trip (FM-08), enforcement spec freshness (T6), requirement index freshness (B15), ADR lifecycle cross-references (REQ-4.2-08/09), FMEA controls implementation (REQ-2.1-53), section heading anchors (T5), README structure, ToC link consistency, ADR validation triggers, ADR validation section presence (REQ-4.2-07), CHANGELOG entry presence, FMEA completeness (REQ-2.1-37), work session log structure (REQ-4.6-01), orphan script detector, count congruence, CHANGELOG-to-git-tag congruence, orphan ADR detector, generic template compliance, FMEA congruence, standards-application frontmatter, doc references (discoverability), release existence, VSM baseline reference (shadow)."
+          echo "Checks: em dash scan, ADR frontmatter, internal link validation, CHANGELOG structure, REQ-ID uniqueness (T1), tag schema lint (T2), integrity manifest (T7), count parity (T7b), stale counts (PF-37), FMEA consistency (REQ-2.1-43), self-compliance (REQ-2.1-51), unclassified obligations (T3), broken tables, table format, work item export round-trip (FM-08), enforcement spec freshness (T6), requirement index freshness (B15), ADR lifecycle cross-references (REQ-4.2-08/09), FMEA controls implementation (REQ-2.1-53), section heading anchors (T5), README structure, ToC link consistency, ADR validation triggers, ADR validation section presence (REQ-4.2-07), CHANGELOG entry presence, FMEA completeness (REQ-2.1-37), work session log structure (REQ-4.6-01), orphan script detector, count congruence, CHANGELOG-to-git-tag congruence, orphan ADR detector, generic template compliance, FMEA congruence, standards-application frontmatter, doc references (discoverability), release existence, VSM baseline reference (shadow), agent-config posture (shadow)."
           echo "All checks must pass before merge is permitted."
