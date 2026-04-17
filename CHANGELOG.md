@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `docs/addenda/agent-assisted-development.md`: **MCP supply-chain extension subsection** added under the existing MCP and External Tool Register section. Four new REQ-ADD-AAD-NN requirements introduced that govern how entries on the register are evaluated as supply-chain artifacts: `REQ-ADD-AAD-11` (provenance-verification evidence named before enablement; no silent acceptance), `REQ-ADD-AAD-12` (version pinning to release tag / commit SHA / content hash; `latest` invalid), `REQ-ADD-AAD-13` (audit trail of enablement and disablement decisions in commit / ADR / register-local changelog), `REQ-ADD-AAD-14` (threat-surface listing per row; one sentence per class of data the tool can exfiltrate or operation it can perform; `soft` enforcement). REQ-ID count advances 754 -> 758. Stale-count references in `docs/architecture/ese-machine-readable-enforcement-system.md` (lines 47, 199) and `CLAUDE.md` (line 24) bumped from 754 to 758. Implements A3 (Wave 3 A-cluster; ese-plugin ecc-comparison-2026-04-16.md).
+
 ## [2.11.0] - 2026-04-17
 
 **Theme:** Agent-assisted-development addendum content and self-application; Lean VSM methodology grounding; adopter-facing agent-config and named-owner-integrity shadow linters. Closes the Session C / v2.9.0 intentional slot-before-content divergence. Pairs MA5 methodology with VSM1 artifact discipline shipped in v2.10.0.

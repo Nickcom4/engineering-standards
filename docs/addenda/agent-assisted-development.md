@@ -218,6 +218,34 @@ At minimum each register row names:
 
 When the harness loads no external tools, the register is a single row declaring `not-applicable` with the rationale. Silent absence of the register is not a valid posture.
 
+### MCP Supply-Chain Extensions
+
+The register above names MCP servers and external tools; the four requirements in this subsection govern how those entries are evaluated as supply-chain artifacts. MCPs and external tools are packaged code that the harness grants trust to; each enablement is a supply-chain decision equivalent to adding a dependency to the project.
+
+<a name="REQ-ADD-AAD-11"></a>
+**REQ-ADD-AAD-11** `artifact` `define` `hard` `addendum:AAD`
+Each MCP or external tool on the register names the provenance-verification evidence used to accept its supply path before enablement: a signed-release verification, a maintainer identity trusted through the adopter's existing trust graph, an internal build with source review, or an explicit "unverified provenance; rationale recorded" acknowledgment. Silent acceptance of a new supply path is not valid posture.
+
+An unverified supply path is a supply-chain attack vector; named acceptance with rationale is not a mitigation but is a reviewable claim that surfaces the risk. The goal is that every row on the register can be traced to a conscious decision about its origin.
+
+<a name="REQ-ADD-AAD-12"></a>
+**REQ-ADD-AAD-12** `artifact` `define` `hard` `addendum:AAD`
+Each register row pins the MCP or external tool to a specific version (release tag, commit SHA, or content hash); `latest` and unpinned references are invalid. Re-pinning is a register update subject to the same gate as a new enablement.
+
+Unpinned references defeat supply-chain verification by allowing silent upstream rewrites of the trusted code. Pinning is the mechanism that makes REQ-ADD-AAD-11's provenance decision durable; a decision recorded against an unpinned reference applies to a version that does not exist.
+
+<a name="REQ-ADD-AAD-13"></a>
+**REQ-ADD-AAD-13** `artifact` `build` `hard` `addendum:AAD`
+Enablement and disablement of an MCP or external tool in the register are audit-trailed: a commit message, ADR, or register-local changelog names who decided, when, against what version, and the rationale. Register edits without audit-trail evidence are invalid posture.
+
+The audit trail is what makes the register evolve reviewably. Without it, the register snapshot is an assertion of the current state with no history of decisions; future review has no way to distinguish deliberate enablement from drift.
+
+<a name="REQ-ADD-AAD-14"></a>
+**REQ-ADD-AAD-14** `artifact` `design` `soft` `addendum:AAD`
+Each register row lists the threat surface the MCP or external tool adds: the classes of data it can exfiltrate, the operations it can perform, the prompt-injection paths it opens. One sentence per class is sufficient; the list need not be exhaustive but must surface the primary threats a reviewer should know.
+
+Threat-listing is the forcing function that makes the adopter reason about the tool before adding it. A tool whose threats cannot be summarized in one sentence per class is a tool whose trust decision is not yet informed enough to make.
+
 ---
 
 ## External Standards

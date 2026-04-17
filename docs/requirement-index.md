@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 620 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 624 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -53,7 +53,7 @@
 
 ## Define
 
-*55 requirements.*
+*57 requirements.*
 
 ### All work items
 
@@ -136,6 +136,8 @@
 | `REQ-ADD-AAD-01` | **hard** | The project's standards application document declares the harness in use, whether agents hold commit authority, the sand... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-02` | **hard** | When an agent holds commit authority, the branches on which agent-initiated commits are permitted are named, and the gat... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-10` | **hard** | When the harness loads external tools or Model Context Protocol (MCP) servers, a register enumerates each tool, its sour... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-11` | **hard** | Each MCP or external tool on the register names the provenance-verification evidence used to accept its supply path befo... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-12` | **hard** | Each register row pins the MCP or external tool to a specific version (release tag, commit SHA, or content hash); `lates... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ### type:improvement
 
@@ -147,7 +149,7 @@
 
 ## Design
 
-*70 requirements.*
+*71 requirements.*
 
 ### All work items
 
@@ -253,6 +255,7 @@
 |---|---|---|---|
 | `REQ-ADD-AAD-04` | **hard** | The scope of approved agent actions is declared explicitly: allowed file types, directory allowlists, and command catego... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-05` | **hard** | The agent execution environment has a declared isolation level (one of: devcontainer, vm, network-isolated, unrestricted... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-14` | *soft* | Each register row lists the threat surface the MCP or external tool adds: the classes of data it can exfiltrate, the ope... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ### type:feature AND (type:component OR type:security)
 
@@ -276,7 +279,7 @@
 
 ## Build
 
-*64 requirements.*
+*65 requirements.*
 
 ### All work items
 
@@ -386,6 +389,7 @@
 |---|---|---|---|
 | `REQ-ADD-AAD-06` | **hard** | Agent-initiated commits are distinguishable from human-initiated commits through a durable convention recorded in the po... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-09` | **hard** | Agent configuration files (for example, CLAUDE.md, AGENTS.md, .cursorrules, harness settings files) are committed to the... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-13` | **hard** | Enablement and disablement of an MCP or external tool in the register are audit-trailed: a commit message, ADR, or regis... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ## Verify
 
