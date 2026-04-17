@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.13.0] - 2026-04-17
+
+**Theme:** Wave 4 addendum extensions (partial). MA1 Theory of Constraints framing in continuous-improvement (REQ-ADD-CI-67 through -69) complements the Wave 1 VSM methodology. EVT1 event-consumer idempotency requirements in event-driven (REQ-ADD-EVT-24 through -27) make the dedup mechanism, window, poison-handling, and at-least-once semantics auditable at the architecture-doc surface. MS1 contract test coverage registry in multi-service (REQ-ADD-MS-17 through -19) reifies the consumer-producer pair-to-test map as a single auditable artifact. MA3 adoption maturity levels, G1 STANDARDS.md agent-assisted-development section, EVT1 event-consumer idempotency docs, MS1 contract test coverage registry, C1 provider-agnostic AGENTS.md starter, C2 stack-specific CLAUDE.md starters, and MR2 ese-starter consolidation planning ADR remain tracked for a future minor release. REQ-ID count advances 761 -> 771 (+3 REQ-ADD-CI, +4 REQ-ADD-EVT, +3 REQ-ADD-MS).
+
 ### Added
 
 - `docs/addenda/multi-service.md`: new Contract Test Coverage Registry section (MS1, Wave 4). Three new REQ-IDs: REQ-ADD-MS-17 (registry exists at `docs/api-contracts/registry.md` or equivalent), REQ-ADD-MS-18 (four named fields per row: consumer, producer, test path or named exemption, last-verified-passing date / CI run), REQ-ADD-MS-19 (registry staleness surfaced in Testing Gap Audit with adopter-declared threshold; 90 days recommended default). REQ-ID count for MS addendum advances 16 -> 19. Extends REQ-ADD-MS-03 and REQ-ADD-MS-08 by making pair-to-test coverage completeness auditable rather than implicit.
