@@ -107,6 +107,8 @@ At minimum the declaration distinguishes:
 - **Command categories:** shell-command families the agent is permitted to run (for example, read-only discovery, test runners, formatters). Destructive categories (force-push, history rewrite, dependency removal) require individual justification at the time the agent is invoked, not a blanket grant.
 - **Wildcard grants:** if a wildcard grant exists, the rationale is named. "Everything except X" is a valid posture when X is enumerated; it is not a valid posture when X is implicit.
 
+**Minimum floor:** [ADR-2026-04-17-approval-boundary-for-agent-actions](../decisions/ADR-2026-04-17-approval-boundary-for-agent-actions.md) names the minimum approval-boundary floor the posture declaration must meet (no tracked-file deletion, no destructive git, no writes outside the working tree without gate-authority prompt, with a named enforcement layer). The per-adopter extension space remains open; the floor is non-negotiable.
+
 ---
 
 ## Sandbox and Isolation Posture (Required)
