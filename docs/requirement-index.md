@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 617 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 620 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -147,7 +147,7 @@
 
 ## Design
 
-*69 requirements.*
+*70 requirements.*
 
 ### All work items
 
@@ -201,6 +201,7 @@
 |---|---|---|---|
 | `REQ-ADD-CI-01` | **hard** | Value stream mapping produces a current-state map with active time and wait time sourced from at least 10 completed work... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 | `REQ-ADD-CI-07` | **hard** | At least one improvement work item is filed with a measurable before/after target. | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
+| `REQ-ADD-CI-64` | **hard** | Before the first improvement work item is filed against a value stream, the bottleneck stage is named explicitly and bac... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 
 ### Addendum: Multi-Team
 
@@ -388,7 +389,7 @@
 
 ## Verify
 
-*68 requirements.*
+*69 requirements.*
 
 ### All work items
 
@@ -459,6 +460,7 @@
 | `REQ-ADD-CI-38` | **hard** | All five columns have named, specific entries with no blanks and no "TBD" values. | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 | `REQ-ADD-CI-39` | **hard** | What is outside the Suppliers-to-Customers boundary is stated explicitly in writing and agreed to by the team. | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 | `REQ-ADD-CI-62` | **hard** | FMEA derived sections (High-Severity table, RPN Summary, Controls Summary, Review Checklist) are consistent with source ... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
+| `REQ-ADD-CI-65` | **hard** | Before a countermeasure to the named bottleneck is implemented, the pre-intervention baseline measurement is recorded (w... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 
 ### Addendum: AI/ML
 
@@ -629,7 +631,7 @@
 
 ## Monitor
 
-*9 requirements.*
+*10 requirements.*
 
 ### All work items
 
@@ -637,6 +639,12 @@
 |---|---|---|---|
 | `REQ-2.1-10` | **hard** | The MONITOR answer records the specific alert, dashboard, or detection mechanism in the work item before CLOSE. | [STANDARDS.md](../STANDARDS.md) |
 | `REQ-2.1-34` | **hard** | The MONITOR answer records who is notified when the detection mechanism triggers. | [STANDARDS.md](../STANDARDS.md) |
+
+### Addendum: Continuous Improvement
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-CI-66` | **hard** | After a bottleneck countermeasure lands, re-measurement is scheduled on an event trigger (N completed work items travers... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 
 ### Addendum: AI/ML
 

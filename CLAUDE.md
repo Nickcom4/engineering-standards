@@ -21,7 +21,7 @@
 
 ## About This Repo
 
-Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 751 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 37 CI checks and maintain self-compliance.
+Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 754 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 37 CI checks and maintain self-compliance.
 
 **Key paths:**
 
@@ -34,7 +34,7 @@ Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-
 | `docs/decisions/*.md` | ADRs (prescriptive) |
 | `docs/standards-application.md` | ESE applying its own standard to itself |
 | `CHANGELOG.md` | Version history (update with every change) |
-| `enforcement-spec.yml` | 317 machine-readable gates (auto-generated) |
+| `enforcement-spec.yml` | 320 machine-readable gates (auto-generated) |
 | `scripts/` | CI validation scripts and git hooks |
 
 ---

@@ -117,6 +117,38 @@ At least one improvement work item is filed with a measurable before/after targe
 - The three largest wait times are identified by stage name and measured duration.
 - At least one improvement work item is filed with a measurable before/after target tied to the largest wait time.
 
+### Lean Methodology Grounding
+
+> **Activates at:** DESIGN and post-mortem (methodology applies whenever a VSM is constructed).
+
+The Lean tradition (Taiichi Ohno; Womack and Jones; Rother and Shook) treats VSM as an application of the Theory of Constraints (Goldratt): at any point in time, total throughput is set by the slowest stage in the stream, and improvements outside that stage do not increase throughput. The consequences of ignoring this are practical, not rhetorical. Investing in a stage that is not the constraint makes work pile up faster at the constraint and makes the effective delivery rate lower, not higher. The methodology below exists so the bottleneck is named before any improvement action is taken.
+
+**Walk the stream (Gemba).** The canonical Lean practice is `genchi genbutsu`: go and see, not "go and hear about." A VSM built from memory, self-report, or aggregated dashboards systematically under-counts wait time: the stages where work sits are the stages no one narrates, because no one is acting on it there. The methodology-faithful method:
+
+- For a software delivery stream, walk the actual artifacts: the last N completed work items (10 minimum per [REQ-ADD-CI-01](#value-stream-mapping)), tracing each from D0 capture through production deployment. Record the timestamps at each state transition as they exist in the system of record (version control, task system, deploy log), not as estimates.
+- Where the system of record does not capture a transition (for example, the time a work item sat waiting for review before a reviewer opened it), record that absence explicitly. An unmeasured stage is a stage you will not improve; the measurement gap itself is a VSM finding.
+- Record ownership per stage. A stage with no single owning role accumulates wait time proportionally to the number of handoffs inside it, and the methodology is explicit that fixing that stage starts with naming the role that owns it, not with optimizing the mechanics.
+
+**Identify the constraint before hypothesizing the cause.** The stage with the largest wait time is not necessarily the stage that is slow; it may be the stage after the true constraint, where work accumulates. Constraint identification is a structured activity (see [Constraint Identification Methods](#constraint-identification-methods)), not an inference from the largest cell in the map. A VSM that lists three candidate bottlenecks without evidence for which one is the true constraint has done half the work.
+
+<a name="REQ-ADD-CI-64"></a>
+**REQ-ADD-CI-64** `gate` `design` `hard` `addendum:CI` `per-item`
+Before the first improvement work item is filed against a value stream, the bottleneck stage is named explicitly and backed by evidence (measurement from the current-state map, not inference from the largest wait cell).
+
+**Commit to a single measurable change before re-mapping.** Lean improvement cycles (`kaizen`) are iterative and small. Mapping the whole stream, committing to six parallel improvements, and re-mapping six weeks later produces a VSM that cannot attribute delta to cause. The methodology-faithful sequence is: one change targeted at the identified bottleneck, measured against the declared before/after target from [REQ-ADD-CI-07](#value-stream-mapping), re-map before the next change begins.
+
+<a name="REQ-ADD-CI-65"></a>
+**REQ-ADD-CI-65** `gate` `verify` `hard` `addendum:CI` `per-item`
+Before a countermeasure to the named bottleneck is implemented, the pre-intervention baseline measurement is recorded (which metric, what value, sourced from which completed work items) so that post-intervention comparison is observable.
+
+**Re-measure on an event trigger, not a calendar window.** "Check in three months" is a calendar trigger and tends to drift when calendars get busy. The methodology-faithful trigger is event-based: re-measure when N completed work items have traversed the modified stage since the change landed, where N is set to the same floor as the baseline (10 per [REQ-ADD-CI-01](#value-stream-mapping)). If N items have not traversed the stage in the expected window, that absence is itself a finding about throughput.
+
+<a name="REQ-ADD-CI-66"></a>
+**REQ-ADD-CI-66** `gate` `monitor` `hard` `addendum:CI` `per-item`
+After a bottleneck countermeasure lands, re-measurement is scheduled on an event trigger (N completed work items traversing the modified stage, matching the baseline-sample floor), not a calendar window.
+
+**Relationship to the VSM artifact discipline.** The methodology described here is the `how` of producing a VSM. The [VSM template](../../templates/vsm.md) shipped in v2.10.0 is the `what`: the required sections (Purpose and Context, Current-State Map with active/wait/yield/ownership per stage, Measured Observations from 10+ items per REQ-ADD-CI-01, Bottleneck Identification with evidence for the three largest wait times, Metadata with current-state-as-of date, author, status, supersedes) carry the output of the methodology into a reviewable artifact. Adopter repositories using the methodology without the template produce a VSM whose shape cannot be enforced by `scripts/lint-vsm-baseline-reference.sh`; adopter repositories using the template without the methodology produce a shape whose content is not grounded in current state. Both are required.
+
 ---
 
 ## Kaizen Events
