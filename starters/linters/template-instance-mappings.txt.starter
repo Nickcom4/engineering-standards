@@ -59,6 +59,12 @@ ${ESE_ROOT}/templates/work-item-export.md | docs/work-items/*.md | work item exp
 # -------- Compliance reviews --------
 ${ESE_ROOT}/templates/compliance-review.md | docs/compliance-review-*.md | compliance review
 
+# -------- Value stream maps (continuous-improvement addendum) --------
+# Baseline archive for improvement work items per REQ-ADD-CI-01. Pair with
+# lint-vsm-baseline-reference.sh to enforce that type:improvement work
+# items cite a resolvable baseline path in their Dependencies table.
+${ESE_ROOT}/templates/vsm.md | docs/improvement/vsm/VSM-*.md | VSM
+
 # -------- Product-layer documents (§1.2 progression) --------
 ${ESE_ROOT}/templates/capabilities.md | docs/product/capabilities-*.md | capabilities
 ${ESE_ROOT}/templates/prd.md | docs/product/prd-*.md | PRD

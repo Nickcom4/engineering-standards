@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 602 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 607 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -804,7 +804,7 @@
 
 ## Continuous
 
-*163 requirements.*
+*168 requirements.*
 
 ### All work items
 
@@ -969,6 +969,16 @@
 | `REQ-TPL-63` | *soft* | §4.6: one paragraph - current state, what to do first, any blockers. The next session must be able to resume without ask... | [templates/work-session-log.md](../templates/work-session-log.md) |
 | `REQ-TPL-64` | *soft* | §4.2: every significant decision about this component must have an ADR. List them here for discoverability. | [templates/architecture-doc.md](../templates/architecture-doc.md) |
 | `REQ-TPL-65` | *soft* | §1.1: define before starting - not after the first incident. Per §5.7: rollback trigger must be pre-defined. | [templates/prd.md](../templates/prd.md) |
+
+### Addendum: Continuous Improvement
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-STR-30` | *soft* | Archive convention for value stream maps supporting improvement work items. Required by [§2.6](../STANDARDS.md#26-delive... | [starters/vsm.md](../starters/vsm.md) |
+| `REQ-TPL-66` | *soft* | Value stream map archives the current-state baseline for a delivery process before improvement work begins. | [templates/vsm.md](../templates/vsm.md) |
+| `REQ-TPL-67` | *soft* | The improvement arc and the trigger that motivated the map are stated before measurement begins. | [templates/vsm.md](../templates/vsm.md) |
+| `REQ-TPL-68` | *soft* | Observations are sourced from at least 10 completed work items with the measurement method named per item. | [templates/vsm.md](../templates/vsm.md) |
+| `REQ-TPL-69` | *soft* | The three largest wait times are identified with stage name, measured duration, and the evidence that the stage binds th... | [templates/vsm.md](../templates/vsm.md) |
 
 ### Addendum: Multi-Team
 

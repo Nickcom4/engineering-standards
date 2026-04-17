@@ -75,7 +75,7 @@ docs/
   incidents/                           Lessons learned and anti-patterns
   product/                             Product documents (PRDs, capabilities, research)
   work-items/                          Exported work item records (ADR-019)
-templates/                             15 reusable templates; create many instances throughout project lifecycle
+templates/                             16 reusable templates; create many instances throughout project lifecycle
   adr.md                               Architectural decision record
   a3.md                                A3 structured problem solving
   architecture-doc.md                  Component architecture document
@@ -88,10 +88,11 @@ templates/                             15 reusable templates; create many instan
   problem-research.md                  Problem discovery research (also DISCOVER D2 abbreviated)
   slo.md                               Service level objectives
   tech-eval.md                         Technology evaluation
+  vsm.md                               Value stream map (baseline archive per REQ-ADD-CI-01)
   work-item.md                         Work item (8 required attributes, lifecycle fields)
   work-item-export.md                  Work item export for private-system teams (ADR-019)
   work-session-log.md                  Work session log
-starters/                              8 one-time adoption files; copy once at adoption, then maintain
+starters/                              9 one-time adoption files; copy once at adoption, then maintain
   standards-application.md             Project compliance tracker
   repo-structure.md                    Reference directory layout and naming conventions
   deployment.md                        Deployment procedure and rollback
@@ -100,6 +101,7 @@ starters/                              8 one-time adoption files; copy once at a
   intake-log.md                        Signal intake log for non-tracked-system projects
   lessons-learned-registry.md          Lessons-learned starter
   anti-pattern-registry.md             Anti-pattern registry starter
+  vsm.md                               Value stream mapping baseline archive convention
   linters/                             Adopter-facing portable linters (vendor once at adoption)
     README.md                          Adoption protocol for the linter starter pack
     lint-template-compliance.sh        Parameterized template-instance compliance linter
@@ -109,6 +111,7 @@ starters/                              8 one-time adoption files; copy once at a
     lint-orphan-scripts.sh             Detect lint/validate scripts not wired to CI and agent context
     lint-readme-structure.sh           Bidirectional README Structure disk/README congruence linter
     lint-count-congruence.sh           Gate/check/script count-in-prose congruence linter
+    lint-vsm-baseline-reference.sh     Improvement-WI baseline VSM citation linter (shadow)
     template-instance-mappings.txt.starter  Example mapping config for lint-template-compliance
   tools/                               Adopter-facing workflow tools (vendor once at adoption)
     README.md                          Adoption protocol for the tool starter pack

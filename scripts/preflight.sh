@@ -15,7 +15,8 @@
 # What preflight runs:
 #
 #   1. All scripts/lint-*.sh (currently 28 linters including
-#      lint-release-existence.sh; preflight discovers linters dynamically)
+#      lint-vsm-baseline-reference.sh; preflight discovers linters
+#      dynamically)
 #   2. Three manifest verifiers: generate-req-manifest.sh verify,
 #      generate-enforcement-spec.sh verify, generate-req-index.sh verify
 #   3. Typographic scan: em dashes (U+2014), en dashes (U+2013), smart

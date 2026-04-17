@@ -42,6 +42,9 @@ templates/work-item-export.md | docs/work-items/*.md | work item export
 # -------- Compliance reviews --------
 templates/compliance-review.md | docs/compliance-review-*.md | compliance review
 
+# -------- Value stream maps (continuous-improvement addendum) --------
+templates/vsm.md | docs/improvement/vsm/VSM-*.md | VSM
+
 # -------- Product-layer documents (§1.2 progression) --------
 templates/capabilities.md | docs/product/capabilities-*.md | capabilities
 templates/prd.md | docs/product/prd-*.md | PRD

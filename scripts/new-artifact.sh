@@ -248,7 +248,7 @@ if [ -z "$OUTPUT_PATH" ]; then
 
   # Decide whether to include a date in the filename
   case "$prefix" in
-    ADR-|DFMEA-|PFMEA-|post-mortem-|compliance-review-)
+    ADR-|DFMEA-|PFMEA-|post-mortem-|compliance-review-|VSM-)
       filename="${prefix}${TODAY}-${SLUG}${suffix}"
       ;;
     "")
