@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-04-17
+
+**Theme:** Wave 3 agent-assisted-development content completion. A3 (MCP supply-chain) extends the v2.11.0 register section with provenance, pinning, audit-trail, and threat-surface requirements. A5 (sandbox/isolation) extends the posture section with filesystem, network, and credential-access scope requirements. A6 (approval-boundary ADR) names the minimum floor an adopter posture must meet. REQ-ID count advances 754 -> 761.
+
 ### Added
 
 - `docs/decisions/ADR-2026-04-17-approval-boundary-for-agent-actions.md`: new accepted ADR naming the minimum approval-boundary floor that an adopter posture declaration under `REQ-ADD-AAD-04` must meet. Floor: no tracked-file deletion, no destructive git operations (force-push, reset --hard, protected-branch or tag delete, amending published commits), no writes outside the working tree without explicit gate-authority prompt per invocation, and a named enforcement layer. Per-adopter extensions remain open for stricter postures. Four alternatives considered and rejected: unbounded authority (status quo that produced the original gap); per-action prompt for everything (usability defeat); tiered boundaries (classification overhead); ESE-level enforcement of specific hook configurations (couples standard to runtime, violates ESE §3.3 portability). Validation: next adopter posture declaration after v2.12.0 names the four minimum-floor classes + enforcement layer. Cross-referenced from `REQ-ADD-AAD-04` in `docs/addenda/agent-assisted-development.md`. Implements A6 (Wave 3 A-cluster; ese-plugin ecc-comparison-2026-04-16.md).
