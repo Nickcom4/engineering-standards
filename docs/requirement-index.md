@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 624 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 627 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -149,7 +149,7 @@
 
 ## Design
 
-*71 requirements.*
+*74 requirements.*
 
 ### All work items
 
@@ -256,6 +256,9 @@
 | `REQ-ADD-AAD-04` | **hard** | The scope of approved agent actions is declared explicitly: allowed file types, directory allowlists, and command catego... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-05` | **hard** | The agent execution environment has a declared isolation level (one of: devcontainer, vm, network-isolated, unrestricted... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 | `REQ-ADD-AAD-14` | *soft* | Each register row lists the threat surface the MCP or external tool adds: the classes of data it can exfiltrate, the ope... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-15` | **hard** | The posture declaration names the filesystem scope the agent can reach: the directory trees mounted read-write, the dire... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-16` | **hard** | The posture declaration names the network policy for agent sessions: the egress destinations permitted (by host or CIDR)... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-17` | **hard** | The posture declaration names the credential-access scope inside the sandbox: which credentials the agent can read (for ... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ### type:feature AND (type:component OR type:security)
 

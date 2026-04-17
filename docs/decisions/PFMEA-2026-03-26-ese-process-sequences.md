@@ -296,6 +296,8 @@ Eight sequential processes identified in STANDARDS.md:
 
 
 
+
+
 ## RPN Summary
 
 **Threshold:** RPN >= 75 requires action. Severity >= 7 requires review regardless of RPN.

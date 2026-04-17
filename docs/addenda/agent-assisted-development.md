@@ -127,6 +127,28 @@ Isolation posture is the containment boundary for a misbehaving agent or a compr
 
 A posture of `unrestricted` paired with `handles-sensitive-data: true` in the capability declaration is a blocking discrepancy and should be resolved before further work.
 
+### Sandbox and Isolation Posture Extensions
+
+The isolation-level declaration above names the category; the three requirements in this subsection govern the content of the posture within each category. The category alone (`devcontainer`, `vm`, etc.) is not a containment claim; the content is.
+
+<a name="REQ-ADD-AAD-15"></a>
+**REQ-ADD-AAD-15** `artifact` `design` `hard` `addendum:AAD`
+The posture declaration names the filesystem scope the agent can reach: the directory trees mounted read-write, the directory trees mounted read-only, the directory trees out of reach entirely. A posture that does not name filesystem scope is invalid for any category other than `not-applicable`.
+
+Filesystem scope is what makes the containment claim measurable. An agent running in a `devcontainer` that mounts the whole host filesystem read-write is not containment by the common-sense reading of the term; the category is honest only when scope is named.
+
+<a name="REQ-ADD-AAD-16"></a>
+**REQ-ADD-AAD-16** `artifact` `design` `hard` `addendum:AAD`
+The posture declaration names the network policy for agent sessions: the egress destinations permitted (by host or CIDR), the egress destinations blocked, whether ingress is permitted (for example, debugging proxies), and whether the policy is enforced at the network layer (e.g., iptables, container networking) or at the application layer (e.g., HTTP client allowlist).
+
+Network policy is a lever the isolation category does not determine: a `vm` with default routing is network-unconstrained; a `devcontainer` with a strict network allowlist is network-constrained. The policy statement disambiguates.
+
+<a name="REQ-ADD-AAD-17"></a>
+**REQ-ADD-AAD-17** `artifact` `design` `hard` `addendum:AAD`
+The posture declaration names the credential-access scope inside the sandbox: which credentials the agent can read (for example, a scoped API token for the adopter's GitHub organization), which it cannot (for example, the operator's personal PAT), and the mechanism by which the distinction is enforced (mount-scope, environment-variable allowlist, credential-broker).
+
+Without a credential-access scope, a sandboxed agent that can still read the operator's long-lived tokens on disk is not sandboxed for the classes of threat the sandbox was meant to address. Naming the scope is what makes the sandbox threat model complete.
+
 ---
 
 ## Audit Trail (Required)
