@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.11.0] - 2026-04-17
+
+**Theme:** Agent-assisted-development addendum content and self-application; Lean VSM methodology grounding; adopter-facing agent-config and named-owner-integrity shadow linters. Closes the Session C / v2.9.0 intentional slot-before-content divergence. Pairs MA5 methodology with VSM1 artifact discipline shipped in v2.10.0.
+
 ### Added
 
 - `docs/addenda/continuous-improvement.md`: **Lean VSM methodology grounding subsection** added under the existing Value Stream Mapping section. Introduces the Theory of Constraints framing (Goldratt) that underlies Lean VSM, the `genchi genbutsu` (go-and-see) methodology that prevents a VSM built from memory or dashboards, the ownership-per-stage requirement, the constraint-identification-before-causal-hypothesis sequence, the single-measurable-change-before-re-mapping discipline (iterative kaizen), and the event-triggered re-measurement ceiling. 3 new REQ-ADD-CI-NN requirements introduced: `REQ-ADD-CI-64` (bottleneck named with evidence before improvement filing), `REQ-ADD-CI-65` (pre-intervention baseline measurement recorded before countermeasure implementation), `REQ-ADD-CI-66` (re-measurement scheduled on an event trigger of N completed items, matching the baseline-sample floor, not a calendar window). Formalizes the "how" of the methodology that [REQ-ADD-CI-01](../docs/addenda/continuous-improvement.md#value-stream-mapping) and the v2.10.0 VSM template shipped the "what" for: methodology plus template together produce a reviewable VSM whose content is grounded in current state and whose shape the `lint-vsm-baseline-reference.sh` linter can enforce. Methodology content is companion to the ese-plugin opportunity MA5 card.
