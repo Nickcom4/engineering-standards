@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 630 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 634 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -149,7 +149,7 @@
 
 ## Design
 
-*74 requirements.*
+*78 requirements.*
 
 ### All work items
 
@@ -224,6 +224,10 @@
 | `REQ-ADD-EVT-21` | *soft* | If event sourcing is used: snapshot strategy is documented in the architecture doc. | [docs/addenda/event-driven.md](addenda/event-driven.md) |
 | `REQ-ADD-EVT-22` | *soft* | If event sourcing is used: schema evolution (upcasting) strategy is documented in the architecture doc. | [docs/addenda/event-driven.md](addenda/event-driven.md) |
 | `REQ-ADD-EVT-23` | *soft* | If event sourcing is used: consistency model is documented in the architecture doc. | [docs/addenda/event-driven.md](addenda/event-driven.md) |
+| `REQ-ADD-EVT-24` | **hard** | Every consumer declares an idempotency mechanism in the architecture doc: dedup-key (consumer-local record of processed ... | [docs/addenda/event-driven.md](addenda/event-driven.md) |
+| `REQ-ADD-EVT-25` | **hard** | The dedup window is documented: how long must a processed message ID be retained before it is safe to forget? The window... | [docs/addenda/event-driven.md](addenda/event-driven.md) |
+| `REQ-ADD-EVT-26` | *soft* | Poison-message handling is documented: a message that repeatedly fails processing is routed to a dead-letter queue or eq... | [docs/addenda/event-driven.md](addenda/event-driven.md) |
+| `REQ-ADD-EVT-27` | *soft* | At-least-once semantics are explicitly acknowledged in the architecture doc: "exactly-once" claims are rejected unless b... | [docs/addenda/event-driven.md](addenda/event-driven.md) |
 
 ### Addendum: AI/ML
 

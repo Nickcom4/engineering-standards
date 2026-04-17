@@ -242,3 +242,33 @@ If your system uses event sourcing, document:
 
 If your system does not use event sourcing, a one-sentence statement to that effect in the architecture doc is sufficient.
 
+---
+
+## Consumer Idempotency Requirements
+
+Event-driven systems typically offer at-least-once delivery semantics: a consumer may see the same event twice under normal operation (broker retry, network timeout, consumer crash between processing and acknowledgement). Consumer idempotency is the discipline of handling duplicates without producing duplicate side effects: double-crediting an account, double-shipping an order, double-emitting a downstream event. Idempotency is a mandatory property of every consumer, not an optimization.
+
+<a name="REQ-ADD-EVT-24"></a>
+**REQ-ADD-EVT-24** `artifact` `design` `hard` `addendum:EVT`
+Every consumer declares an idempotency mechanism in the architecture doc: dedup-key (consumer-local record of processed message IDs), upsert (target-state operation that is naturally idempotent), or state-machine guard (consumer rejects a transition that has already occurred).
+
+<a name="REQ-ADD-EVT-25"></a>
+**REQ-ADD-EVT-25** `artifact` `design` `hard` `addendum:EVT`
+The dedup window is documented: how long must a processed message ID be retained before it is safe to forget? The window must be at least the maximum broker redelivery window plus a safety margin.
+
+<a name="REQ-ADD-EVT-26"></a>
+**REQ-ADD-EVT-26** `artifact` `design` `soft` `addendum:EVT`
+Poison-message handling is documented: a message that repeatedly fails processing is routed to a dead-letter queue or equivalent quarantine, not retried indefinitely. The retry count threshold and dead-letter destination are both named.
+
+<a name="REQ-ADD-EVT-27"></a>
+**REQ-ADD-EVT-27** `artifact` `design` `soft` `addendum:EVT`
+At-least-once semantics are explicitly acknowledged in the architecture doc: "exactly-once" claims are rejected unless backed by a distinct mechanism (transactional outbox pattern, idempotent receiver with persistence, or a broker with genuine exactly-once guarantees under the consumer's actual configuration).
+
+**Acceptance criteria (all must be true to advance):**
+
+- Each consumer names one of the three idempotency mechanisms by technique (not just "we have idempotency").
+- The dedup window is a named duration, not "long enough".
+- Poison-message routing is tested (not just documented); a negative-path test injects a message that will fail and verifies it reaches the DLQ within the configured retry count.
+
+**Relationship to REQ-ADD-EVT-11.** REQ-ADD-EVT-11 requires every consumer to handle duplicates; REQ-ADD-EVT-24 through -27 specify the architectural-doc surfaces where the mechanism, window, poison handling, and delivery semantics must be documented so the requirement is auditable, not implicit.
+
