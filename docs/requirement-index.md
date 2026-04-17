@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 627 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 630 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -854,7 +854,7 @@
 
 ## Continuous
 
-*168 requirements.*
+*171 requirements.*
 
 ### All work items
 
@@ -1024,6 +1024,9 @@
 
 | REQ-ID | Enforcement | Statement | Source |
 |---|---|---|---|
+| `REQ-ADD-CI-67` | *soft* | Each improvement cycle identifies the system's current binding constraint by name and explains why it is the constraint ... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
+| `REQ-ADD-CI-68` | *soft* | Improvement work in the current cycle either exploits the named constraint (raises its throughput without capital invest... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
+| `REQ-ADD-CI-69` | *soft* | After each improvement cycle, the team re-identifies the constraint: the constraint either moved to a new stage (success... | [docs/addenda/continuous-improvement.md](addenda/continuous-improvement.md) |
 | `REQ-STR-54` | *soft* | Archive convention for value stream maps supporting improvement work items. Required by [§2.6](../STANDARDS.md#26-delive... | [starters/vsm.md](../starters/vsm.md) |
 | `REQ-TPL-66` | *soft* | Value stream map archives the current-state baseline for a delivery process before improvement work begins. | [templates/vsm.md](../templates/vsm.md) |
 | `REQ-TPL-67` | *soft* | The improvement arc and the trigger that motivated the map are stated before measurement begins. | [templates/vsm.md](../templates/vsm.md) |

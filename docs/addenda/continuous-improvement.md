@@ -856,3 +856,29 @@ When using this addendum, extend the [§6.2](../../STANDARDS.md#62-testing-gap-a
 | Kaizen events completed without post-event measurement | Cannot confirm improvement occurred | P2 |
 | Waste audit results not filed as work items | Identified waste accumulates; no accountability | P2 |
 
+---
+
+## Theory of Constraints (Goldratt)
+
+Goldratt's Theory of Constraints (TOC; from _The Goal_, 1984) frames continuous improvement around the single binding constraint in a system: the bottleneck that limits end-to-end throughput. TOC prescribes a five-step focusing cycle (Identify, Exploit, Subordinate, Elevate, Repeat) that complements the Lean VSM methodology named in REQ-ADD-CI-64 through -66. Where VSM maps the whole value stream, TOC directs improvement effort at the stage whose pace gates everything downstream.
+
+<a name="REQ-ADD-CI-67"></a>
+**REQ-ADD-CI-67** `advisory` `continuous` `soft` `addendum:CI` `per-system`
+Each improvement cycle identifies the system's current binding constraint by name and explains why it is the constraint (throughput measurement at each stage, queue depth observation, or a documented bottleneck argument).
+
+<a name="REQ-ADD-CI-68"></a>
+**REQ-ADD-CI-68** `advisory` `continuous` `soft` `addendum:CI` `per-system`
+Improvement work in the current cycle either exploits the named constraint (raises its throughput without capital investment), subordinates other stages to the constraint's pace (non-constraint stages are reduced or rescheduled so they do not overproduce into a bottleneck queue), or elevates the constraint (capital investment to expand its capacity). Each work item in a cycle declares which of the three it performs.
+
+<a name="REQ-ADD-CI-69"></a>
+**REQ-ADD-CI-69** `advisory` `continuous` `soft` `addendum:CI` `per-system`
+After each improvement cycle, the team re-identifies the constraint: the constraint either moved to a new stage (success: the prior bottleneck is no longer binding) or did not move (indicates the cycle's interventions did not address the true constraint). Movement of the constraint is the pass signal for the cycle.
+
+**Acceptance criteria (all must be true to advance):**
+
+- The named constraint is specific (a stage, a role, a resource type), not generic ("engineering bandwidth" is too vague).
+- Each work item in the cycle maps to Exploit, Subordinate, or Elevate and names its evidence.
+- The re-identification step either names the new constraint with evidence or records a cycle-failure lesson.
+
+**Relationship to other addendum mechanisms.** TOC frames the _direction_ of improvement work; VSM (REQ-ADD-CI-64 through -66) supplies the _map_ that exposes the constraint; kaizen events and process capability measurement supply the _tactics_. The three are complementary, not substitutes.
+
