@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `docs/addenda/multi-service.md`: new Contract Test Coverage Registry section (MS1, Wave 4). Three new REQ-IDs: REQ-ADD-MS-17 (registry exists at `docs/api-contracts/registry.md` or equivalent), REQ-ADD-MS-18 (four named fields per row: consumer, producer, test path or named exemption, last-verified-passing date / CI run), REQ-ADD-MS-19 (registry staleness surfaced in Testing Gap Audit with adopter-declared threshold; 90 days recommended default). REQ-ID count for MS addendum advances 16 -> 19. Extends REQ-ADD-MS-03 and REQ-ADD-MS-08 by making pair-to-test coverage completeness auditable rather than implicit.
+
 ## [2.12.0] - 2026-04-17
 
 **Theme:** Wave 3 agent-assisted-development content completion. A3 (MCP supply-chain) extends the v2.11.0 register section with provenance, pinning, audit-trail, and threat-surface requirements. A5 (sandbox/isolation) extends the posture section with filesystem, network, and credential-access scope requirements. A6 (approval-boundary ADR) names the minimum floor an adopter posture must meet. REQ-ID count advances 754 -> 761.

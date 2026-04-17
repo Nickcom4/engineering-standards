@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 634 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 637 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -149,7 +149,7 @@
 
 ## Design
 
-*78 requirements.*
+*79 requirements.*
 
 ### All work items
 
@@ -252,6 +252,7 @@
 | `REQ-ADD-MS-01` | **hard** | Every request crossing a service boundary is authenticated. | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 | `REQ-ADD-MS-06` | **hard** | Every cross-service operation requiring consistency has a documented strategy (saga, eventual consistency, or synchronou... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 | `REQ-ADD-MS-07` | **hard** | The authentication mechanism (mTLS, token, API key) and authorization model are documented for each interface. | [docs/addenda/multi-service.md](addenda/multi-service.md) |
+| `REQ-ADD-MS-17` | **hard** | A contract test coverage registry exists at `docs/api-contracts/registry.md` (or equivalent machine-readable path) listi... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 
 ### addendum:AAD
 
@@ -400,7 +401,7 @@
 
 ## Verify
 
-*69 requirements.*
+*71 requirements.*
 
 ### All work items
 
@@ -487,6 +488,8 @@
 | REQ-ID | Enforcement | Statement | Source |
 |---|---|---|---|
 | `REQ-ADD-MS-02` | **hard** | Every service is independently deployable, independently testable with test doubles, and capable of running against the ... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
+| `REQ-ADD-MS-18` | **hard** | Each registry row names four fields: consumer service, producer service, contract test path (or `exempt:<reason>` with a... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
+| `REQ-ADD-MS-19` | *soft* | Registry entries whose contract test path does not resolve on disk or whose last-verified date is older than the adopter... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 
 ### addendum:AAD
 

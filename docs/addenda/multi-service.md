@@ -214,3 +214,29 @@ In addition to Section 3.1 requirements, multi-service architecture documents mu
 | No authorization enforcement on service boundaries | Authenticated callers reach endpoints they should not | P1 |
 | No correlation ID propagation | Cross-service debugging requires log archaeology | P2 |
 
+---
+
+## Contract Test Coverage Registry
+
+Consumer-driven contract tests (REQ-ADD-MS-03, REQ-ADD-MS-08) verify that every producer keeps its contract with every consumer as the system evolves. The discipline breaks down silently when a new consumer-producer pair is introduced without a matching contract test: the absence is invisible to the CI gate that only validates the tests that exist. The contract test coverage registry closes that gap by making every consumer-producer pair visible as a registry row whose test path must resolve or whose exemption must be named.
+
+<a name="REQ-ADD-MS-17"></a>
+**REQ-ADD-MS-17** `artifact` `design` `hard` `addendum:MS`
+A contract test coverage registry exists at `docs/api-contracts/registry.md` (or equivalent machine-readable path) listing every consumer-producer pair in the adopter's architecture.
+
+<a name="REQ-ADD-MS-18"></a>
+**REQ-ADD-MS-18** `artifact` `verify` `hard` `addendum:MS`
+Each registry row names four fields: consumer service, producer service, contract test path (or `exempt:<reason>` with a documented rationale), and last-verified-passing date or CI run reference.
+
+<a name="REQ-ADD-MS-19"></a>
+**REQ-ADD-MS-19** `advisory` `verify` `soft` `addendum:MS`
+Registry entries whose contract test path does not resolve on disk or whose last-verified date is older than the adopter's configured staleness threshold are surfaced as a gap in the Testing Gap Audit. The staleness threshold is an adopter decision with a declared default (90 days recommended for continuously-delivered systems).
+
+**Acceptance criteria (all must be true to advance):**
+
+- The registry row count matches the count of consumer-producer pairs discovered via route scanning, dependency graph, or declared architecture doc (the discovery method is a named adopter choice).
+- Every row's path field is either a resolvable test file or a named exemption rationale; no "TBD" or empty entries.
+- Registry staleness check is wired into CI as a warning-level signal when the adopter reaches the declared cadence threshold.
+
+**Relationship to REQ-ADD-MS-03 and REQ-ADD-MS-08.** REQ-ADD-MS-03 requires contracts; REQ-ADD-MS-08 requires provider CI to fail on contract break; REQ-ADD-MS-17 through -19 make the completeness of that coverage auditable by reifying the pair-to-test map as a single registry artifact.
+
