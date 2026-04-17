@@ -6,8 +6,8 @@ frequency: per-improvement-arc
 
 # Value Stream Mapping: Baseline Archive Convention
 
-<a name="REQ-STR-30"></a>
-**REQ-STR-30** `advisory` `continuous` `soft` `addendum:CI`
+<a name="REQ-STR-54"></a>
+**REQ-STR-54** `advisory` `continuous` `soft` `addendum:CI`
 Archive convention for value stream maps supporting improvement work items. Required by [§2.6](../STANDARDS.md#26-delivery-cadence) and [REQ-ADD-CI-01](../docs/addenda/continuous-improvement.md).
 
 > Archive convention for value stream maps supporting improvement work items. [REQ-ADD-CI-01](../docs/addenda/continuous-improvement.md) requires the current-state map to draw from at least 10 completed work items before optimization. Without an on-disk archive of each baseline, cross-cycle comparison is not possible and improvement claims cannot be verified against a prior measurement. This starter documents the directory convention, the citation rule for `type:improvement` work items, and how the enforcement linter reads those citations.

@@ -44,7 +44,7 @@ Enable any agent (human or machine) to determine the complete compliance require
 
 | Dimension | Current | Target | Gap | Work Item ID |
 |-----------|---------|--------|-----|-------------|
-| Machine-readable format | Complete (741 REQ-IDs, 313 gates) | Complete | None | - |
+| Machine-readable format | Complete (751 REQ-IDs, 317 gates) | Complete | None | - |
 | enforcement-spec.yml | Generated, CI-verified | Generated, CI-verified | None | - |
 | Portable work item data store | Under investigation | Format selected, round-trip tested | Format not selected | lifecycle container model investigation |
 
@@ -196,7 +196,7 @@ Work Item Lifecycle
 ## Data Flows
 
 1. **Standards authoring flow:** Author edits STANDARDS.md or addenda -> CI runs `generate-enforcement-spec.sh` -> enforcement-spec.yml regenerated -> `verify` mode confirms no drift
-2. **Requirement validation flow:** CI runs `validate-req-ids.sh` + `lint-req-tags.sh` -> all 741 REQ-IDs validated for uniqueness and tag schema conformance
+2. **Requirement validation flow:** CI runs `validate-req-ids.sh` + `lint-req-tags.sh` -> all 751 REQ-IDs validated for uniqueness and tag schema conformance
 3. **Work item export flow:** Tracked system exports closed work item -> `work-item-export.md` template applied -> committed to `docs/work-items/` -> `lint-work-item-export.sh` validates format
 
 ---

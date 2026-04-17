@@ -2627,5 +2627,6 @@ The universal standard covers principles that apply to all software projects. Th
 | [Containerized and Orchestrated Systems](docs/addenda/containerized-systems.md) | Your project runs in containers or is managed by an orchestrator |
 | [AI and ML Systems](docs/addenda/ai-ml.md) | Your project trains, fine-tunes, or serves machine learning models, or builds on probabilistic AI outputs |
 | [Event-Driven Systems](docs/addenda/event-driven.md) | Your project produces or consumes events or messages via a broker, queue, or stream |
+| [Agent-Assisted Development](docs/addenda/agent-assisted-development.md) | AI coding agents hold commit authority in your repository, whether as primary maintainers, paired collaborators, or autonomous contributors |
 | [Continuous Improvement](docs/addenda/continuous-improvement.md) | Your project has recurring quality issues of the same class, delivery throughput consistently below required rate, or is targeting a defined sigma-level quality improvement goal |
 

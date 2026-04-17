@@ -6,6 +6,17 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Fixed
+
+- `starters/vsm.md`: REQ-ID renumbered from `REQ-STR-30` to `REQ-STR-54` to resolve a duplicate with `starters/runbook.md` (which has held `REQ-STR-30` for "Operations documentation includes how to stop the service" since v2.5.0). The duplicate was introduced in v2.10.0 during the VSM starter's landing and was not caught before release: `scripts/preflight.sh` did not include the REQ-ID uniqueness check at that point; the check lives in `scripts/pre-commit` and only fires at commit time. Renumbering the newer claim (VSM) preserves the older adopter-facing contract on `REQ-STR-30` (runbook). The v2.10.0 CHANGELOG block is frozen and retains its historical claim; this [Unreleased] entry is the corrective record.
+
+### Added
+
+- `docs/addenda/agent-assisted-development.md`: **Agent-Assisted Development addendum content file** now exists. Covers the posture, harness, commit-authority, and external-tool surface for repositories maintained with AI coding agent assistance. Introduces 10 REQ-ADD-AAD-NN requirements (REQ-ADD-AAD-01 through REQ-ADD-AAD-10) across ten clusters: posture declaration, commit-authority boundary, human gate authority, approval boundary, sandbox and isolation posture, audit trail, credential handling, revocation path, configuration file integrity, and MCP/external-tool register. Each requirement is authored in the same shape as the existing addenda (anchor block, tag line, prose statement). 4 REQ-IDs are `gate` type (REQ-ADD-AAD-02, -03, -06, -09) and 6 are `artifact` type (REQ-ADD-AAD-01, -04, -05, -07, -08, -10). Closes the deferred content deliverable cited in `docs/decisions/ADR-2026-04-16-agent-assisted-development-addenda-slot.md`; pairs with the Session C slot-first/content-second sequencing. Self-application on ESE's own `docs/standards-application.md` is a follow-on commit so the two decisions (content lands; ESE applies the content to itself) remain separable.
+- `STANDARDS.md` Addenda summary table: new row for Agent-Assisted Development citing the addendum file path and the "when to apply" trigger (AI coding agents hold commit authority, whether as primary maintainers, paired collaborators, or autonomous contributors).
+- `req-manifest.sha256`, `enforcement-spec.yml`, `docs/requirement-index.md`: regenerated to register the 10 new REQ-ADD-AAD-NN IDs. Total REQ-ID count moves from 741 to 751; total gate count moves from 313 to 317.
+- `CLAUDE.md` and `docs/architecture/ese-machine-readable-enforcement-system.md`: count references updated from 741/313 to 751/317 to match the authoritative sources.
+
 ## [2.10.0] - 2026-04-17
 
 **Theme:** Value stream mapping baseline archive convention. A new artifact type (value stream map), a new directory convention (`docs/improvement/vsm/`), and a shadow linter give `REQ-ADD-CI-01` (continuous-improvement addendum) an on-disk enforcement surface. Improvement work items must cite a baseline VSM from their Dependencies table; without an archived baseline, cross-cycle comparison is not possible and improvement claims cannot be verified against a prior measurement.

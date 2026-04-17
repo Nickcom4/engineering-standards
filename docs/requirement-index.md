@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 607 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 617 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -53,7 +53,7 @@
 
 ## Define
 
-*52 requirements.*
+*55 requirements.*
 
 ### All work items
 
@@ -129,6 +129,14 @@
 | `REQ-ADD-WEB-27` | **hard** | The project application document records a specific numeric threshold for CLS. | [docs/addenda/web-applications.md](addenda/web-applications.md) |
 | `REQ-ADD-WEB-28` | **hard** | The project application document records minimum Lighthouse scores for Performance, Accessibility, Best Practices, and S... | [docs/addenda/web-applications.md](addenda/web-applications.md) |
 
+### addendum:AAD
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-AAD-01` | **hard** | The project's standards application document declares the harness in use, whether agents hold commit authority, the sand... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-02` | **hard** | When an agent holds commit authority, the branches on which agent-initiated commits are permitted are named, and the gat... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-10` | **hard** | When the harness loads external tools or Model Context Protocol (MCP) servers, a register enumerates each tool, its sour... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+
 ### type:improvement
 
 | REQ-ID | Enforcement | Statement | Source |
@@ -139,7 +147,7 @@
 
 ## Design
 
-*67 requirements.*
+*69 requirements.*
 
 ### All work items
 
@@ -238,6 +246,13 @@
 | `REQ-ADD-MS-06` | **hard** | Every cross-service operation requiring consistency has a documented strategy (saga, eventual consistency, or synchronou... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 | `REQ-ADD-MS-07` | **hard** | The authentication mechanism (mTLS, token, API key) and authorization model are documented for each interface. | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 
+### addendum:AAD
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-AAD-04` | **hard** | The scope of approved agent actions is declared explicitly: allowed file types, directory allowlists, and command catego... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-05` | **hard** | The agent execution environment has a declared isolation level (one of: devcontainer, vm, network-isolated, unrestricted... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+
 ### type:feature AND (type:component OR type:security)
 
 | REQ-ID | Enforcement | Statement | Source |
@@ -260,7 +275,7 @@
 
 ## Build
 
-*62 requirements.*
+*64 requirements.*
 
 ### All work items
 
@@ -364,9 +379,16 @@
 | `REQ-ADD-MS-08` | **hard** | Provider CI fails if a consumer contract is broken. | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 | `REQ-ADD-MS-09` | **hard** | All spans in a request trace are linkable across all services. | [docs/addenda/multi-service.md](addenda/multi-service.md) |
 
+### addendum:AAD
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-AAD-06` | **hard** | Agent-initiated commits are distinguishable from human-initiated commits through a durable convention recorded in the po... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-09` | **hard** | Agent configuration files (for example, CLAUDE.md, AGENTS.md, .cursorrules, harness settings files) are committed to the... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+
 ## Verify
 
-*67 requirements.*
+*68 requirements.*
 
 ### All work items
 
@@ -452,6 +474,12 @@
 | REQ-ID | Enforcement | Statement | Source |
 |---|---|---|---|
 | `REQ-ADD-MS-02` | **hard** | Every service is independently deployable, independently testable with test doubles, and capable of running against the ... | [docs/addenda/multi-service.md](addenda/multi-service.md) |
+
+### addendum:AAD
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-AAD-03` | **hard** | No agent-initiated commit lands on a protected branch without a human gate-authority review or a CI gate that encodes th... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ### addendum:CI AND type:improvement
 
@@ -601,7 +629,7 @@
 
 ## Monitor
 
-*7 requirements.*
+*9 requirements.*
 
 ### All work items
 
@@ -619,6 +647,13 @@
 | `REQ-ADD-AI-27` | **hard** | AI systems monitor input distribution drift. | [docs/addenda/ai-ml.md](addenda/ai-ml.md) |
 | `REQ-ADD-AI-28` | **hard** | AI systems monitor confidence distribution shifts. | [docs/addenda/ai-ml.md](addenda/ai-ml.md) |
 | `REQ-ADD-AI-29` | **hard** | AI systems monitor anomalous outputs. | [docs/addenda/ai-ml.md](addenda/ai-ml.md) |
+
+### addendum:AAD
+
+| REQ-ID | Enforcement | Statement | Source |
+|---|---|---|---|
+| `REQ-ADD-AAD-07` | **hard** | Agents do not hold persistent access to credentials outside an active session. Session-scoped credentials are the defaul... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
+| `REQ-ADD-AAD-08` | **hard** | A named path exists for revoking agent commit authority within one business day of a trust incident, recorded in the pos... | [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) |
 
 ## Close
 
@@ -974,7 +1009,7 @@
 
 | REQ-ID | Enforcement | Statement | Source |
 |---|---|---|---|
-| `REQ-STR-30` | *soft* | Archive convention for value stream maps supporting improvement work items. Required by [§2.6](../STANDARDS.md#26-delive... | [starters/vsm.md](../starters/vsm.md) |
+| `REQ-STR-54` | *soft* | Archive convention for value stream maps supporting improvement work items. Required by [§2.6](../STANDARDS.md#26-delive... | [starters/vsm.md](../starters/vsm.md) |
 | `REQ-TPL-66` | *soft* | Value stream map archives the current-state baseline for a delivery process before improvement work begins. | [templates/vsm.md](../templates/vsm.md) |
 | `REQ-TPL-67` | *soft* | The improvement arc and the trigger that motivated the map are stated before measurement begins. | [templates/vsm.md](../templates/vsm.md) |
 | `REQ-TPL-68` | *soft* | Observations are sourced from at least 10 completed work items with the measurement method named per item. | [templates/vsm.md](../templates/vsm.md) |
