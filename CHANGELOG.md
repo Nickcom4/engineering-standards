@@ -6,6 +6,8 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-04-17
+
 **Theme:** Value stream mapping baseline archive convention. A new artifact type (value stream map), a new directory convention (`docs/improvement/vsm/`), and a shadow linter give `REQ-ADD-CI-01` (continuous-improvement addendum) an on-disk enforcement surface. Improvement work items must cite a baseline VSM from their Dependencies table; without an archived baseline, cross-cycle comparison is not possible and improvement claims cannot be verified against a prior measurement.
 
 ### Added
