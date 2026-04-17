@@ -36,6 +36,7 @@ addenda:
   containerized: false
   ai-ml: false
   event-driven: false
+  agent-assisted-development: true
   continuous-improvement: false
 
 template-compliance:
@@ -292,6 +293,7 @@ Compliant. ESE is a documentation standard with no runtime service. For correcti
 | Containerized and Orchestrated Systems | No | No containers |
 | AI and ML Systems | No | No ML models |
 | Event-Driven Systems | No | No event brokers |
+| Agent-Assisted Development | Yes | AI coding agents hold commit authority in this repository (primary maintainer posture). Posture declared in CLAUDE.md and AGENTS.md at repo root. Commit-authority scope: feature branches with gate-authority review required before protected-branch merge. Sandbox posture: devcontainer-equivalent (session-scoped; no persistent credentials). The 10 REQ-ADD-AAD-NN requirements in [docs/addenda/agent-assisted-development.md](addenda/agent-assisted-development.md) are adopted. |
 | Continuous Improvement | No | No recurring quality issues requiring formal Lean/Six Sigma methods |
 
 ---
