@@ -151,11 +151,50 @@ classification methodology, not a frozen list.
 
 ## Output (feeds Session P commit 13)
 
-Commit 13 applies `status: deprecated` annotations to 15-20 category
-(a) REQs in their home document (STANDARDS.md or the applicable
-addendum). The CHANGELOG entry for v2.15.0 names each deprecated
-REQ with its supersession citation. The next major bump (v3.0.0
-candidate) is the planned removal window.
+**Revised after actual X8 output inspection (commit 13 land time).**
+
+Re-running the X8 shadow linter against the v2.14.0 baseline
+(from ese-plugin) produces two categories with different semantics
+than the session-prompt summary anticipated:
+
+- **dead-in-adopter (7 REQs):** upstream-declared but never
+  referenced locally in ese-plugin. These are the triage input.
+- **dead-upstream (99 REQs):** referenced locally but retired from
+  current upstream. This is ALREADY the post-deprecation state;
+  nothing to annotate here because the REQs are gone from upstream.
+
+Applying the triage to the actual 7-REQ dead-in-adopter set:
+
+| REQ-ID | Capability / Addendum | Category | Rationale |
+|---|---|---|---|
+| REQ-4.9-03 | §4.9 (an ESE section) | (b) reserved | No adopter declares the trigger capability; future-activation candidate. |
+| REQ-4.9-04 | §4.9 | (b) reserved | Same as above. |
+| REQ-ADD-AAD-06 | Agent-assisted-development addendum | (c) wrongly-flagged | Load-bearing; directly implemented by ese-plugin's A8 ADAPT commit 2 via the Signed-agent-by trailer. The grep missed the reference because the WI-080 reference uses the REQ family form. |
+| REQ-ADD-AAD-09 | Agent-assisted-development addendum | (c) wrongly-flagged | Load-bearing; implemented by the CLAUDE.md and `.claude/settings.json` commit discipline. Referenced in running prose. |
+| REQ-ADD-CI-64 | Continuous-improvement addendum | (b) reserved | ese-plugin does not declare continuous-improvement:true. |
+| REQ-ADD-CI-65 | Continuous-improvement addendum | (b) reserved | Same as above. |
+| REQ-ADD-CI-66 | Continuous-improvement addendum | (b) reserved | Same as above. |
+
+**Category-(a) count at triage time: 0.** No dead-in-adopter REQ
+meets the "capability has been superseded or is no longer enumerated"
+test. All 7 are either reserved-for-future (the capability or
+addendum is in the current enumeration; a future adopter activates
+them) or wrongly-flagged (implemented but missed by the grep).
+
+**Commit 13 action revised: no deprecation annotations applied this
+session.** The "deprecate 15-20" target from the session-P prompt
+anticipated a much larger category-(a) bucket; the actual audit
+output places all 7 dead-in-adopter REQs in categories (b) and (c),
+both of which explicitly do not warrant deprecation. Category (c)
+findings (REQ-ADD-AAD-06, -09) point back at the X8 linter as the
+improvement surface (widen the grep to catch family-form references
+in running prose); this is an ese-plugin-side follow-up, not an
+upstream change.
+
+Commit 13 updates this doc to reflect the actual outcome. Future
+sessions may re-run the triage if the X8 dead-in-adopter set grows
+or if the grep is widened and a new dead-in-adopter class emerges
+that meets category (a) conditions.
 
 ## References
 
