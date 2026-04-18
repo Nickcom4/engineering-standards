@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.15.0] - 2026-04-17
+
+**Theme:** N12 applicability-inheritance Part A (additive `inherit-from:` field in starters/standards-application.md; Part B inheritance-resolution linter lands in ese-plugin v0.36.0); X8 dead-upstream REQ triage + deprecation-pass revision (0 new deprecations applied after actual audit inspection; all 7 dead-in-adopter REQs fall in reserved-for-future or wrongly-flagged categories, not genuinely-retire).
+
 ### Changed
 
 - **X8 deprecation pass revised after actual audit inspection (Session P commit 13).** Updated `docs/research/dead-upstream-req-triage-2026-04-17.md` with the per-REQ classification of the 7 actual dead-in-adopter REQs against the v2.14.0 baseline. All 7 REQs fall in categories (b) reserved-for-future (5: REQ-4.9-03/-04, REQ-ADD-CI-64/-65/-66) and (c) wrongly-flagged (2: REQ-ADD-AAD-06/-09, implemented by ese-plugin's A8 ADAPT trailer convention but missed by the grep). Category-(a) count at this baseline: 0. Commit 13 action revised from "apply 15-20 deprecation annotations" (session-P prompt anticipation) to "apply 0 annotations this session" because no dead-in-adopter REQ meets the strict supersession test. The STANDARDS.md deprecation mechanism (`\`deprecated:REQ-X.Y-ZZ\`` trailer annotation with strike-through prose) is already in place and covers 37 prior deprecations; no additional deprecations warranted this session. Category-(c) findings pointing at the X8 linter as the improvement surface (widen the grep to catch REQ-family-bare references) are an ese-plugin-side follow-up, not an upstream change. Minimal-viable interpretation per the session-P prompt's X8 stuck-guidance: category (c) entries stay category (c), no forced-category-(a) migration. Implements X8 deprecation pass (Wave 4; ecc-comparison-2026-04-16.md).
