@@ -1,7 +1,7 @@
 # Requirement Index
 
 > Auto-generated from REQ-ID tags by `scripts/generate-req-index.sh`. Do not edit by hand.
-> Source: 637 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
+> Source: 638 active REQ-IDs across the corpus (STANDARDS.md, 7 addenda, templates, starters, adoption.md).
 > Organized by lifecycle scope, then by applies-when group.
 > Enforcement: **hard** = blocks; *soft* = warns; none = informational.
 
@@ -861,7 +861,7 @@
 
 ## Continuous
 
-*171 requirements.*
+*172 requirements.*
 
 ### All work items
 
@@ -869,6 +869,7 @@
 |---|---|---|---|
 | `REQ-1.5-01` | **hard** | An enforcement tool applying ESE-derived rules to a target repository in a Complicated-domain work session must exempt r... | [STANDARDS.md](../STANDARDS.md) |
 | `REQ-1.5-02` | **hard** | Complex-domain work sessions are exempt from externally applied ESE enforcement rules. | [STANDARDS.md](../STANDARDS.md) |
+| `REQ-1.6-01` | *soft* | An adopter whose repository includes an AI coding agent with commit authority declares `addenda.agent-assisted-developme... | [STANDARDS.md](../STANDARDS.md) |
 | `REQ-2.1-01` | **hard** | Every work item follows the DISCOVER-DEFINE-DESIGN-BUILD-VERIFY-DOCUMENT-DEPLOY-MONITOR-CLOSE sequence. | [STANDARDS.md](../STANDARDS.md) |
 | `REQ-2.1-27` | **hard** | The stage that triggers a re-entry records what was missing in the earlier stage and why the return was necessary. | [STANDARDS.md](../STANDARDS.md) |
 | `REQ-2.1-40` | **hard** | Every work period begins by verifying that the prior work period's close obligations were fulfilled: no unfinished deliv... | [STANDARDS.md](../STANDARDS.md) |

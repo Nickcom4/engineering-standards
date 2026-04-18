@@ -307,6 +307,20 @@ Complex-domain work sessions are exempt from externally applied ESE enforcement 
 **REQ-1.5-03** `gate` `continuous` `hard` `all` `per-item` `deprecated:REQ-1.5-02`
 ~~Deprecated: consolidated into REQ-1.5-02.~~
 
+### 1.6 Agent-Assisted Development
+
+Adopters whose repositories carry AI coding agents with commit authority (as primary maintainers, paired collaborators, or autonomous contributors) apply the [Agent-Assisted Development addendum](docs/addenda/agent-assisted-development.md) in addition to the universal standard. The addendum is opt-in; its applicability is declared in `docs/standards-application.md` under `addenda.agent-assisted-development: true`.
+
+This standards-level section is a pointer, not a substitute for the addendum. The pointer's purpose is to name the adoption context at Section 1 (Scope) where readers expect domain-applicability signals, so agent-assisted adopters find the addendum without reading the full addenda table.
+
+**Scope summary.** The addendum covers: (1) gate-authority posture declaration, (2) credential handling with session-scoped secrets, (3) revocation path within one business day, (4) approval-boundary floor per the v2.12.0 ADR, (5) sandbox and isolation posture, (6) MCP supply-chain discipline, (7) agent-identity posture (shared vs separate), and (8) enforcement-hook design. Each is captured by a named REQ-ADD-AAD-NN requirement.
+
+**Why this lives at §1 and not only in the Addenda table:** agent-assisted development alters the core ESE assumption that a named human gate authority authors every commit. When the authorship assumption shifts, the lifecycle, documentation, and learning-from-failure sections all have implicit extensions that the addendum makes explicit. The pointer belongs where adopters are establishing scope, not only where they are picking optional extensions.
+
+<a name="REQ-1.6-01"></a>
+**REQ-1.6-01** `advisory` `continuous` `soft` `all`
+An adopter whose repository includes an AI coding agent with commit authority declares `addenda.agent-assisted-development: true` in `docs/standards-application.md` and applies the [Agent-Assisted Development addendum](docs/addenda/agent-assisted-development.md).
+
 ---
 
 ## 2. Methodology
