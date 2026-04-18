@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.14.0] - 2026-04-17
+
+**Theme:** Wave 3/4 deferrals closed. MA3 adoption maturity levels (CMMI-inspired five-level self-assessment), G1 agent-assisted-development pointer at STANDARDS §1.6 with REQ-1.6-01, C1 provider-agnostic AGENTS.md starter, C2 three stack-specific CLAUDE.md starters (python, go, typescript), MR2 ese-starter consolidation planning ADR (Proposed). REQ-ID count advances 771 -> 772 (+1 REQ-1.6-01).
+
 ### Added
 
 - **MR2 ese-starter consolidation planning ADR (Session O commit 17).** New `docs/decisions/ADR-2026-04-17-ese-starter-consolidation-into-engineering-standards.md` (Proposed) documents the option to absorb ese-starter's distinctive content (bootstrap.sh, pre-commit hook, CI workflow, agent-context starters, starter-linter vendoring source) into engineering-standards and retire ese-starter as an archive. Context names three observable costs of the current two-repo split: upgrade double-hop (engineering-standards v2.14.0 propagates through ese-starter to adopters), vendoring drift (hand-copied scripts between repos), duplicated CHANGELOG entries. Decision is Proposed only; the consolidation itself is deferred to a follow-up Accepted ADR after gate-authority review. Three alternatives rejected with rationale: keep the two-repo split, invert direction (move standards into starter), consolidate only scripts / CI. Validation: within two release cycles of consolidation landing, zero adopter-filed issues citing lost capability. Implements MR2 (Wave 3 deferred from v2.13.0).
