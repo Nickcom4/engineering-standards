@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.16.0] - 2026-04-18
+
+**Theme:** Stability discipline propagated to CLAUDE.md; operator-facing agent rules codified so adopters with `addenda.agent-assisted-development: true` inherit the discipline when they bootstrap or upgrade.
+
 ### Added
 
 - **Stability discipline section in CLAUDE.md (operator-facing).** Mirrors the section added to ese-plugin's CLAUDE.md in Session Q after LL-007 (agent meta-instability under user emotional pressure) and AP-006 (emotional matching instead of stable analysis) were filed. When the gate authority expresses frustration, repeats a question, or cites evidence the agent missed something, the agent must hold prior positions and explain reasoning rather than restructure answers to match the emotional valence, escalate scope to demonstrate thoroughness, or minimize scope to deflect alarm. Applies to every repo that declares `addenda.agent-assisted-development: true`; adopters inherit the block verbatim.
