@@ -197,6 +197,24 @@ def is_pos_int(v):
 
 ese_version = require('ese-version', is_nonempty_str, 'is not a non-empty string')
 last_updated = require('last-updated', is_nonempty_str, 'is not a non-empty string')
+
+# N12 applicability inheritance (optional). When set, identifies an
+# upstream source whose applicability-field defaults should auto-
+# propagate into this file's capabilities and addenda sections. Leave
+# empty or omit to manage fields manually.
+ALLOWED_INHERIT_FROM = {'', 'ese-starter'}
+inherit_from = get('inherit-from')
+if inherit_from is None:
+    inherit_from = ''
+if not isinstance(inherit_from, str):
+    violations.append(
+        f"Tier1: inherit-from={inherit_from!r} is not a string; "
+        f"expected one of {sorted(ALLOWED_INHERIT_FROM)}"
+    )
+elif inherit_from not in ALLOWED_INHERIT_FROM:
+    violations.append(
+        f"Tier1: inherit-from={inherit_from!r} not in {sorted(ALLOWED_INHERIT_FROM)}"
+    )
 require('owner.name', is_nonempty_str, 'is not a non-empty string')
 require('owner.contact', is_nonempty_str, 'is not a non-empty string')
 cadence = require('compliance-review.cadence', is_nonempty_str, 'is not a non-empty string')

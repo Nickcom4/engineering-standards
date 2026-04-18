@@ -18,6 +18,21 @@ frequency: one-time
 ese-version: "{X.Y.Z}"                      # pin to the ESE version your submodule points at
 last-updated: "YYYY-MM-DD"                  # bump whenever this file changes; new-artifact.sh substitutes to today's date at scaffold time
 
+# Applicability inheritance (optional, N12).
+# When set, identifies an upstream source whose applicability-field defaults
+# should auto-propagate into this file's capabilities and addenda sections
+# on ese-starter bootstrap-upgrade runs. Leave empty or omit to manage
+# fields manually. Recognized values:
+#   ese-starter   - inherit from ese-starter/docs/standards-application.md
+#                   at the pinned .standards/ submodule tag; adopter agrees
+#                   that ese-starter's starter is the source of truth for
+#                   optional-field defaults
+# Unset or empty keeps the current manual-management posture; nothing
+# auto-propagates. Downstream linters warn on source-drift when
+# inherit-from is set and an inherited field has diverged from the upstream
+# value without an override comment.
+inherit-from: ""                            # empty = manual; set to "ese-starter" for N12 auto-sync
+
 owner:
   name: "{Team or individual}"              # §2.4 named owner; must be discoverable without asking
   contact: "{channel or contact method}"    # how to reach the owner

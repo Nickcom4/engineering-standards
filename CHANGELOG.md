@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- **N12 Part A (Session P commit 11): `inherit-from:` field in starters/standards-application.md.** Additive optional YAML field `inherit-from:` between `last-updated:` and `owner:`. When set to `"ese-starter"`, adopter agrees that ese-starter's `docs/standards-application.md` is the authoritative source for optional applicability-field defaults (capabilities, addenda booleans) and those fields can auto-propagate on ese-starter bootstrap-upgrade runs. Empty string or omission keeps the current manual-management posture. Recognized values: `""` (default, manual) or `"ese-starter"`. `starters/linters/lint-standards-application-frontmatter.sh` Tier 1 extended to validate the field is a string and its value is in the allowed set; absent or empty is accepted. No behavior change for adopters who do not set the field. Part B (inheritance-resolution linter mode that reads the source ese-starter file and warns on drift) lands separately in ese-plugin v0.36.0 per ADR-split; the upstream-standards change lands here in v2.15.0. Implements N12 Part A (Wave 4 deferred from v2.14.0).
+
 ## [2.14.0] - 2026-04-17
 
 **Theme:** Wave 3/4 deferrals closed. MA3 adoption maturity levels (CMMI-inspired five-level self-assessment), G1 agent-assisted-development pointer at STANDARDS §1.6 with REQ-1.6-01, C1 provider-agnostic AGENTS.md starter, C2 three stack-specific CLAUDE.md starters (python, go, typescript), MR2 ese-starter consolidation planning ADR (Proposed). REQ-ID count advances 771 -> 772 (+1 REQ-1.6-01).
