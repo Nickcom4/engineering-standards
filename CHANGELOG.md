@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- **Stability discipline section in CLAUDE.md (operator-facing).** Mirrors the section added to ese-plugin's CLAUDE.md in Session Q after LL-007 (agent meta-instability under user emotional pressure) and AP-006 (emotional matching instead of stable analysis) were filed. When the gate authority expresses frustration, repeats a question, or cites evidence the agent missed something, the agent must hold prior positions and explain reasoning rather than restructure answers to match the emotional valence, escalate scope to demonstrate thoroughness, or minimize scope to deflect alarm. Applies to every repo that declares `addenda.agent-assisted-development: true`; adopters inherit the block verbatim.
+
 ## [2.15.0] - 2026-04-17
 
 **Theme:** N12 applicability-inheritance Part A (additive `inherit-from:` field in starters/standards-application.md; Part B inheritance-resolution linter lands in ese-plugin v0.36.0); X8 dead-upstream REQ triage + deprecation-pass revision (0 new deprecations applied after actual audit inspection; all 7 dead-in-adopter REQs fall in reserved-for-future or wrongly-flagged categories, not genuinely-retire).

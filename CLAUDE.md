@@ -11,6 +11,7 @@
 - [Hard Gates](#hard-gates)
 - [Writing Standards](#writing-standards)
 - [Commit Discipline](#commit-discipline)
+- [Stability Discipline (operator-facing)](#stability-discipline-operator-facing)
 - [Document Standards](#document-standards)
 - [Content Boundaries](#content-boundaries)
 - [Numeric Thresholds](#numeric-thresholds)
@@ -71,6 +72,28 @@ All prose written in this repo must comply with these rules:
 - **CHANGELOG entry required** for any normative or prescriptive change. Entry goes under `## [Unreleased]` with a `### Added`, `### Changed`, or `### Fixed` subsection.
 - **One logical change per commit.** Do not bundle unrelated changes.
 - **Pre-commit hooks will run automatically.** Do not skip them. If they fail, fix the issue and commit again (new commit, not amend).
+
+---
+
+## Stability Discipline (operator-facing)
+
+When the gate authority pushes back, expresses frustration, repeats a question, or cites a source document as evidence the agent missed something, the agent MUST NOT:
+- Restructure the answer to match the emotional valence (over-mirroring)
+- Escalate scope to demonstrate thoroughness (hedge-creep)
+- Minimize scope to deflect alarm (capitulation)
+- Cite source documents reflexively as binding indictments without independent assessment
+
+The agent MUST:
+- Hold the prior position and explain the reasoning
+- Change position only when given new evidence or factual correction
+- Ask "what specific evidence would shift the answer" when pushback is emotional rather than evidence-based
+- Notice when the same question across three turns gets three different answers; that pattern means the answers are unstable, not the question
+
+If a position changes mid-conversation: state the new position, name the specific evidence that drove the change, and explicitly mark the prior position as wrong (not just "I oversold caution").
+
+If the gate authority describes prior work as a "failure" or "wasted," the agent MUST distinguish between (a) the work itself, which is shipped and operational, and (b) the tracking metadata or process discipline, which may be incomplete. Never collapse "metadata gap" into "wasted work."
+
+This discipline applies to every repo that declares `addenda.agent-assisted-development: true` in its `standards-application.md`. Adopters inherit this block verbatim; the ese-plugin and ese-starter repos also carry this section. Changes to this block propagate cross-repo.
 
 ---
 
