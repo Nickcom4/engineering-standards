@@ -1,0 +1,63 @@
+# Agent Context (CLAUDE.md) - TypeScript / Node stack
+
+> This repo applies the [Excellence Standards - Engineering (ESE)](.standards/STANDARDS.md). These instructions apply to any AI coding agent working in this repository.
+
+## Bootstrap
+
+Run the bootstrap script before any other work if this project has unfilled ESE placeholders. See the canonical AGENTS.md / CLAUDE.md for the full bootstrap check and procedure.
+
+## Stack-specific commands
+
+**Package manager.** This project uses `npm` (replace with `pnpm` / `yarn` / `bun` if different). Replace `npm run` with your chosen manager's equivalent.
+
+**Test runner.** Before declaring a feature complete, run:
+
+```
+npm test
+```
+
+For a tighter loop during development (replace `jest` with `vitest` / `mocha` if different):
+
+```
+npx jest <specific-test-file> --watch
+```
+
+**Type check.** Always run the compiler:
+
+```
+npx tsc --noEmit
+```
+
+This catches type errors without emitting build output; cheaper than a full build.
+
+**Lint.** This project uses `eslint` (plus `prettier` for formatting):
+
+```
+npx eslint .
+npx prettier --check .
+```
+
+**Build.** For a library or application build:
+
+```
+npm run build
+```
+
+**Pre-commit.** Install the hook once per clone:
+
+```
+ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+```
+
+## TypeScript / Node-specific ESE notes
+
+- Use strict TypeScript: `"strict": true` in `tsconfig.json`; no implicit any.
+- Dependency pinning via `package-lock.json` / `pnpm-lock.yaml` / `yarn.lock`; commit the lockfile.
+- Vulnerability scan via `npm audit` or `pnpm audit`; CI runs `npm audit --audit-level=high` and fails on high-severity findings.
+- Secrets must not land in source; use `dotenv` for `.env` with `.env.example` checked in.
+- ESM vs CommonJS: pick one at project bootstrap and be explicit in `package.json` `type` field.
+- Publish packages with `.npmignore` or `files:` in `package.json` so internal tooling is not shipped.
+
+## Universal ESE rules
+
+The full set of ESE rules that apply to every project (artifact scaffolding, writing standards, commit discipline, release discipline, submodule upgrades) live in the canonical [AGENTS.md](.standards/starters/AGENTS.md) at `.standards/starters/AGENTS.md`. Read that file for cross-stack rules. This CLAUDE.md supplements it with TypeScript / Node-specific commands.

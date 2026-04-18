@@ -1,0 +1,61 @@
+# Agent Context (CLAUDE.md) - Python stack
+
+> This repo applies the [Excellence Standards - Engineering (ESE)](.standards/STANDARDS.md). These instructions apply to any AI coding agent working in this repository.
+
+## Bootstrap
+
+Run the bootstrap script before any other work if this project has unfilled ESE placeholders. See the canonical AGENTS.md / CLAUDE.md for the full bootstrap check and procedure.
+
+## Stack-specific commands
+
+**Test runner.** This project uses `pytest` (replace with `unittest` / `nose2` / etc. if different). Before declaring a feature complete, run:
+
+```
+pytest
+```
+
+For a tighter loop during development:
+
+```
+pytest -x -q <specific-test-file>
+```
+
+**Lint.** This project uses `ruff` (replace with `flake8` / `pylint` / etc. if different):
+
+```
+ruff check .
+ruff format --check .
+```
+
+**Type check.** This project uses `mypy` (replace with `pyright` / `pyre` if different):
+
+```
+mypy .
+```
+
+**Build / package.** If this project publishes a package:
+
+```
+python -m build
+```
+
+**Pre-commit.** Install the hook once per clone:
+
+```
+ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+```
+
+The ESE pre-commit hook runs `scripts/verify.sh` which invokes the full linter suite.
+
+## Python-specific ESE notes
+
+- Follow PEP 8 conventions; `ruff` enforces.
+- Type hints required on all public functions per ESE §5 code-quality requirements.
+- `pyproject.toml` is the canonical build manifest; no `setup.py` unless there's a specific reason.
+- Dependency pinning via `poetry.lock` / `pip-tools`-generated `requirements.txt` / `uv.lock`; choose one and be explicit.
+- Vulnerability scan via `pip-audit` or `safety check`; run in CI.
+- Secrets must not land in source; use `python-dotenv` for `.env` with `.env.example` checked in.
+
+## Universal ESE rules
+
+The full set of ESE rules that apply to every project (artifact scaffolding, writing standards, commit discipline, release discipline, submodule upgrades) live in the canonical [AGENTS.md](.standards/starters/AGENTS.md) at `.standards/starters/AGENTS.md`. Read that file for cross-stack rules. This CLAUDE.md supplements it with Python-specific commands.

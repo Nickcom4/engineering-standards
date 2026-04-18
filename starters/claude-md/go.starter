@@ -1,0 +1,81 @@
+# Agent Context (CLAUDE.md) - Go stack
+
+> This repo applies the [Excellence Standards - Engineering (ESE)](.standards/STANDARDS.md). These instructions apply to any AI coding agent working in this repository.
+
+## Bootstrap
+
+Run the bootstrap script before any other work if this project has unfilled ESE placeholders. See the canonical AGENTS.md / CLAUDE.md for the full bootstrap check and procedure.
+
+## Stack-specific commands
+
+**Test runner.** Before declaring a feature complete, run:
+
+```
+go test ./...
+```
+
+For a tighter loop:
+
+```
+go test -run <TestName> ./<pkg>
+```
+
+For race detection and coverage:
+
+```
+go test -race -cover ./...
+```
+
+**Lint.** This project uses `golangci-lint` (replace with `staticcheck` / `go vet` if different):
+
+```
+golangci-lint run ./...
+```
+
+Plus the always-present vet:
+
+```
+go vet ./...
+```
+
+**Format.** `gofmt` is non-negotiable:
+
+```
+gofmt -l -s -d .
+```
+
+`goimports` for import ordering:
+
+```
+goimports -l -d .
+```
+
+**Build.** Binary build:
+
+```
+go build ./...
+```
+
+**Pre-commit.** Install the hook once per clone:
+
+```
+ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+```
+
+## Go-specific ESE notes
+
+- Follow standard Go conventions: effective Go, idiomatic error handling, no panics in library code.
+- Module pinning via `go.mod` + `go.sum`; run `go mod tidy` before commit.
+- Internal packages under `internal/` for non-exportable code; do not rely on lowercase names alone.
+- Error wrapping with `fmt.Errorf("...%w", err)` so errors retain their chain.
+- Vulnerability scan via `govulncheck`:
+
+```
+govulncheck ./...
+```
+
+- Secrets must not land in source; use env vars or a secret manager. `.env.example` checked in; `.env` gitignored.
+
+## Universal ESE rules
+
+The full set of ESE rules that apply to every project (artifact scaffolding, writing standards, commit discipline, release discipline, submodule upgrades) live in the canonical [AGENTS.md](.standards/starters/AGENTS.md) at `.standards/starters/AGENTS.md`. Read that file for cross-stack rules. This CLAUDE.md supplements it with Go-specific commands.
