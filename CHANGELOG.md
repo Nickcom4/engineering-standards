@@ -12,6 +12,7 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ### Changed
 
+- **`.github/workflows/ci.yml` `actions/checkout@v4` now runs with `fetch-depth: 0`.** Without full history the runner performs a shallow clone and fetches no tags, which makes `scripts/lint-changelog-tags.sh` (Check 30, CHANGELOG-to-git-tag congruence) report every versioned heading in CHANGELOG.md as "tag does not exist" even though the tags are present in the remote. The fix mirrors the pattern already codified in ese-starter's CI workflow and called out in adopter `CLAUDE.md` files ("a shallow clone would mask tag-to-CHANGELOG mismatches"); the engineering-standards workflow was the only one missing it.
 - **`.github/workflows/ci.yml` link check now excludes `templates/` and `starters/` directories.** These directories intentionally contain placeholder syntax (`{link}`, `{path-to-problem-research-doc}`, `ADR-NNN-title.md`, `YYYY-MM-DD.md`) and adopter-repo-specific paths (`.standards/STANDARDS.md`) that only resolve after the template is instantiated into an adopter repo. Running internal-link validation against template placeholders was the cause of 9 of the pre-fix failing link-check errors and was producing false positives by design; the validation is categorically inappropriate for the template source itself and should apply only to the rendered adopter instances (which are checked in the adopter repos' own CI).
 
 ## [2.16.0] - 2026-04-18
