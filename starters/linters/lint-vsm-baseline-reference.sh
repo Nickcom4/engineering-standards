@@ -51,7 +51,7 @@ fi
 # citations; adopters with an unusual layout can edit the match logic.
 case "$VSM_DIR" in
   "$PROJECT_ROOT"/*)
-    VSM_DIR_REL="${VSM_DIR#$PROJECT_ROOT/}"
+    VSM_DIR_REL="${VSM_DIR#"$PROJECT_ROOT"/}"
     ;;
   *)
     VSM_DIR_REL="$VSM_DIR"
