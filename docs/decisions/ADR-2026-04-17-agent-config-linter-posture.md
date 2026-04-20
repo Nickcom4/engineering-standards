@@ -22,7 +22,7 @@ architecture-doc: ~
 **REQ-TPL-03** `advisory` `continuous` `soft` `all`
 Architectural Decision Record. Required by §4.2 for any change that introduces a new component, replaces an existing approach, adds an external dep...
 
-> Architectural Decision Record. Required by [§4.2](../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../STANDARDS.md#91-evaluation-framework).
+> Architectural Decision Record. Required by [§4.2](../../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../../STANDARDS.md#91-evaluation-framework).
 >
 > The YAML frontmatter above is required by the CI gate (`.github/workflows/ci.yml` Check 2). The five CI-required fields are: `type`, `id`, `title`, `status`, `date`. The `deciders` field is recommended but not enforced by CI. Status values: `Proposed` | `Accepted` | `Superseded by ADR-{n}`.
 
@@ -30,7 +30,7 @@ Architectural Decision Record. Required by §4.2 for any change that introduces 
 
 ## Context
 
-> [§4.2](../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
+> [§4.2](../../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
 
 [ADR-2026-04-17-agent-assisted-development-addendum-content-and-self-application.md](ADR-2026-04-17-agent-assisted-development-addendum-content-and-self-application.md) shipped 10 REQ-ADD-AAD-NN requirements governing adopter posture for AI-coding-agent-maintained repositories. Requirements written in prose are necessary but not sufficient: a requirement that cannot be checked automatically will drift silently between adopters, and between an adopter's declared state and its actual state. The `lint-template-compliance.sh` linter already catches cases where `addenda.agent-assisted-development: true` is declared before the addendum content file exists; that is necessary but does not reach the posture-file layer. Once a posture file exists, its contents are no longer checked.
 
@@ -40,7 +40,7 @@ Constraints:
 
 - The linter must not fire when the addendum is not applicable; adopters who declare `agent-assisted-development: false` should see silent-pass. The addendum applicability flag is the opt-in trigger.
 - Detection has to start simple enough to land on day one. A model-driven natural-language detector would take ecosystem-scale effort to stand up and would itself need an ADR-ADD-AI-30-style evaluation harness before promotion. Lexical phrase patterns are tractable and can be refined once real-world false positives and false negatives are known.
-- Promotion from advisory to blocking requires evidence, not time (per [ADR-2026-04-16-shadow-gate-promotion-policy.md](ADR-2026-04-16-shadow-gate-promotion-policy.md)). A lexical detector has false-positive risk; shipping it as a hard gate on day one would create adopter friction the policy is intended to prevent.
+- Promotion from advisory to blocking requires evidence, not time (per the shadow-gate promotion policy, to be filed as a sibling ADR). A lexical detector has false-positive risk; shipping it as a hard gate on day one would create adopter friction the policy is intended to prevent.
 
 Cost of inaction: the 10 REQ-ADD-AAD-NN requirements remain declarative only. Adopter drift between posture declaration and posture content accumulates with no detection surface. Self-application by ESE itself has no linter forcing function to catch future drift when CLAUDE.md is edited without attention to the addendum's posture requirements.
 
@@ -50,7 +50,7 @@ Cost of inaction: the 10 REQ-ADD-AAD-NN requirements remain declarative only. Ad
 
 ## Decision
 
-> [§4.2](../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
+> [§4.2](../../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
 
 Ship `starters/linters/lint-agent-config.sh` (parameterized adopter-portable) and `scripts/lint-agent-config.sh` (ESE-internal mirror) as `# status: shadow` per the shadow-gate-promotion-policy ADR. The internal linter is wired as `.github/workflows/ci.yml` Check 38 and auto-discovered by `scripts/preflight.sh`.
 
@@ -71,7 +71,7 @@ Promotion from shadow to gate is evidence-based. The trigger is: the first adopt
 
 ## Consequences
 
-> [§4.2](../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
+> [§4.2](../../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
 
 ### Positive
 
@@ -93,7 +93,7 @@ Promotion from shadow to gate is evidence-based. The trigger is: the first adopt
 **REQ-TPL-04** `advisory` `continuous` `soft` `all`
 §4.2: every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
-> [§4.2](../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
+> [§4.2](../../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
 ### Alternative 1: Ship the linter as a hard gate from day one
 
@@ -119,7 +119,7 @@ Rejected. ESE self-applies the agent-assisted-development addendum in the compan
 **REQ-TPL-05** `advisory` `continuous` `soft` `all`
 §4.2: what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a ju...
 
-> [§4.2](../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
+> [§4.2](../../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
 
 **Pass condition:** both the starter and internal linters pass `bash scripts/preflight.sh` on the engineering-standards tree on commit day; `.github/workflows/ci.yml` registers the new check at slot 38; the internal linter surfaces at least the two expected shadow findings against ESE's current CLAUDE.md (credential-handling and revocation-path) without blocking the build; the starter linter silent-passes when run against a project whose `standards-application.md` declares the addendum `false`.
 
@@ -131,7 +131,7 @@ Rejected. ESE self-applies the agent-assisted-development addendum in the compan
 
 ## Per-Document Impact Analysis <!-- optional -->
 
-> Required by [REQ-4.2-10](../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
+> Required by [REQ-4.2-10](../../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
 
 | Document | Change required | Notes |
 |---|---|---|
@@ -147,7 +147,7 @@ Rejected. ESE self-applies the agent-assisted-development addendum in the compan
 
 ## Follow-on Requirements <!-- optional -->
 
-> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
+> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
 
 <a name="REQ-TPL-06"></a>
 **REQ-TPL-06** `advisory` `continuous` `soft` `all`

@@ -22,7 +22,7 @@ architecture-doc: ~
 **REQ-TPL-03** `advisory` `continuous` `soft` `all`
 Architectural Decision Record. Required by §4.2 for any change that introduces a new component, replaces an existing approach, adds an external dep...
 
-> Architectural Decision Record. Required by [§4.2](../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../STANDARDS.md#91-evaluation-framework).
+> Architectural Decision Record. Required by [§4.2](../../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../../STANDARDS.md#91-evaluation-framework).
 >
 > The YAML frontmatter above is required by the CI gate (`.github/workflows/ci.yml` Check 2). The five CI-required fields are: `type`, `id`, `title`, `status`, `date`. The `deciders` field is recommended but not enforced by CI. Status values: `Proposed` | `Accepted` | `Superseded by ADR-{n}`.
 
@@ -30,13 +30,13 @@ Architectural Decision Record. Required by §4.2 for any change that introduces 
 
 ## Context
 
-> [§4.2](../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
+> [§4.2](../../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
 >
 > If this decision replaces an existing approach: update the superseded ADR's status field to `Superseded by ADR-{this number}` and link it here.
 
 [REQ-ADD-CI-01](../addenda/continuous-improvement.md) in the continuous-improvement addendum obligates a current-state value stream map drawn from at least 10 completed work items before optimization. The requirement is worded against a map at a point in time; it does not prescribe how prior maps are retained. The standard as written therefore admits the failure mode where every improvement cycle maps the current state fresh, files the map somewhere ephemeral (a chat thread, an ad-hoc document, a person's memory), and starts measuring again the next cycle from scratch.
 
-Without an on-disk archive of each baseline, cross-cycle comparison is not possible. An improvement claim of the form "reduce PR review wait from 1.5 days to 4 hours" presumes a prior measured baseline; if the baseline was never archived or is only described in prose inside the improvement work item itself, future cycles cannot reproduce the measurement to verify the improvement held or detect regression. The measurement falsifiability requirement at [§7.7](../STANDARDS.md#77-measurement-system-analysis) implicitly assumes an archive exists; without one, verification against baseline is a claim without an auditable anchor.
+Without an on-disk archive of each baseline, cross-cycle comparison is not possible. An improvement claim of the form "reduce PR review wait from 1.5 days to 4 hours" presumes a prior measured baseline; if the baseline was never archived or is only described in prose inside the improvement work item itself, future cycles cannot reproduce the measurement to verify the improvement held or detect regression. The measurement falsifiability requirement at [§7.7](../../STANDARDS.md#77-measurement-system-analysis) implicitly assumes an archive exists; without one, verification against baseline is a claim without an auditable anchor.
 
 The gap was surfaced by the Ecology of Coordination Comparison analysis dated 2026-04-16 as opportunity VSM1: "VSM baseline archiving." The companion opportunity MA5 (Lean value stream mapping methodology import) is the methodology side of the same gap; VSM1 is the artifact-discipline companion and is independently valuable now. Addressing VSM1 requires a directory convention, a template, a citation rule, and an enforcement linter. Addressing MA5 requires importing the methodology itself (pre-work, data collection, current-state/future-state mapping rhythm) into STANDARDS.md or the continuous-improvement addendum and is out of scope for this decision.
 
@@ -48,7 +48,7 @@ Cost of inaction: adopters who enable the continuous-improvement addendum satisf
 
 ## Decision
 
-> [§4.2](../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
+> [§4.2](../../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
 
 Four concrete mechanisms operationalize REQ-ADD-CI-01 into an enforceable baseline-archive discipline:
 
@@ -68,7 +68,7 @@ No new REQ-ID is introduced. REQ-ADD-CI-01 is the standards anchor; VSM1 operati
 
 ## Consequences
 
-> [§4.2](../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
+> [§4.2](../../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
 
 ### Positive
 
@@ -92,7 +92,7 @@ No new REQ-ID is introduced. REQ-ADD-CI-01 is the standards anchor; VSM1 operati
 **REQ-TPL-04** `advisory` `continuous` `soft` `all`
 §4.2: every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
-> [§4.2](../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
+> [§4.2](../../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
 ### Alternative A: Prose-only inside improvement work items
 
@@ -126,7 +126,7 @@ Rejected. The linter is new and the false-positive surface is not yet characteri
 **REQ-TPL-05** `advisory` `continuous` `soft` `all`
 §4.2: what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a ju...
 
-> [§4.2](../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
+> [§4.2](../../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
 
 **Pass condition:** `bash scripts/lint-vsm-baseline-reference.sh` (a) exits 0 and prints a pass message when run against a synthetic work item whose frontmatter declares `type: improvement` and whose Dependencies table cites an existing path under `docs/improvement/vsm/`, AND (b) exits 0 and prints a shadow-violation message naming the work item and the missing citation when run against a synthetic work item whose frontmatter declares `type: improvement` and whose Dependencies table cites nothing or cites an unresolvable path.
 

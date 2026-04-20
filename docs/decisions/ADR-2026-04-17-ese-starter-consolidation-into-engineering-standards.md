@@ -26,7 +26,7 @@ architecture-doc: ~
 **REQ-TPL-03** `advisory` `continuous` `soft` `all`
 Architectural Decision Record. Required by §4.2 for any change that introduces a new component, replaces an existing approach, adds an external dep...
 
-> Architectural Decision Record. Required by [§4.2](../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../STANDARDS.md#91-evaluation-framework).
+> Architectural Decision Record. Required by [§4.2](../../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../../STANDARDS.md#91-evaluation-framework).
 >
 > The YAML frontmatter above is required by the CI gate (`.github/workflows/ci.yml` Check 2). The five CI-required fields are: `type`, `id`, `title`, `status`, `date`. The `deciders` field is recommended but not enforced by CI. Status values: `Proposed` | `Accepted` | `Superseded by ADR-{n}`.
 
@@ -34,7 +34,7 @@ Architectural Decision Record. Required by §4.2 for any change that introduces 
 
 ## Context
 
-> [§4.2](../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
+> [§4.2](../../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
 
 ESE currently lives across two repositories: `engineering-standards` (the normative standard, templates, addenda, starters) and `ese-starter` (vendored scripts, CI workflow, pre-commit hook, AGENTS.md / CLAUDE.md seed files, bootstrap tooling). Adopters consume ESE by cloning or bootstrapping from ese-starter, which pulls engineering-standards in as a git submodule.
 
@@ -54,7 +54,7 @@ This ADR is Proposed only; it is a PLANNING artifact that documents the consolid
 
 ## Decision
 
-> [§4.2](../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
+> [§4.2](../../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
 
 **This ADR's decision is to PROPOSE consolidation and document the planning; the consolidation itself is deferred to a follow-up Accepted ADR after gate-authority review.**
 
@@ -79,7 +79,7 @@ Scope boundaries of the CONSOLIDATION (not of this planning ADR):
 
 ## Consequences
 
-> [§4.2](../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
+> [§4.2](../../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
 
 ### Positive
 
@@ -103,7 +103,7 @@ Scope boundaries of the CONSOLIDATION (not of this planning ADR):
 **REQ-TPL-04** `advisory` `continuous` `soft` `all`
 §4.2: every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
-> [§4.2](../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
+> [§4.2](../../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
 ### Keep the two-repo split
 
@@ -125,7 +125,7 @@ Keep agent-context starters and `docs/` in engineering-standards; move only `scr
 **REQ-TPL-05** `advisory` `continuous` `soft` `all`
 §4.2: what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a ju...
 
-> [§4.2](../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
+> [§4.2](../../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
 
 **Pass condition:** within two engineering-standards release cycles after the follow-up Accepted ADR lands, zero adopters have reported bootstrap or upgrade failures attributable to the consolidation AND the CHANGELOG entries for the first two post-consolidation releases contain no duplicated content that previously lived in both engineering-standards and ese-starter.
 
@@ -137,7 +137,7 @@ Keep agent-context starters and `docs/` in engineering-standards; move only `scr
 
 ## Per-Document Impact Analysis <!-- optional -->
 
-> Required by [REQ-4.2-10](../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
+> Required by [REQ-4.2-10](../../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
 
 | Document | Change required | Notes |
 |---|---|---|
@@ -147,7 +147,7 @@ Keep agent-context starters and `docs/` in engineering-standards; move only `scr
 
 ## Follow-on Requirements <!-- optional -->
 
-> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
+> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
 
 <a name="REQ-TPL-06"></a>
 **REQ-TPL-06** `advisory` `continuous` `soft` `all`

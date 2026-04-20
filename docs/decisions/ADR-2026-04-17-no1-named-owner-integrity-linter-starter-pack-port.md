@@ -22,7 +22,7 @@ architecture-doc: ~
 **REQ-TPL-03** `advisory` `continuous` `soft` `all`
 Architectural Decision Record. Required by §4.2 for any change that introduces a new component, replaces an existing approach, adds an external dep...
 
-> Architectural Decision Record. Required by [§4.2](../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../STANDARDS.md#91-evaluation-framework).
+> Architectural Decision Record. Required by [§4.2](../../STANDARDS.md#42-adr-format) for any change that introduces a new component, replaces an existing approach, adds an external dependency, or alters how services communicate. Also required at [§2.1 DESIGN step](../../STANDARDS.md#21-the-lifecycle) and for all technology adoption decisions per [§9.1](../../STANDARDS.md#91-evaluation-framework).
 >
 > The YAML frontmatter above is required by the CI gate (`.github/workflows/ci.yml` Check 2). The five CI-required fields are: `type`, `id`, `title`, `status`, `date`. The `deciders` field is recommended but not enforced by CI. Status values: `Proposed` | `Accepted` | `Superseded by ADR-{n}`.
 
@@ -30,7 +30,7 @@ Architectural Decision Record. Required by §4.2 for any change that introduces 
 
 ## Context
 
-> [§4.2](../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
+> [§4.2](../../STANDARDS.md#42-adr-format): describe the problem, constraints, and cost of doing nothing.
 
 The NO1 opportunity card in `ese-plugin/docs/research/ecc-comparison-2026-04-16.md` identifies a gap between ESE's writing rule ("no person names in normative content; the named-owner field in `standards-application.md` is the only place for an operator name") and the actual state of adopter corpora. The rule is declared but not verified: an adopter can declare an owner correctly in the YAML field and still have the same name appearing in ADR Context sections, FMEA narratives, and architecture-doc author credits. Ownership then drifts from a single-named-field posture into a distributed set of implicit authorship signals across normative artifacts.
 
@@ -52,7 +52,7 @@ Cost of inaction: adopter ecosystem retains the drift class without a detection 
 
 ## Decision
 
-> [§4.2](../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
+> [§4.2](../../STANDARDS.md#42-adr-format): be specific and unambiguous. Not "we will consider X" - "we are doing X."
 
 Ship `starters/linters/lint-named-owner-integrity.sh` ported from ese-plugin's `scripts/lint-named-owner-integrity.sh` (Session J commit 7). The starter is parameterized per starter-pack conventions: `PROJECT_ROOT`, `APPLICATION_FILE`, `ARTIFACT_DIRS` (colon-separated list of directory or single-file paths relative to PROJECT_ROOT, defaulting to the common ESE layout), and `MAX_FINDINGS` (truncation ceiling with `MAX_FINDINGS=0` for unlimited).
 
@@ -71,7 +71,7 @@ Smoke-test verification: running the starter linter against ese-plugin's state w
 
 ## Consequences
 
-> [§4.2](../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
+> [§4.2](../../STANDARDS.md#42-adr-format): state both positive and negative trade-offs. An ADR with no negative consequences was not thought through.
 
 ### Positive
 
@@ -93,7 +93,7 @@ Smoke-test verification: running the starter linter against ese-plugin's state w
 **REQ-TPL-04** `advisory` `continuous` `soft` `all`
 §4.2: every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
-> [§4.2](../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
+> [§4.2](../../STANDARDS.md#42-adr-format): every rejected alternative must have a documented rejection rationale. This prevents re-evaluating the same option later.
 
 ### Alternative 1: Port without parameterization (ESE-layout defaults only)
 
@@ -119,7 +119,7 @@ Rejected. Adopters do not need to wait for ESE's triage to benefit from the lint
 **REQ-TPL-05** `advisory` `continuous` `soft` `all`
 §4.2: what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a ju...
 
-> [§4.2](../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
+> [§4.2](../../STANDARDS.md#42-adr-format): what observable signal confirms this decision was correct, and what triggers the assessment? Criteria must be binary (true or false, not a judgment call) and outcome-triggered (an event, not a calendar window). See §4.2 for the full requirement.
 
 **Pass condition:** `bash scripts/preflight.sh` passes after the starter lands; running the starter against ese-plugin's state with the documented parameter overrides produces 27 findings, matching the ese-plugin internal linter's count against the same state (functional-equivalence test); `starters/linters/README.md` catalog contains the NO1 row with the "no ESE-internal mirror" qualifier.
 
@@ -131,7 +131,7 @@ Rejected. Adopters do not need to wait for ESE's triage to benefit from the lint
 
 ## Per-Document Impact Analysis <!-- optional -->
 
-> Required by [REQ-4.2-10](../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
+> Required by [REQ-4.2-10](../../STANDARDS.md#req-4210) for ADRs modifying an existing component, API, interface, or standard. List every document affected by this decision. Documents confirmed unchanged must be listed explicitly. Optional in the template-compliance linter: only ADRs that modify an existing component, API, interface, or standard need to include this section. ADRs introducing genuinely new decisions with no existing artifacts to modify may omit it.
 
 | Document | Change required | Notes |
 |---|---|---|
@@ -145,7 +145,7 @@ Rejected. Adopters do not need to wait for ESE's triage to benefit from the lint
 
 ## Follow-on Requirements <!-- optional -->
 
-> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
+> If this decision introduces or modifies a component touching authentication, payments, data mutation, or external integrations, complete a FMEA per [§2.1 DESIGN](../../STANDARDS.md#21-the-lifecycle) before BUILD begins. Optional in the template-compliance linter: only ADRs that introduce qualifying follow-on obligations (FMEA, new REQ-IDs, etc.) need this section. Process-only ADRs that trigger no downstream artifacts may omit it.
 
 <a name="REQ-TPL-06"></a>
 **REQ-TPL-06** `advisory` `continuous` `soft` `all`

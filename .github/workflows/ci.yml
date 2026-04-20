@@ -161,7 +161,11 @@ jobs:
       # -------------------------
       - name: Markdown link check (internal links)
         run: |
-          # Create config to check only internal links (skip http/https)
+          # Create config to check only internal links (skip http/https).
+          # templates/ and starters/ are excluded from the find below because
+          # they intentionally contain placeholder syntax ({link}, YYYY-MM-DD,
+          # ADR-NNN-title, .standards/*) that resolves only after the template
+          # is instantiated into an adopter repo.
           cat > /tmp/mlc-config.json <<'MLCEOF'
           {
             "ignorePatterns": [
@@ -183,7 +187,7 @@ jobs:
               echo "$result" | grep -E "ERROR|Dead|\[✗\]"
               FAILED=1
             fi
-          done < <(find . -name "*.md" -not -path './.git/*' -not -path './node_modules/*' -print0)
+          done < <(find . -name "*.md" -not -path './.git/*' -not -path './node_modules/*' -not -path './templates/*' -not -path './starters/*' -print0)
 
           if [ "$FAILED" -eq 1 ]; then
             echo "FAIL: Broken internal links found (ESE §2.1 VERIFY)"
