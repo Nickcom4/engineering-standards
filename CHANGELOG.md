@@ -6,6 +6,40 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.17.0] - 2026-04-24                                                                                                                                                            
+                                                                                                                                                                                                      
+  Minor release shedding adopter-facing executable code to ese-starter per ADR-2026-04-24. Engineering-standards now ships specification (STANDARDS.md, templates/, docs/addenda/, docs/decisions/)   
+  and its own internal self-validation toolchain (scripts/); executable linter scripts and adopter bootstrap tooling canonicalize in ese-starter (v1.12.x). Validated in practice across 11 adopter   
+  repos that re-vendored from ese-starter v1.12.1 without CI regression.                                                                                                                              
+                                                                                                                                                                                      
+  ### Added
+
+  - `docs/decisions/ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md` (Accepted). Records the single-source-of-truth decision:             
+  adopter-facing executable code (linters under `scripts/lint-*.sh`, tools such as `new-artifact.sh`, `verify.sh`, `upgrade-check.sh`, `catchup.sh`, supporting libs under `scripts/lib/`) lives
+  canonically in ese-starter. Engineering-standards retains STANDARDS.md, templates, addenda, decisions, and its own internal `scripts/` self-validation toolchain. Supersedes ADR-2026-04-17.        
+                                                                                                                                                                                      
+  ### Removed
+
+  - `starters/linters/` and `starters/tools/` directories (~15 executable scripts: 11 `lint-*.sh` + 4 tools + 2 README files). Adopter-facing executable code now lives exclusively in ese-starter;   
+  engineering-standards stops double-shipping it. The 18-file audit + meta-analysis conducted 2026-04-24 established that ese-plugin and ese-starter held the most recent fixes (WI-127, 27
+  false-positive reductions, SCRIPT_DIR fix, shellcheck cleanups) while `starters/linters/` was frequently the stalest copy. Consolidating removes the drift class at its architectural root rather   
+  than managing it continuously via WI-074-style reconciliation.                                                                                                                      
+
+  ### Changed
+
+  - `starters/README.md`, `README.md`, `docs/adoption.md`, `docs/migrating-from-partial-adoption.md`, `docs/standards-application.md` (§4.1 Verification Mode): prose references to 
+  `starters/linters/` and `starters/tools/` updated to point adopters at ese-starter. Historical context in prior CHANGELOG entries, closed work items, ADR-2026-04-17 (Rejected), and ADR-2026-04-24 
+  itself intentionally preserved as decision trail.
+  - `docs/decisions/ADR-2026-04-17-ese-starter-consolidation-into-engineering-standards.md`: status Proposed -> Rejected, superseded by ADR-2026-04-24. Rejection rationale documents the 18-file     
+  audit findings and the observed upward fix-flow that contradicted the original proposed direction.                                                                                                  
+   
+  ### Migration                                                                                                                                                                                       
+                                                                                                                                                                                      
+  Adopters vendor linter code from `ese-starter/scripts/` via `bash scripts/bootstrap.sh --upgrade --target .` (requires ese-starter >= v1.12.1). Adopters that historically ran `upgrade-check.sh` 
+  against `starters/linters/` paths need ese-starter >= v1.12.2, which adds graceful degradation for the post-removal layout (ESE_STARTER_ROOT fallback or clean skip). Previously vendored copies in 
+  adopter `scripts/` remain functional; adopters upgrade at their own cadence. No REQ-ID removals; STANDARDS.md normative surface unchanged.
+                         
+
 ### Removed
 
 - **`starters/linters/` and `starters/tools/` directories** (18 files total: 11 linter shell scripts + `starters/linters/README.md` + `starters/linters/template-instance-mappings.txt.starter` + 4 tool shell scripts + `starters/tools/README.md`). Adopter-facing executable code (linter scripts, bootstrap tool, verify harness, scaffolding tool, drift-detection helpers) canonically lives in `ese-starter` effective v1.12.1 per ADR-2026-04-24. engineering-standards continues to ship specification (STANDARDS.md, templates/, docs/addenda/, docs/decisions/) and its own internal `scripts/` directory for self-validation; that internal toolchain is NOT affected by this change. `starters/README.md`, `README.md` Structure block, `docs/adoption.md`, `docs/migrating-from-partial-adoption.md`, and `docs/standards-application.md` §4.1 Verification mode prose updated to point adopters at ese-starter for executable scaffolding. Historical CHANGELOG entries and prior ADRs retain their original references to the removed paths as historical context. Phase 3 of the ESE dedup consolidation.
