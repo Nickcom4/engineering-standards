@@ -2,7 +2,7 @@
 type: adr
 id: ADR-2026-04-17-ese-starter-consolidation-into-engineering-standards
 title: "ese-starter consolidation into engineering-standards"
-status: Proposed
+status: Rejected
 date: 2026-04-17
 deciders: "Nick Baker"
 stage:
@@ -50,6 +50,8 @@ This ADR is Proposed only; it is a PLANNING artifact that documents the consolid
 
 **Supersedes:** N/A
 
+**Superseded by:** [ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code](ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md)
+
 ---
 
 ## Decision
@@ -94,6 +96,20 @@ Scope boundaries of the CONSOLIDATION (not of this planning ADR):
 - **Migration cost for existing adopters.** Adopters who bootstrapped from ese-starter need to be told (in ese-starter's archived README) to re-bootstrap or to repoint their upgrade-check target. The cost is one-time but real.
 - **ese-starter git history is archived.** Contributors who have bookmarked or referenced specific ese-starter commits need to follow the archived repo forward; link rot is likely over time.
 - **ese-plugin split remains.** The consolidation resolves the starter split, not the plugin split. A second ADR may be needed later.
+
+---
+
+## Rejection rationale
+
+This ADR was moved from Proposed to Rejected on 2026-04-24 after an 18-file audit and meta-analysis across engineering-standards, ese-starter, ese-plugin, and dotfiles produced evidence that inverted the consolidation direction this ADR had proposed.
+
+**Empirical finding: fix-flow runs upward from adopters to engineering-standards, not downward from a pure-specification repo.** The audit found that ese-plugin holds the most recent critical fixes: the WI-127 `set -e` / EXIT-trap fix, 27 false-positive regex reductions in the NO1 linter, SCRIPT_DIR resolution, WI-027 auto-numbering, N3 FMEA normalization, N12 Part B inheritance, and Tier 2.5 placeholder-residue detection. Separately, ese-starter performed a shellcheck-clean sweep on 2026-04-14 that never propagated upstream. The nominal upstream copy at `starters/linters/` in engineering-standards is, in practice, frequently the STALEST of the three copies.
+
+**Consequence for this ADR's direction.** This ADR proposed pulling ese-starter's executable content (bootstrap.sh, pre-commit hook, CI workflow, starter-linter vendoring) INTO engineering-standards and retiring ese-starter. The observed direction of fixes contradicts that topology: the repo that should be canonical is the one where the fixes actually land first, which is the adopter-facing layer (ese-starter and ese-plugin), not the specification repo. Consolidating code into engineering-standards would institutionalize the current lag pattern instead of resolving it.
+
+**Superseding decision.** The inverse direction was adopted in ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code: ese-starter becomes the single source of truth for adopter-facing executable code, and engineering-standards contracts to pure specification plus its own internal self-validation toolchain. That direction matches the observed flow of fixes and removes the staleness gap at its root rather than absorbing it.
+
+**Preservation note.** The Context, Decision, Consequences, and Alternatives sections above are retained as the historical record of the direction that was considered and rejected; the Alternatives section's "Move engineering-standards into ese-starter instead" entry, which was originally rejected, is effectively the direction the superseding ADR adopted once the observed fix-flow evidence was weighed.
 
 ---
 
