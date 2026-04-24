@@ -38,7 +38,7 @@ See [docs/adoption.md](docs/adoption.md) for full setup instructions (submodule,
 2. Read [STANDARDS.md](STANDARDS.md)
 3. Create your `docs/standards-application.md` from the [template](starters/standards-application.md) and fill in the YAML applicability frontmatter
 4. Identify which [addenda](docs/addenda/) apply
-5. Vendor the linters you want from [starters/linters/](starters/linters/) and the tools from [starters/tools/](starters/tools/)
+5. Vendor the adopter-facing linters and tools from the [ese-starter](https://github.com/Nickcom4/ese-starter) repository (canonical per [ADR-2026-04-24](docs/decisions/ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md))
 
 **Migrating from an older partial adoption:** see [docs/migrating-from-partial-adoption.md](docs/migrating-from-partial-adoption.md).
 
@@ -102,20 +102,6 @@ starters/                              9 one-time adoption files; copy once at a
   lessons-learned-registry.md          Lessons-learned starter
   anti-pattern-registry.md             Anti-pattern registry starter
   vsm.md                               Value stream mapping baseline archive convention
-  linters/                             Adopter-facing portable linters (vendor once at adoption)
-    README.md                          Adoption protocol for the linter starter pack
-    lint-template-compliance.sh        Parameterized template-instance compliance linter
-    lint-fmea-congruence.sh            FMEA status/iteration/table/controls congruence linter
-    lint-orphan-adrs.sh                Advisory linter for ADRs not referenced from living documents
-    lint-changelog-tags.sh             CHANGELOG-to-git-tag congruence linter
-    lint-orphan-scripts.sh             Detect lint/validate scripts not wired to CI and agent context
-    lint-readme-structure.sh           Bidirectional README Structure disk/README congruence linter
-    lint-count-congruence.sh           Gate/check/script count-in-prose congruence linter
-    lint-vsm-baseline-reference.sh     Improvement-WI baseline VSM citation linter (shadow)
-    template-instance-mappings.txt.starter  Example mapping config for lint-template-compliance
-  tools/                               Adopter-facing workflow tools (vendor once at adoption)
-    README.md                          Adoption protocol for the tool starter pack
-    new-artifact.sh                    Scaffold new instances from ESE templates with placeholders pre-filled
 ```
 
 ## Versioning

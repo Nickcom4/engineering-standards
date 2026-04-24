@@ -42,4 +42,4 @@ If an adopter's target repo does not have a Claude-specific configuration, use [
 
 ## Linters and tools
 
-The `linters/` and `tools/` subdirectories carry vendored scripts that adopters copy into `scripts/`. See each subdirectory's contents for the specific scripts; adopters should re-copy these when upgrading to a new ese-starter release.
+Executable adopter scaffolding (linter scripts, bootstrap tool, verify harness, scaffolding tool) lives canonically in the `ese-starter` repository per [ADR-2026-04-24](../docs/decisions/ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md). See [docs/adoption.md](../docs/adoption.md) for the adoption protocol.

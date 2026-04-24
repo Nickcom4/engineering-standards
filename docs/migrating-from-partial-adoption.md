@@ -19,7 +19,7 @@
 This guide applies if any of these statements are true about your project:
 
 - Your `.standards/` submodule is pinned at a commit older than the current ESE `v2.5.0` tag.
-- Your `scripts/` directory is missing one or more of the eight vendored drift-detection linters from ESE's `starters/linters/`.
+- Your `scripts/` directory is missing one or more of the eight vendored drift-detection linters canonically owned by `ese-starter` (per ADR-2026-04-24).
 - Your `docs/standards-application.md` does not have the machine-readable YAML applicability frontmatter at the top (the block starting with `---` and containing fields like `ese-version`, `owner`, `capabilities`, `addenda`).
 - Your `scripts/pre-commit` or `.github/workflows/ci.yml` does not invoke the vendored ESE linters.
 - You adopted ESE before the clean-history cut at `v2.5.0` and your submodule reference points at a commit that no longer exists on `origin` (you see `fatal: reference not found` when fetching).
@@ -33,7 +33,7 @@ Most partial adoptions fall into one of four buckets. Your project may be in one
 | State | Symptom | Resolution complexity |
 |---|---|---|
 | **A. Stale submodule pin** | `.standards/` points at a commit older than the current ESE HEAD, or at a commit that no longer exists on origin (pre-rewrite SHA) | Low: one submodule bump |
-| **B. Missing vendored linters** | `scripts/lint-*.sh` is missing one or more of the eight drift-detection linters | Low: copy from `.standards/starters/linters/` |
+| **B. Missing vendored linters** | `scripts/lint-*.sh` is missing one or more of the eight drift-detection linters | Low: re-run ese-starter bootstrap in upgrade mode, or manually copy from an ese-starter clone's `scripts/` |
 | **C. Missing applicability frontmatter** | `docs/standards-application.md` has prose sections but no YAML frontmatter block at the top | Medium: copy schema from `.standards/starters/standards-application.md`, fill in values |
 | **D. Missing pre-commit and CI wiring** | `scripts/pre-commit` does not exist, or `.github/workflows/ci.yml` does not run the vendored linters | Medium: copy workflow and pre-commit from `.standards/.github/workflows/ci.yml` pattern and adapt |
 
@@ -94,18 +94,18 @@ git add .standards
 git commit -m "chore: bump ESE submodule to latest"
 ```
 
-Then re-verify your vendored files against the new submodule state. Any vendored linter that has diverged from its upstream form is a candidate for re-copy:
+Then re-verify your vendored files against the ese-starter canonical source (per ADR-2026-04-24, adopter-facing executable code is owned by ese-starter, not by the engineering-standards submodule). Any vendored linter that has diverged from its upstream form is a candidate for re-copy. With an ese-starter clone at `$ESE_STARTER_ROOT`:
 
 ```sh
 for lint in scripts/lint-*.sh; do
-  upstream=".standards/starters/linters/$(basename $lint)"
+  upstream="$ESE_STARTER_ROOT/scripts/$(basename $lint)"
   if [ -f "$upstream" ] && ! diff -q "$lint" "$upstream" >/dev/null; then
     echo "DRIFT: $lint differs from $upstream"
   fi
 done
 ```
 
-For each drift, decide: keep your local customization (and document why), or re-copy from upstream (discarding your changes). There is no correct answer; this is an engineering judgment call per script.
+For each drift, decide: keep your local customization (and document why), or re-copy from upstream (discarding your changes). There is no correct answer; this is an engineering judgment call per script. The ese-starter `scripts/upgrade-check.sh` automates the same comparison.
 
 ### If the pinned SHA does not exist on origin
 
@@ -125,30 +125,35 @@ Your submodule now points at the new `v2.5.0` root commit. Any vendored files mu
 
 ## State B: missing vendored linters
 
-Copy the missing linters from the submodule:
+The canonical source of adopter-facing linters and scaffolding tools is the `ese-starter` repository (per ADR-2026-04-24). The simplest path is to clone ese-starter and run its bootstrap in upgrade mode against your project:
 
 ```sh
+git clone https://github.com/Nickcom4/ese-starter.git /tmp/ese-starter
+bash /tmp/ese-starter/scripts/bootstrap.sh --upgrade --target .
+```
+
+This re-copies the full `scripts/` directory (linters, scaffolding tool, verify harness, pre-commit hook) and CI workflow into your project. It does not touch your `docs/`, your `CHANGELOG.md`, or the `.standards/` submodule.
+
+If you prefer to copy individual files, point the source at your ese-starter clone's `scripts/` directory:
+
+```sh
+ESE_STARTER_ROOT=/tmp/ese-starter
 for lint in lint-template-compliance.sh lint-standards-application-frontmatter.sh lint-fmea-congruence.sh lint-orphan-adrs.sh lint-changelog-tags.sh lint-orphan-scripts.sh lint-readme-structure.sh lint-count-congruence.sh; do
   if [ ! -f "scripts/$lint" ]; then
-    cp ".standards/starters/linters/$lint" "scripts/$lint"
+    cp "$ESE_STARTER_ROOT/scripts/$lint" "scripts/$lint"
     chmod +x "scripts/$lint"
     echo "copied scripts/$lint"
   fi
 done
-```
-
-Also copy the scaffolding tool and the mapping config if they are missing:
-
-```sh
-[ -f scripts/new-artifact.sh ] || cp .standards/starters/tools/new-artifact.sh scripts/ && chmod +x scripts/new-artifact.sh
-[ -f scripts/template-instance-mappings.txt ] || cp .standards/starters/linters/template-instance-mappings.txt.starter scripts/template-instance-mappings.txt
+[ -f scripts/new-artifact.sh ] || cp "$ESE_STARTER_ROOT/scripts/new-artifact.sh" scripts/ && chmod +x scripts/new-artifact.sh
+[ -f scripts/template-instance-mappings.txt ] || cp "$ESE_STARTER_ROOT/scripts/template-instance-mappings.txt" scripts/template-instance-mappings.txt
 ```
 
 Commit:
 
 ```sh
 git add scripts/
-git commit -m "chore: vendor missing ESE linters from .standards/starters/"
+git commit -m "chore: vendor missing ESE linters from ese-starter"
 ```
 
 ## State C: missing applicability frontmatter
@@ -183,7 +188,9 @@ git commit -m "docs: add applicability frontmatter schema to standards-applicati
 Copy the starter pre-commit and install it as a git hook:
 
 ```sh
-cp .standards/starters/linters/template-instance-mappings.txt.starter scripts/template-instance-mappings.txt 2>/dev/null || true
+# template-instance-mappings.txt is part of the ese-starter-owned toolchain
+# (see ADR-2026-04-24). Vendor it from an ese-starter clone if missing:
+# cp "$ESE_STARTER_ROOT/scripts/template-instance-mappings.txt" scripts/template-instance-mappings.txt
 # Use the pre-commit pattern from the ese-starter repo (a reference implementation);
 # a minimal adopter version is inline below.
 cat > scripts/pre-commit <<'PRECOMMIT'
