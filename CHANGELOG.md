@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `.github/workflows/claude-pr-review.yml`: reusable workflow (`on: workflow_call`) that consumer ESE-adopting repos call from a small stub with `secrets: inherit`. Centralizes the three-token OAuth pool, concurrency cancellation, attempt rotation on rate-limit, and the standard review prompt so PR review behavior stays consistent across every adopter without each repo maintaining its own copy. Reads `CLAUDE_CODE_OAUTH_TOKEN_1/2/3` from the calling repo or org secret store; missing slots are skipped, at least one is required.
+
 ### Fixed
 
 - `docs/decisions/ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md`: corrected 9 relative-path references to the root `STANDARDS.md`. Paths used `../STANDARDS.md` (which resolves to the nonexistent `docs/STANDARDS.md` from `docs/decisions/`); changed to `../../STANDARDS.md` to match the convention in every other ADR. Unblocks the Documentation Quality CI job which checks internal markdown links.
