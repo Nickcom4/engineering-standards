@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Fixed
+
+- `docs/decisions/ADR-2026-04-24-ese-code-canonicalization-ese-starter-as-single-source-for-adopter-facing-executable-code.md`: corrected 9 relative-path references to the root `STANDARDS.md`. Paths used `../STANDARDS.md` (which resolves to the nonexistent `docs/STANDARDS.md` from `docs/decisions/`); changed to `../../STANDARDS.md` to match the convention in every other ADR. Unblocks the Documentation Quality CI job which checks internal markdown links.
+
 ## [2.17.0] - 2026-04-24                                                                                                                                                            
                                                                                                                                                                                                       
   Minor release shedding adopter-facing executable code to ese-starter per ADR-2026-04-24. Engineering-standards now ships specification (STANDARDS.md, templates/, docs/addenda/, docs/decisions/)   
