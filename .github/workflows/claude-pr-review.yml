@@ -1,0 +1,164 @@
+name: Claude PR Review
+
+# Reusable workflow that runs a headless Claude Code session against a PR diff
+# and posts a single PR review (approve, request-changes, or comment). Intended
+# to be called from any ESE-adopting repo so the review behavior stays
+# consistent everywhere.
+#
+# Authentication: a pool of Claude Pro/Max OAuth tokens. Generate each with
+# `claude setup-token` on a machine that has an authenticated Claude Code
+# session for that account. Store as repository or organization secrets:
+#
+#   CLAUDE_CODE_OAUTH_TOKEN_1   (primary)
+#   CLAUDE_CODE_OAUTH_TOKEN_2   (first fallback)
+#   CLAUDE_CODE_OAUTH_TOKEN_3   (second fallback)
+#
+# At least one token must be set. Missing slots are skipped. The workflow tries
+# tokens 1, 2, 3 in order, stopping at the first success; this rotates around
+# per-account daily rate limits without operator intervention.
+#
+# How to call from a consumer repo (place at .github/workflows/claude-pr-review.yml):
+#
+#   name: Claude PR Review
+#   on:
+#     pull_request:
+#       types: [opened, synchronize, reopened, ready_for_review]
+#   jobs:
+#     review:
+#       uses: Nickcom4/engineering-standards/.github/workflows/claude-pr-review.yml@main
+#       secrets: inherit
+#
+# Pin to a tag (e.g. @v2.17.0) instead of @main once the consumer repo is
+# stable; tag pinning ties the review behavior to a known engineering-standards
+# version, so behavior changes only when the submodule is bumped.
+
+on:
+  workflow_call:
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN_1:
+        required: false
+      CLAUDE_CODE_OAUTH_TOKEN_2:
+        required: false
+      CLAUDE_CODE_OAUTH_TOKEN_3:
+        required: false
+
+# When a new push lands on a PR, cancel any in-progress review on the prior
+# head SHA. Each run consumes one token from the pool; without cancellation,
+# rapid pushes stack redundant runs and drain the pool.
+concurrency:
+  group: claude-pr-review-${{ github.repository }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    env:
+      REVIEW_PROMPT: |
+        You are reviewing PR #${{ github.event.pull_request.number }} on ${{ github.repository }}.
+
+        Read these rules first; skip any file that does not exist in this repo:
+          - .standards/STANDARDS.md (ESE normative standard, vendored as a submodule)
+          - CLAUDE.md or AGENTS.md (project-specific rules, skill routing, commit and push policy)
+          - docs/incidents/anti-patterns.md (registered anti-patterns)
+          - docs/incidents/lessons-learned.md (registered lessons)
+
+        Review the PR diff against those rules. Check specifically:
+          - Writing standards: no Unicode em dash (U+2014) or en dash (U+2013), no ASCII double-hyphen sentence dashes, no smart quotes, no person names in normative content, no absolute paths in living documents.
+          - CHANGELOG entry recorded for substantive changes.
+          - Template compliance for ESE artifacts (ADRs, FMEAs, work items, post-mortems, capabilities, problem-research, etc.). Each instance preserves all non-optional headings from its template.
+          - Commit discipline: one logical change per commit, no AI attribution (no Co-Authored-By trailers, no "Generated with" lines), no skipped pre-commit hooks.
+          - Security: no secrets in committed files, no injection surfaces, no overbroad workflow permissions.
+          - If the PR modifies workflow files, hooks, or skills, verify no chain-bypass risk and that frontmatter and declared invariants still validate.
+
+        Post a single PR review via `gh pr review ${{ github.event.pull_request.number }}`:
+          - `--approve` if the diff is clean against every applicable rule.
+          - `--request-changes` with specific file:line pointers if any rule is violated.
+          - `--comment` for advisory-only notes (optional improvements, not blockers).
+
+        Keep the review concise. Cite the specific rule and the file:line for every finding. Do not repeat rule text; reference it.
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: false
+
+      - name: Detect available OAuth tokens in pool
+        id: tokens
+        env:
+          T1: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_1 }}
+          T2: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_2 }}
+          T3: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_3 }}
+        run: |
+          set -u
+          count=0
+          if [ -n "${T1:-}" ]; then echo "has_1=true"  >> "$GITHUB_OUTPUT"; count=$((count+1)); else echo "has_1=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -n "${T2:-}" ]; then echo "has_2=true"  >> "$GITHUB_OUTPUT"; count=$((count+1)); else echo "has_2=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -n "${T3:-}" ]; then echo "has_3=true"  >> "$GITHUB_OUTPUT"; count=$((count+1)); else echo "has_3=false" >> "$GITHUB_OUTPUT"; fi
+          echo "pool_size=$count" >> "$GITHUB_OUTPUT"
+          echo "Claude OAuth token pool size: $count"
+          if [ "$count" -eq 0 ]; then
+            echo "::error::No Claude OAuth tokens configured. Set at least CLAUDE_CODE_OAUTH_TOKEN_1 as a repo or organization secret."
+            exit 1
+          fi
+
+      - name: Try token 1
+        id: try1
+        if: steps.tokens.outputs.has_1 == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_1 }}
+          claude_args: "--allowed-tools Bash,Read,Grep,Glob"
+          prompt: ${{ env.REVIEW_PROMPT }}
+
+      - name: Try token 2
+        id: try2
+        if: |
+          steps.tokens.outputs.has_2 == 'true' &&
+          steps.try1.outcome != 'success'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_2 }}
+          claude_args: "--allowed-tools Bash,Read,Grep,Glob"
+          prompt: ${{ env.REVIEW_PROMPT }}
+
+      - name: Try token 3
+        id: try3
+        if: |
+          steps.tokens.outputs.has_3 == 'true' &&
+          steps.try1.outcome != 'success' &&
+          steps.try2.outcome != 'success'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_3 }}
+          claude_args: "--allowed-tools Bash,Read,Grep,Glob"
+          prompt: ${{ env.REVIEW_PROMPT }}
+
+      - name: Final outcome
+        env:
+          POOL_SIZE: ${{ steps.tokens.outputs.pool_size }}
+        run: |
+          o1="${{ steps.try1.outcome }}"
+          o2="${{ steps.try2.outcome }}"
+          o3="${{ steps.try3.outcome }}"
+          echo "Attempt outcomes: token_1=${o1:-n/a}  token_2=${o2:-n/a}  token_3=${o3:-n/a}"
+          if [ "$o1" = "success" ] || [ "$o2" = "success" ] || [ "$o3" = "success" ]; then
+            if [ "$o1" = "success" ]; then echo "Review posted via token_1."; fi
+            if [ "$o2" = "success" ]; then echo "Review posted via token_2 (token_1 failed or skipped)."; fi
+            if [ "$o3" = "success" ]; then echo "Review posted via token_3 (tokens 1 and 2 failed or skipped)."; fi
+            exit 0
+          fi
+          echo "::error::All ${POOL_SIZE:-unknown} Claude OAuth tokens in the pool failed."
+          echo "::error::Common causes: (a) daily Pro/Max rate limit hit on every account; (b) the PR modifies a workflow file that triggers GitHub's workflow-validation block on the action's token exchange."
+          exit 1
