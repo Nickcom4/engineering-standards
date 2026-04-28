@@ -1,0 +1,53 @@
+name: notify-repo-sync
+
+# Fires one ntfy push notification on every commit landing on master.
+# Drop this file at .github/workflows/notify-repo-sync.yml in each repo
+# you want to track (ese, ese-plugin, ese-starter, dotfiles).
+#
+# Required repo secrets:
+#   NTFY_URL    Full ntfy publish URL, e.g. https://ntfy.example.com/repo-sync
+#   NTFY_TOKEN  Optional Bearer token if your ntfy server requires auth.
+#
+# The ntfy URL must be reachable from GitHub-hosted runners. Either use
+# the public ntfy.sh with a hard-to-guess topic, or expose your self-hosted
+# ntfy via Tailscale Funnel / Cloudflare Tunnel / similar.
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post ntfy notification
+        env:
+          NTFY_URL: ${{ secrets.NTFY_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          REPO: ${{ github.event.repository.name }}
+          REPO_FULL: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.event.pusher.name }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${NTFY_URL:-}" ]]; then
+            echo "NTFY_URL secret not set; skipping notification." >&2
+            exit 0
+          fi
+          subject=$(printf '%s\n' "$MSG" | head -n1)
+          short_sha="${SHA:0:7}"
+          body="${REPO} @ ${short_sha} by ${ACTOR}: ${subject}"
+          auth_args=()
+          if [[ -n "${NTFY_TOKEN:-}" ]]; then
+            auth_args=(-H "Authorization: Bearer ${NTFY_TOKEN}")
+          fi
+          curl -fsS "${auth_args[@]}" \
+            -H "Title: repo-sync: ${REPO}" \
+            -H "Tags: arrows_counterclockwise" \
+            -H "Click: https://github.com/${REPO_FULL}/commit/${SHA}" \
+            --data-binary "${body}" \
+            "${NTFY_URL}"
