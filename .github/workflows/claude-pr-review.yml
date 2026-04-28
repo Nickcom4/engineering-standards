@@ -23,14 +23,26 @@ name: Claude PR Review
 #   on:
 #     pull_request:
 #       types: [opened, synchronize, reopened, ready_for_review]
+#       # GitHub strips action token-exchange permissions on any PR that
+#       # modifies workflow files, which structurally fails the review on
+#       # those PRs. Skipping them entirely keeps the fail badge meaningful.
+#       paths-ignore:
+#         - '.github/workflows/**'
+#   permissions:
+#     contents: read
+#     pull-requests: write
+#     issues: write
+#     id-token: write
 #   jobs:
 #     review:
-#       uses: Nickcom4/engineering-standards/.github/workflows/claude-pr-review.yml@main
+#       uses: Nickcom4/engineering-standards/.github/workflows/claude-pr-review.yml@v2.18.0
 #       secrets: inherit
 #
-# Pin to a tag (e.g. @v2.17.0) instead of @main once the consumer repo is
-# stable; tag pinning ties the review behavior to a known engineering-standards
-# version, so behavior changes only when the submodule is bumped.
+# Pin to a tag (e.g. @v2.18.0) rather than @main; tag pinning ties review
+# behavior to a known engineering-standards version, so behavior changes
+# only when the consumer bumps the pin in lockstep with the .standards
+# submodule. The permissions block in the caller is required because most
+# repos default GITHUB_TOKEN to read-only.
 
 on:
   workflow_call:
