@@ -6,6 +6,15 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.18.1] - 2026-04-28 
+
+### Fixed                                                                                                                                                                                           
+                                                                                          
+  - **Release discipline: tag v2.18.0 was cut at a commit that predated the CHANGELOG promotion.** Adopters bumping their `.standards` submodule to v2.18.0 had Tier3 of                              
+  `lint-standards-application-frontmatter.sh` fail because the CHANGELOG at the v2.18.0 tag's commit still listed that release's content under `[Unreleased]`. v2.18.1 cuts a tag at a commit that
+  includes the promoted heading so the lint passes for adopters.                                                                                                                                      
+     
+
 ## [2.18.0] - 2026-04-28
 
 ### Added
