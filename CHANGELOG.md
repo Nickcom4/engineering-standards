@@ -6,6 +6,8 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.18.0] - 2026-04-28
+
 ### Added
 
 - `.github/workflows/claude-pr-review.yml`: reusable workflow (`on: workflow_call`) that consumer ESE-adopting repos call from a small stub with `secrets: inherit`. Centralizes the three-token OAuth pool, concurrency cancellation, attempt rotation on rate-limit, and the standard review prompt so PR review behavior stays consistent across every adopter without each repo maintaining its own copy. Reads `CLAUDE_CODE_OAUTH_TOKEN_1/2/3` from the calling repo or org secret store; missing slots are skipped, at least one is required.
