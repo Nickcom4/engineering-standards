@@ -14,7 +14,7 @@ name: notify-repo-sync
 
 on:
   push:
-    branches: [master]
+    branches: [main, master]
 
 permissions:
   contents: read
@@ -40,7 +40,7 @@ jobs:
           fi
           subject=$(printf '%s\n' "$MSG" | head -n1)
           short_sha="${SHA:0:7}"
-          body="${REPO} @ ${short_sha} by ${ACTOR}: ${subject}"
+          body=$(printf '%s @ %s: %s\nRun: bash ~/.ese/repo-sync/repo-sync-now.sh' "$REPO" "$short_sha" "$subject")
           auth_args=()
           if [[ -n "${NTFY_TOKEN:-}" ]]; then
             auth_args=(-H "Authorization: Bearer ${NTFY_TOKEN}")
