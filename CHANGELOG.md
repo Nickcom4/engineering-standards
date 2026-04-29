@@ -6,6 +6,14 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `scripts/lint-tag-tree-congruence.sh` and CI Check 38: for every annotated `vX.Y.Z` tag, verifies the tag commit's tree is internally consistent with the tag version (CHANGELOG.md has the matching versioned heading, `ese-version` frontmatter and footer in `docs/standards-application.md` match the tag, and the tag commit is reachable from `origin/main`). Closes #16. The historical v2.18.0 tag is exempted with rationale documented in the script header. Tests in `tests/test-lint-tag-tree-congruence.sh` cover the PASS case and three FAIL fixtures (CHANGELOG still under `[Unreleased]`, orphan tag on a side branch, stale `ese-version`).
+
+### Fixed
+
+- Closes the gap that allowed the `tag-cut-before-promotion` anti-pattern to recur. `lint-changelog-tags.sh` only inspects the current working tree and could not see that v2.18.0 (CHANGELOG and `ese-version` both stale at the tag tree) and v2.19.0 (CHANGELOG promoted but `ese-version` still 2.18.1 at the tag tree) had been cut at pre-promotion commits. The new `lint-tag-tree-congruence.sh` reads each tag's tree directly via `git show <tag>:<path>` and fails CI when the tree is inconsistent with the tag. Anti-pattern entry: `docs/incidents/anti-patterns.md` row `tag-cut-before-promotion`.
+
 ## [2.19.0] - 2026-04-29
 
 Minor release: `claude-pr-review.yml` exits cleanly when no OAuth token is configured (defense-in-depth for the awareness gap addressed on the bootstrap side in `Nickcom4/ese-starter#17`); adds `notify-repo-sync.yml` so operator hosts receive an ntfy push on every commit landing on main and master, with the run command included in the notification body. Adopters bump `.standards` to v2.19.0 to inherit the workflow change; `Nickcom4/ese-starter` should bump `CLAUDE_PR_REVIEW_VERSION` in `scripts/bootstrap.sh` to v2.19.0 so freshly-installed adopter stubs pick up the corrected behavior.
