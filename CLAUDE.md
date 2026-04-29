@@ -22,7 +22,7 @@
 
 ## About This Repo
 
-Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 772 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 38 CI checks and maintain self-compliance.
+Excellence Standards - Engineering (ESE) is a universal, domain-agnostic, stack-agnostic engineering standard. It defines software delivery gates across 9 sections with 772 machine-readable requirements. ESE applies its own standard to itself. Every change must pass 39 CI checks and maintain self-compliance.
 
 **Key paths:**
 
@@ -250,6 +250,7 @@ bash scripts/lint-session-artifacts.sh
 bash scripts/lint-orphan-scripts.sh
 bash scripts/lint-count-congruence.sh
 bash scripts/lint-changelog-tags.sh
+bash scripts/lint-tag-tree-congruence.sh
 bash scripts/lint-orphan-adrs.sh
 bash scripts/lint-template-compliance.sh
 bash scripts/lint-fmea-congruence.sh
