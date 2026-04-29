@@ -6,13 +6,17 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+## [2.19.0] - 2026-04-29
+
+Minor release: `claude-pr-review.yml` exits cleanly when no OAuth token is configured (defense-in-depth for the awareness gap addressed on the bootstrap side in `Nickcom4/ese-starter#17`); adds `notify-repo-sync.yml` so operator hosts receive an ntfy push on every commit landing on main and master, with the run command included in the notification body. Adopters bump `.standards` to v2.19.0 to inherit the workflow change; `Nickcom4/ese-starter` should bump `CLAUDE_PR_REVIEW_VERSION` in `scripts/bootstrap.sh` to v2.19.0 so freshly-installed adopter stubs pick up the corrected behavior.
+
 ### Added
 
 - `.github/workflows/notify-repo-sync.yml`: posts an ntfy push on every commit landing on main (and master) so operator hosts receive a notification to run repo-sync-now and pull the change. Notification body includes the run command so the operator can pull and re-sync without leaving the notification. Requires repo secret `NTFY_URL`.
 
 ### Fixed
 
-- `.github/workflows/claude-pr-review.yml`: empty OAuth token pool no longer fails the workflow. Adopters who have not yet provisioned `CLAUDE_CODE_OAUTH_TOKEN_{1,2,3}` (or who deliberately opt out) now see the preflight step exit 0 with a one-line skip log (`claude-pr-review: skipped; no CLAUDE_CODE_OAUTH_TOKEN_{1,2,3} configured`) and a one-line provisioning hint pointing at the keyring sync. Downstream review steps gate on a new `tokens_present` output. Adopters with at least one token set see no behavior change. Closes #12. Coordination note: ese-starter will bump `CLAUDE_PR_REVIEW_VERSION` to the next-tagged engineering-standards version after this fix lands and a release is cut, so consumer stubs pick up the corrected behavior.
+- `.github/workflows/claude-pr-review.yml`: empty OAuth token pool no longer fails the workflow. Adopters who have not yet provisioned `CLAUDE_CODE_OAUTH_TOKEN_{1,2,3}` (or who deliberately opt out) now see the preflight step exit 0 with a one-line skip log (`claude-pr-review: skipped; no CLAUDE_CODE_OAUTH_TOKEN_{1,2,3} configured`) and a one-line provisioning hint pointing at the keyring sync. Downstream review steps gate on a new `tokens_present` output. Adopters with at least one token set see no behavior change. Closes #12. Coordination note: ese-starter bumps `CLAUDE_PR_REVIEW_VERSION` in `scripts/bootstrap.sh` to v2.19.0 so consumer stubs pick up the corrected behavior.
 
 ## [2.18.1] - 2026-04-28 
 
