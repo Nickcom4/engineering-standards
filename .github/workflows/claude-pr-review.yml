@@ -117,14 +117,22 @@ jobs:
           if [ -n "${T3:-}" ]; then echo "has_3=true"  >> "$GITHUB_OUTPUT"; count=$((count+1)); else echo "has_3=false" >> "$GITHUB_OUTPUT"; fi
           echo "pool_size=$count" >> "$GITHUB_OUTPUT"
           echo "Claude OAuth token pool size: $count"
+          # Empty pool is an opt-out signal, not a misconfiguration. Adopters who
+          # have not yet provisioned the OAuth token pool (or who deliberately
+          # opt out) should see a clean green check, not a permanent red X on
+          # every PR. Emit a one-line skip log + provisioning hint and exit 0;
+          # downstream review steps gate on tokens_present == 'true'.
           if [ "$count" -eq 0 ]; then
-            echo "::error::No Claude OAuth tokens configured. Set at least CLAUDE_CODE_OAUTH_TOKEN_1 as a repo or organization secret."
-            exit 1
+            echo "tokens_present=false" >> "$GITHUB_OUTPUT"
+            echo "claude-pr-review: skipped; no CLAUDE_CODE_OAUTH_TOKEN_{1,2,3} configured"
+            echo "to enable: provision the secrets via the keyring sync (Nickcom4/shared-secrets manifest + secrets-sync-to-gh-actions.sh)"
+            exit 0
           fi
+          echo "tokens_present=true" >> "$GITHUB_OUTPUT"
 
       - name: Try token 1
         id: try1
-        if: steps.tokens.outputs.has_1 == 'true'
+        if: steps.tokens.outputs.tokens_present == 'true' && steps.tokens.outputs.has_1 == 'true'
         continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
@@ -135,6 +143,7 @@ jobs:
       - name: Try token 2
         id: try2
         if: |
+          steps.tokens.outputs.tokens_present == 'true' &&
           steps.tokens.outputs.has_2 == 'true' &&
           steps.try1.outcome != 'success'
         continue-on-error: true
@@ -147,6 +156,7 @@ jobs:
       - name: Try token 3
         id: try3
         if: |
+          steps.tokens.outputs.tokens_present == 'true' &&
           steps.tokens.outputs.has_3 == 'true' &&
           steps.try1.outcome != 'success' &&
           steps.try2.outcome != 'success'
@@ -158,6 +168,7 @@ jobs:
           prompt: ${{ env.REVIEW_PROMPT }}
 
       - name: Final outcome
+        if: steps.tokens.outputs.tokens_present == 'true'
         env:
           POOL_SIZE: ${{ steps.tokens.outputs.pool_size }}
         run: |
