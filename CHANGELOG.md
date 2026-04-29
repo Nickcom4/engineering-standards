@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Added
+
+- `.github/workflows/notify-repo-sync.yml`: posts an ntfy push on every commit landing on main (and master) so operator hosts receive a notification to run repo-sync-now and pull the change. Notification body includes the run command so the operator can pull and re-sync without leaving the notification. Requires repo secret `NTFY_URL`.
+
 ### Fixed
 
 - `.github/workflows/claude-pr-review.yml`: empty OAuth token pool no longer fails the workflow. Adopters who have not yet provisioned `CLAUDE_CODE_OAUTH_TOKEN_{1,2,3}` (or who deliberately opt out) now see the preflight step exit 0 with a one-line skip log (`claude-pr-review: skipped; no CLAUDE_CODE_OAUTH_TOKEN_{1,2,3} configured`) and a one-line provisioning hint pointing at the keyring sync. Downstream review steps gate on a new `tokens_present` output. Adopters with at least one token set see no behavior change. Closes #12. Coordination note: ese-starter will bump `CLAUDE_PR_REVIEW_VERSION` to the next-tagged engineering-standards version after this fix lands and a release is cut, so consumer stubs pick up the corrected behavior.
