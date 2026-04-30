@@ -6,10 +6,6 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
-## [2.20.0] - 2026-04-30
-
-Minor release: ESE accretion audit lands as the first systematic earned-its-keep review of the linter suite and REQ-IDs; finds the dominant accretion source is process-ceremony coupling between the standard, the ese-plugin schemas, and the lifecycle gates (six blocking deadlocks observed during the audit itself). Three follow-on issues filed at `Nickcom4/ese-plugin#385`, `#386`, `#387`. New `tag-tree-congruence` linter closes the cut-before-promotion gap that produced two prior incidents (v2.18.0, v2.19.0).
-
 ### Added
 
 - `docs/product/investigation-ese-accretion-audit-2026-04-30.md`: written assessment of which ESE elements (linters and REQ-IDs) still earn their keep, using the test "would removing this permit a real failure?" Headline finding: the 30-linter suite is leaner and more evidence-grounded than expected (23 KEEP, 4 KEEP-as-advisory/shadow, 3 MERGE-CANDIDATE, 1 INVESTIGATE, 0 unambiguous DEPRECATE); the dominant accretion source is process-ceremony coupling between the standard, the ese-plugin, and the lifecycle gates. Five blocking deadlocks were observed during the audit itself; three are filed as follow-on issues at `Nickcom4/ese-plugin#385`, `#386`, `#387`. Five additional deprecation candidates queued (lint-stale-counts, lint-broken-tables, lint-adr-validation header, `§4.2` ADR REQ consolidation, continuous-improvement addendum REQ-count review).
