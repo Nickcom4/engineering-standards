@@ -15,7 +15,13 @@ Thumbs.db
 
 # ese-plugin runtime state (session-local, per work item)
 .ese-session-state.json
+.ese-session-state.json.bak
+.ese-session/
+.ese-anti-pattern-draft.md
+.ese-chain-reminder-state.json
+.ese-chain-paused.json
 docs/work-items/active/
+docs/scaffold-attempts.log
 
 # Claude Code per-project session state (permissions, local settings)
 .claude/
