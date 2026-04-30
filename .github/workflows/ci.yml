@@ -170,7 +170,12 @@ jobs:
           # templates/ and starters/ are excluded from the find below because
           # they intentionally contain placeholder syntax ({link}, YYYY-MM-DD,
           # ADR-NNN-title, .standards/*) that resolves only after the template
-          # is instantiated into an adopter repo.
+          # is instantiated into an adopter repo. docs/work-items/active/ and
+          # docs/work-items/completed/ are excluded because lifecycle work-item
+          # instances inherit the template's ../STANDARDS.md relative paths,
+          # which resolve correctly from the template's location but not from
+          # the deeper active/completed/ paths; work-item records are archives
+          # of process history, not living documentation that adopters traverse.
           cat > /tmp/mlc-config.json <<'MLCEOF'
           {
             "ignorePatterns": [
@@ -192,7 +197,7 @@ jobs:
               echo "$result" | grep -E "ERROR|Dead|\[✗\]"
               FAILED=1
             fi
-          done < <(find . -name "*.md" -not -path './.git/*' -not -path './node_modules/*' -not -path './templates/*' -not -path './starters/*' -print0)
+          done < <(find . -name "*.md" -not -path './.git/*' -not -path './node_modules/*' -not -path './templates/*' -not -path './starters/*' -not -path './docs/work-items/active/*' -not -path './docs/work-items/completed/*' -print0)
 
           if [ "$FAILED" -eq 1 ]; then
             echo "FAIL: Broken internal links found (ESE §2.1 VERIFY)"
