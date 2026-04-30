@@ -36,6 +36,12 @@ templates/architecture-doc.md | docs/architecture/*.md | architecture doc
 # canonical-format logs can add a mapping line here.
 # templates/work-session-log.md | docs/work-sessions/*.md | work session log
 
+# -------- Work items (active, in-repo per ese-plugin lifecycle) --------
+# Engineering-standards is the ESE meta-repo and dogfoods the lifecycle in-repo.
+# Adopter repos with private trackers should NOT add this mapping; they emit
+# work-item-export records below instead.
+templates/work-item.md | docs/work-items/active/work-item.md | work-item
+
 # -------- Work item exports --------
 templates/work-item-export.md | docs/work-items/*.md | work item export
 
@@ -67,7 +73,7 @@ starters/setup.md | docs/setup.md | setup guide
 #   templates/problem-research.md
 #   templates/slo.md
 #   templates/tech-eval.md
-#   templates/work-item.md         (internal work item system is private; exports are via work-item-export)
+#   templates/work-item.md         (mapped above; engineering-standards dogfoods in-repo work items per the ese-plugin lifecycle)
 #   starters/intake-log.md         (adopters only)
 #   starters/anti-pattern-registry.md (no starter section structure)
 #   starters/lessons-learned-registry.md (no starter section structure)

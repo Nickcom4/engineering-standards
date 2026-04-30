@@ -56,6 +56,11 @@ README_STRUCTURE_EXCLUDE = {
     ".github",  # listed as ".github/workflows/ci.yml" in Structure, not as a bare directory
     ".DS_Store",
     ".ese-session-state.json",  # gitignored runtime state
+    ".ese-session-state.json.bak",  # ese-plugin chain-reset snapshot
+    ".ese-session",  # ese-plugin per-session output cache (lint output, scaffold logs)
+    ".ese-anti-pattern-draft.md",  # ese-plugin draft anti-pattern entries pending review
+    ".ese-chain-reminder-state.json",  # ese-plugin chain-reminder cooldown tracking
+    ".ese-chain-paused.json",  # ese-plugin paused-chain flag (set by scripts/pause-chain.sh)
     ".gate-manifest.json",  # gitignored local artifact
     ".claude",  # per-project Claude Code session state (settings.local.json, etc.); gitignored
 }

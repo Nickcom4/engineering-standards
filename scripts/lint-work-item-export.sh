@@ -22,15 +22,19 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 FAILED=0
 
-# Collect files to validate. Excludes docs/work-items/active/ which is the
-# ese-plugin session-local scratch directory (gitignored per .gitignore);
-# scratch work-item.md files use templates/work-item.md, not the
-# work-item-export format, and are not subject to the round-trip gate.
+# Collect files to validate. Excludes:
+# - docs/work-items/active/: ese-plugin session-local scratch directory
+#   (gitignored per .gitignore); scratch work-item.md files use
+#   templates/work-item.md, not the work-item-export format.
+# - docs/work-items/completed/: lifecycle-archived work-item records
+#   produced by ese-plugin's CLOSE stage (`git mv` from active/).
+#   These are full work-item records, not work-item-exports, and are
+#   not subject to the round-trip gate.
 FILES=("$REPO_ROOT/templates/work-item-export.md")
 if [ -d "$REPO_ROOT/docs/work-items" ]; then
   while IFS= read -r -d '' f; do
     FILES+=("$f")
-  done < <(find "$REPO_ROOT/docs/work-items" -type d -name active -prune -o -name "*.md" -print0 2>/dev/null)
+  done < <(find "$REPO_ROOT/docs/work-items" \( -type d \( -name active -o -name completed \) -prune \) -o -name "*.md" -print0 2>/dev/null)
 fi
 
 python3 - "${FILES[@]}" <<'PYEOF'
