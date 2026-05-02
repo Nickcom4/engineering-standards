@@ -295,6 +295,8 @@ TYPE_UPPER=$(printf '%s\n' "$LABEL" | tr '[:lower:]' '[:upper:]' | tr -d ' ')
 
 # Use python for safe substitution; avoid sed quoting issues with titles
 python3 - "$TEMPLATE_PATH" "$OUTPUT_PATH" "$TITLE" "$TODAY" "$ID_SLUG" "$OWNER" "$TYPE_UPPER" <<'PYEOF'
+import os
+import re
 import sys
 
 template_path, output_path, title, today, id_slug, owner, type_upper = sys.argv[1:8]
@@ -315,6 +317,38 @@ content = content.replace('{Feature or Process Name}', title)
 content = content.replace('{Feature or Product Name}', title)
 content = content.replace('{Problem Name}', title)
 content = content.replace('{Project Name}', title)
+
+# Rewrite relative-path links so they resolve from the instance location
+# rather than the template location. Templates live at templates/ (depth 1);
+# instances may live at any depth. A link written `../STANDARDS.md` from
+# templates/ resolves to <repo>/STANDARDS.md, but the same string from
+# docs/work-items/active/ resolves to docs/work-items/STANDARDS.md (broken).
+# We resolve every relative link against the template's directory, then
+# re-express it relative to the instance's directory.
+template_dir = os.path.dirname(os.path.abspath(template_path))
+instance_dir = os.path.dirname(os.path.abspath(output_path))
+
+def rewrite_link(match):
+    target = match.group(1)
+    # Skip absolute URLs, mail, anchor-only refs, root-relative paths,
+    # and any target containing an unfilled placeholder.
+    if re.match(r'^(https?:|mailto:|#|/)', target):
+        return match.group(0)
+    if '{' in target or '}' in target:
+        return match.group(0)
+    if '#' in target:
+        path_part, anchor = target.split('#', 1)
+        anchor = '#' + anchor
+    else:
+        path_part = target
+        anchor = ''
+    if not path_part:
+        return match.group(0)
+    abs_target = os.path.normpath(os.path.join(template_dir, path_part))
+    rel_target = os.path.relpath(abs_target, instance_dir)
+    return f']({rel_target}{anchor})'
+
+content = re.sub(r'\]\(([^)\s]+)\)', rewrite_link, content)
 
 with open(output_path, 'w', encoding='utf-8') as f:
     f.write(content)
