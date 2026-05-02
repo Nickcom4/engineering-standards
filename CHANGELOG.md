@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Fixed
+
+- `.github/workflows/review.yml`: consumer stub that triggers the reusable `claude-pr-review.yml` workflow on `pull_request` events. The reusable workflow is `on: workflow_call` only, so without a consumer stub the required `review / review` status check has no producer and every PR stays BLOCKED under branch protection (the GitHub status reads "Expected, waiting for status to be reported"). Prior PRs in this repo only merged via destructive branch-protection overrides; this stub removes that need. Addresses one symptom of the release-ceremony friction documented in #25 (the engineering-standards portion of the missing producer); cross-repo coordination for ese-plugin and ese-starter remains open under #25.
+
 ## [2.20.0] - 2026-04-30
 
 Minor release: ESE    E  accretion audit lands as the first systematic earned-its-keep review of the linter suite and REQ-IDs; finds the dominant accretion source is process-ceremony coupling between the standard, the    E  ese-plugin schemas, and the lifecycle gates. Three follow-on issues filed at `Nickcom4/ese-plugin#385`, `#386`, `#387`. New `tag-tree-congruence` linter closes the cut-before-promotion    E  gap.
