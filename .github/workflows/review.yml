@@ -1,0 +1,30 @@
+name: Claude PR Review
+
+# Consumer stub for engineering-standards. The reusable workflow at
+# .github/workflows/claude-pr-review.yml is on: workflow_call only and
+# does not self-trigger; without this stub, every PR's required
+# `review / review` status check has no producer and stays "Expected"
+# forever, blocking merge under branch protection.
+#
+# This file is the documented adopter pattern (see the preamble of
+# claude-pr-review.yml lines 20-41). It uses the local file via the
+# ./.github/workflows/<name> syntax rather than a tag-pinned ref so the
+# stub stays in lockstep with the reusable workflow's source.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    uses: ./.github/workflows/claude-pr-review.yml
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN_1: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_1 }}
+      CLAUDE_CODE_OAUTH_TOKEN_2: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_2 }}
+      CLAUDE_CODE_OAUTH_TOKEN_3: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN_3 }}
