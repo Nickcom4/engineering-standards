@@ -14,10 +14,25 @@
 #      entry (REQ-4.3-01 violation).
 #
 # Per ADR-2026-04-11 (release trigger policy), release ceremony commits
-# must be single atomic commits that move the heading and apply the tag
-# in the same flow.
+# must atomically promote the [Unreleased] heading and (in the canonical
+# direct-to-main flow) apply the tag in the same operation.
 #
-# Exit 0 = pass. Exit 1 = mismatch found.
+# Tag-applied-after-merge window (issue #30). PR-based release ceremonies
+# under branch protection cannot apply the tag on the PR branch (the tag
+# would point at a pre-merge SHA and fail reachability post-squash). The
+# tag is applied to the squash-merged SHA after the PR lands on
+# origin/main, which leaves a brief heading-without-tag window. This
+# linter accepts that window when, and only when, EXACTLY ONE versioned
+# heading has no matching tag AND that heading is the topmost (most
+# recent) versioned heading in CHANGELOG.md. Any other unmatched-heading
+# state remains a failure: two or more unmatched means the operator
+# missed prior tags; a non-topmost unmatched means a stale skip.
+#
+# The window is bounded structurally rather than by time: a subsequent
+# release ceremony that promotes a new heading without first tagging the
+# pending one produces two unmatched headings and fails.
+#
+# Exit 0 = pass (including the pending-window state). Exit 1 = mismatch.
 
 set -euo pipefail
 
@@ -121,6 +136,22 @@ if [ "${#CHANGELOG_VERSIONS[@]}" -gt 0 ]; then
   done
 fi
 
+# Tag-applied-after-merge window (issue #30): if exactly one CHANGELOG
+# version is unmatched AND it is the topmost versioned heading (the most
+# recent release ceremony promotion), accept it as the pending release
+# whose tag will be applied to the squash-merged SHA after the PR lands.
+# Any other shape (zero, two-or-more, or a non-topmost single) keeps the
+# original behavior.
+PENDING_RELEASE=""
+if [ "${#MISSING_TAG[@]}" -eq 1 ] && [ "${#CHANGELOG_VERSIONS[@]}" -gt 0 ]; then
+  topmost_version="${CHANGELOG_VERSIONS[0]}"
+  candidate_version="${MISSING_TAG[0]#v}"
+  if [ "$candidate_version" = "$topmost_version" ]; then
+    PENDING_RELEASE="$candidate_version"
+    MISSING_TAG=()
+  fi
+fi
+
 # Every git tag should have a matching CHANGELOG version
 if [ "${#GIT_TAGS[@]}" -gt 0 ]; then
   for t in "${GIT_TAGS[@]}"; do
@@ -168,8 +199,12 @@ if [ ${#MISSING_TAG[@]} -gt 0 ] || [ ${#ORPHANED_TAG[@]} -gt 0 ]; then
 fi
 
 CHECKED=$((${#CHANGELOG_VERSIONS[@]} - SKIPPED_PRE_FLOOR))
+PENDING_NOTE=""
+if [ -n "$PENDING_RELEASE" ]; then
+  PENDING_NOTE=" (v${PENDING_RELEASE} pending: heading promoted, tag-application window open until merged SHA is tagged on origin/main)"
+fi
 if [ "$SKIPPED_PRE_FLOOR" -gt 0 ]; then
-  echo "PASS: $CHECKED CHANGELOG versions at/after floor v$FLOOR all have matching git tags (${#GIT_TAGS[@]} tags total; $SKIPPED_PRE_FLOOR pre-floor versions exempt)."
+  echo "PASS: $CHECKED CHANGELOG versions at/after floor v$FLOOR all have matching git tags (${#GIT_TAGS[@]} tags total; $SKIPPED_PRE_FLOOR pre-floor versions exempt)${PENDING_NOTE}."
 else
-  echo "PASS: ${#CHANGELOG_VERSIONS[@]} CHANGELOG versions all have matching git tags (${#GIT_TAGS[@]} tags total)."
+  echo "PASS: ${#CHANGELOG_VERSIONS[@]} CHANGELOG versions all have matching git tags (${#GIT_TAGS[@]} tags total)${PENDING_NOTE}."
 fi
