@@ -6,6 +6,10 @@ All notable changes to this standard are documented here. Follows [Semantic Vers
 
 ## [Unreleased]
 
+### Changed
+
+- `scripts/lint-changelog-tags.sh` now recognizes a tag-applied-after-merge window: exactly one unmatched `## [X.Y.Z]` heading is accepted IF and only IF it is the topmost (most recent) versioned heading in CHANGELOG.md. This is the canonical state during a PR-based release ceremony under branch protection: the PR commit promotes `[Unreleased]` to a versioned heading, the PR merges to `origin/main`, then the annotated tag is applied to the squash-merged SHA. Before this change, the linter rejected the heading-without-tag state on the PR's CI, forcing release ceremonies to rely on destructive branch-protection overrides (per the narrative in #25). Now release-ceremony PRs pass the linter on the PR branch; the operator applies the tag to the merged SHA after the PR lands. Two-or-more unmatched headings or a non-topmost unmatched heading still fail (tags fell behind, or a stale skip). The window is bounded structurally: a subsequent ceremony that promotes a new heading without first tagging the pending one produces two unmatched headings and fails. `scripts/lint-tag-tree-congruence.sh` does not require a parallel change because it iterates over actual tags only and is therefore invisible to the heading-without-tag state. Closes #30.
+
 ### Fixed
 
 - `.github/workflows/review.yml`: consumer stub that triggers the reusable `claude-pr-review.yml` workflow on `pull_request` events. The reusable workflow is `on: workflow_call` only, so without a consumer stub the required `review / review` status check has no producer and every PR stays BLOCKED under branch protection (the GitHub status reads "Expected, waiting for status to be reported"). Prior PRs in this repo only merged via destructive branch-protection overrides; this stub removes that need. Addresses one symptom of the release-ceremony friction documented in #25 (the engineering-standards portion of the missing producer); cross-repo coordination for ese-plugin and ese-starter remains open under #25.
